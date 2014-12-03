@@ -1,0 +1,59 @@
+﻿@using WFWithCodeActivity.Models
+@{
+    var demos = ViewData["demos"] as WorkflowDemo[];
+}
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>title</title>
+        <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+        <script src="~/Scripts/jquery-1.9.0.min.js"></script>
+        <script src="~/Scripts/bootstrap.min.js"></script>
+    </head>
+    <body>
+        <a href="@Url.Action("Index")">Index</a>
+        <form action="@Url.Action("ASubmit")">
+            <input type="text" id="money" placeholder="money"/>
+            <input type="text" id="reason" placeholder="what for?" />
+            <input type="submit" value="提交"/>
+        </form>
+        <table class="table">
+            <tr>
+                <th>ID</th>
+                <th>A_Money</th>
+                <th>A_Reason</th>
+                <th>A</th>
+                <th>A_Date</th>
+                <th>B</th>
+                <th>B_Comments</th>
+                <th>B_Date</th>
+                <th>C</th>
+                <th>C_Comments</th>
+                <th>C_Date</th>
+                <th>Status</th>
+                <th>A_操作</th>
+            </tr>
+            @foreach (var demo in demos)
+            {
+                <tr>
+                    <td>@demo.ID</td>
+                    <td>@demo.Money</td>
+                    <td>@demo.Reason</td>
+                    <td>@demo.Submiter</td>
+                    <td>@demo.SubmitDate</td>
+                    <td>@demo.FirstAuditer</td>
+                    <td>@demo.FirstAuditerComments</td>
+                    <td>@demo.FirstAuditerDate</td>
+                    <td>@demo.SecondAuditer</td>
+                    <td>@demo.SeconfAuditerComments</td>
+                    <td>@demo.SecondAuditerDate</td>
+                    <td>@demo.Status</td>
+                    <td>
+                        
+                    </td>
+                </tr>
+            }
+        </table>
+    </body>
+</html>
