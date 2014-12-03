@@ -1,0 +1,9 @@
+﻿<Window x:Class="VideoPlayer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="MainWindow" Height="370" Width="525">
+    <StackPanel>
+        <MediaElement HorizontalAlignment="Left" Height="300" Margin="10,10,0,0" VerticalAlignment="Top" Width="497" LoadedBehavior="Play" Name="mediaElement"/>
+        <Button Click="ButtonBase_OnClick">Open</Button>
+    </StackPanel>
+</Window>
