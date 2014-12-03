@@ -1,0 +1,17 @@
+﻿@using Ioc.Net.Model.ServiceConsumer.ServiceReference
+@{
+    var users = ViewData["users"] as User[];
+}
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>title</title>
+    </head>
+    <body>
+        <div>
+            @users.Length
+        </div>
+        <a href="http://localhost:51926/">Another Module</a>
+    </body>
+</html>
