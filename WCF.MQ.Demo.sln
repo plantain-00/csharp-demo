@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30723.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WCF.MQ.Demo", "WCF.MQ.Demo\WCF.MQ.Demo.csproj", "{1A9C9ACA-A085-46B7-96B1-AD87E1BF9708}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WCF.MQ.Server", "WCF.MQ.Server\WCF.MQ.Server.csproj", "{FEACD0F3-D289-46A3-A277-9BA51B16E70D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1A9C9ACA-A085-46B7-96B1-AD87E1BF9708}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A9C9ACA-A085-46B7-96B1-AD87E1BF9708}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A9C9ACA-A085-46B7-96B1-AD87E1BF9708}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A9C9ACA-A085-46B7-96B1-AD87E1BF9708}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FEACD0F3-D289-46A3-A277-9BA51B16E70D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FEACD0F3-D289-46A3-A277-9BA51B16E70D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FEACD0F3-D289-46A3-A277-9BA51B16E70D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FEACD0F3-D289-46A3-A277-9BA51B16E70D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
