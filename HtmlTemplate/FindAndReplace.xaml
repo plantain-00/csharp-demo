@@ -1,0 +1,32 @@
+﻿<Window x:Class="HtmlTemplate.FindAndReplace"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="搜索和替换" Height="300" Width="600"
+        Topmost="True"
+        WindowStartupLocation="CenterScreen"
+        Icon="html.ico">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="30"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <TextBox Grid.ColumnSpan="5" Name="first" PreviewKeyUp="First_OnPreviewKeyUp"></TextBox>
+        <TextBox Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="5" Name="second"></TextBox>
+        <ComboBox Grid.Row="2" Grid.Column="0" VerticalContentAlignment="Center">
+            <ComboBoxItem Name="caseSensitive">区分大小写</ComboBoxItem>
+            <ComboBoxItem IsSelected="True">不区分大小写</ComboBoxItem>
+        </ComboBox>
+        <CheckBox Grid.Row="2" Grid.Column="1" Name="wordMatch">全字匹配</CheckBox>
+        <Button Grid.Row="2" Grid.Column="2" Click="FindNext">查找下一个</Button>
+        <Button Grid.Row="2" Grid.Column="3" Click="ReplaceNext">替换下一个</Button>
+        <Button Grid.Row="2" Grid.Column="4" Click="ReplaceAll">替换所有</Button>
+    </Grid>
+</Window>

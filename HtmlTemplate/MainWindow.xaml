@@ -1,0 +1,55 @@
+﻿<Window x:Class="HtmlTemplate.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit"
+        Title="Html模板"
+        Height="720" Width="1024"
+        WindowStartupLocation="CenterScreen"
+        Icon="html.ico"
+        Background="#1E1E1E"
+        Foreground="White">
+    <TabControl>
+        <TabItem Name="tabTemplate">
+            <avalonedit:TextEditor Name="template"
+                                   SyntaxHighlighting="Razor" />
+        </TabItem>
+        <TabItem Name="tabData">
+            <avalonedit:TextEditor Name="data"
+                                   SyntaxHighlighting="Json" />
+        </TabItem>
+        <TabItem Name="tabString">
+            <avalonedit:TextEditor Name="string"
+                                   Foreground="#D69D85" />
+        </TabItem>
+        <TabItem Name="tabResult">
+            <TabItem.Header>
+                <StackPanel Orientation="Horizontal">
+                    <Label Name="resultHeader" />
+                    <Button Click="ButtonBase_OnClick">生成</Button>
+                </StackPanel>
+            </TabItem.Header>
+            <avalonedit:TextEditor Name="result"
+                                   IsReadOnly="True"
+                                   WordWrap="True"
+                                   SyntaxHighlighting="Razor" />
+        </TabItem>
+        <TabItem Header="提示  ">
+            <TextBlock Foreground="#DCDCDC">
+                1、Ctrl + S：Save<LineBreak />
+                2、Ctrl + Shift + S：Save As<LineBreak />
+                3、Ctrl + O：Open<LineBreak />
+                4、Razor中可以@:来声明字符串，而非代码<LineBreak />
+                5、数据是@Model.Json对象，字符串是@Model.String对象<LineBreak />
+                6、Ctrl + B：Browse<LineBreak />
+                7、Ctrl + F：Find<LineBreak />
+                8、Ctrl + H：Replace<LineBreak />
+                9、using前需要加@<LineBreak />
+                10、Ctrl + R：Redo<LineBreak />
+                11、Ctrl + /：注释<LineBreak />
+                12、Ctrl + ;：声明字符串<LineBreak />
+                13、Ctrl + Shift + Space：空格<LineBreak />
+                14、@：@@<LineBreak />
+            </TextBlock>
+        </TabItem>
+    </TabControl>
+</Window>
