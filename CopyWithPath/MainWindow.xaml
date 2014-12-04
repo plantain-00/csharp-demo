@@ -1,0 +1,9 @@
+﻿<Window x:Class="CopyWithPath.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Copy" Height="350" Width="525"
+        WindowStartupLocation="CenterScreen"
+        Icon="path.ico">
+    <TextBox PreviewDrop="TextBox_OnPreviewDrop"
+             PreviewDragOver="TextBox_OnPreviewDragOver" Name="textBox" />
+</Window>
