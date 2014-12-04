@@ -1,0 +1,104 @@
+﻿<#@ template language="C#" #>
+<#@ assembly name="$(TargetDir)DataSource.dll" #>
+<#@ assembly name="System.Xml.dll" #>
+<#@ assembly name="System.Data.dll" #>
+<#@ import namespace="System.Xml.Serialization" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="DataSource" #>
+<#
+var tmp = new XmlSerializer(typeof(Software))
+                             .Deserialize(
+                                 new FileStream("Last.xml",
+                                                FileMode.Open,
+                                                FileAccess.ReadWrite,
+                                                FileShare.ReadWrite)) as Software;
+foreach (var database in tmp.Databases)
+{
+    var name = "DataSourceRepository." + database.Name + "DataSource";
+    var dataSource = name + ".DataSource";
+    foreach (var table in database.Tables)
+    {#>
+using System.Collections.Generic;
+using System.Data.SQLite;
+using System.Linq;
+using <#= tmp.DALNameSpace #>.Services.<#=database.Name #>;
+using <#=tmp.ModelNameSpace #>.<#=database.Name #>;
+using System;
+
+namespace <#= tmp.DALNameSpace #>.Models.<#=database.Name #>
+{
+    public class DAL<#= table.Name #>
+    {
+        public List<Model<#= table.Name #>> Lists { get; set; }
+        internal List<Model<#= table.Name #>> cache;
+
+		/// <summary>
+        /// 生成count=0的列表，已存入缓存。没有数据库操作。
+        /// </summary>
+        public DAL<#= table.Name #>()
+        {
+            Lists = new List<Model<#= table.Name #>>();
+            cache = new List<Model<#= table.Name #>>();
+        }
+		/// <summary>
+        /// 按条件查询列表，未存入缓存。有数据库操作。
+        /// </summary>
+        /// <param name="strWhere">条件：不要包括“where”，当为null或string.Empty时为无条件查询。</param>
+        /// <exception cref="SQLiteException"></exception>
+		public DAL<#= table.Name #>(string strWhere)
+        {
+            Lists = DAL<#= table.Name #>Service.GetModelList(strWhere);
+        }
+		/// <summary>
+        /// 按条件查询分页列表，未存入缓存。有数据库操作。
+        /// </summary>
+        /// <param name="strWhere">条件：不要包括“where”，当为null或string.Empty时为无条件查询。</param>
+        /// <param name="strOrderby">排序字段，不要包括“order by”,当为null或string.empty是为默认排序</param>
+        /// <param name="limit">所取的记录数</param>
+        /// <param name="offset">跳过的记录数</param>
+        /// <exception cref="SQLiteException"></exception>
+        /// <exception cref="ArgumentException"></exception>
+        public DAL<#= table.Name #>(string strWhere, string strOrderby, int limit, int offset)
+        {
+            if (limit < 0)
+            {
+                throw new ArgumentException("Is Negative.", "limit");
+            }
+            if (offset < 0)
+            {
+                throw new ArgumentException("Is Negative.", "offset");
+            }
+            Lists = DAL<#= table.Name #>Service.GetModelList(strWhere, strOrderby, limit, offset);
+        }
+        /// <exception cref="ArgumentException"></exception>
+        public void SaveToCache()
+        {
+            if (Lists == null)
+            {
+                throw new ArgumentException("Lists is Null.");
+            }
+            cache = Lists.Select(l => l.Clone()).ToList();
+        }
+        /// <exception cref="SQLiteException"></exception>
+        /// <exception cref="ArgumentException"></exception>
+        public void SaveChanges()
+        {
+            if (Lists == null || cache == null)
+            {
+                throw new ArgumentException("Lists and cache is Null.");
+            }
+            DAL<#=table.Name #>Service.SaveChanges(cache, Lists);
+        }
+        /// <exception cref="ArgumentException"></exception>
+        public void DropChanges()
+        {
+            if (cache == null)
+            {
+                throw new ArgumentException("cache is Null.");
+            }
+            Lists = cache.Select(l => l.Clone()).ToList();
+        }
+    }
+}DALModelListRemark20130515<#}
+}#>

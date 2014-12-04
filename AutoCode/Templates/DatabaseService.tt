@@ -1,0 +1,81 @@
+﻿<#@ template language="C#" #>
+<#@ assembly name="$(TargetDir)DataSource.dll" #>
+<#@ assembly name="System.Xml.dll" #>
+<#@ assembly name="System.Data.dll" #>
+<#@ import namespace="System.Xml.Serialization" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="DataSource" #>
+<#
+var tmp = new XmlSerializer(typeof(Software))
+                             .Deserialize(
+                                 new FileStream("Last.xml",
+                                                FileMode.Open,
+                                                FileAccess.ReadWrite,
+                                                FileShare.ReadWrite)) as Software;
+#>
+using System;
+using System.IO;
+
+namespace <#=tmp.DALNameSpace #>.Services
+{
+    public static class DALService
+    {
+<#
+foreach (var database in tmp.Databases)
+{
+    var name = database.Name;
+#>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ArgumentException"></exception>
+        public static void Move<#=name #>From(string path)
+        {
+            if (path == null)
+            {
+                throw new ArgumentNullException("path");
+            }
+
+            if (path.Length == 0)
+            {
+                throw new ArgumentException("Empty String.", "path");
+            }
+
+            File.Delete(DataSourceRepository.<#=name #>DataSource.FilePath);
+            File.Move(path, DataSourceRepository.<#=name #>DataSource.FilePath);
+        }
+
+        /// <exception cref="IOException"></exception>
+        public static void Move<#=name #>FromBak()
+        {
+            Move<#=name #>From(DataSourceRepository.<#=name #>DataSource.FilePath + ".bak");
+        }
+
+        /// <exception cref="IOException"></exception>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ArgumentException"></exception>
+        public static void Copy<#=name #>To(string path)
+        {
+            if (path == null)
+            {
+                throw new ArgumentNullException("path");
+            }
+
+            if (path.Length == 0)
+            {
+                throw new ArgumentException("Empty String.", "path");
+            }
+
+            File.Delete(path);
+            File.Copy(DataSourceRepository.<#=name #>DataSource.FilePath, path);
+        }
+
+        /// <exception cref="IOException"></exception>
+        public static void Copy<#=name #>ToBak()
+        {
+            Copy<#=name #>To(DataSourceRepository.<#=name #>DataSource.FilePath + ".bak");
+        }
+<#
+}
+#>
+    }
+}

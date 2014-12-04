@@ -1,0 +1,56 @@
+﻿<#@ template language="C#" #>
+<#@ assembly name="$(TargetDir)DataSource.dll" #>
+<#@ assembly name="System.Xml.dll" #>
+<#@ assembly name="System.Data.dll" #>
+<#@ import namespace="System.Xml.Serialization" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="DataSource" #>
+<#
+var tmp = new XmlSerializer(typeof(Software))
+                             .Deserialize(
+                                 new FileStream("Last.xml",
+                                                FileMode.Open,
+                                                FileAccess.ReadWrite,
+                                                FileShare.ReadWrite)) as Software;
+#>
+using System;
+using System.IO;
+
+namespace <#=tmp.DALNameSpace #>.Models
+{
+    internal class DatabaseInfo
+    {
+        internal string FileName { get; set; }
+
+        internal string DataSource { get; set; }
+
+        internal string FilePath { get; set; }
+
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ArgumentException"></exception>
+        internal DatabaseInfo(string fileName, string password, string directoryPath)
+        {
+            if (fileName == null)
+            {
+                throw new ArgumentNullException("fileName");
+            }
+
+            if (fileName.Length == 0)
+            {
+                throw new ArgumentException("Empty String.", "fileName");
+            }
+
+            if (directoryPath == null)
+            {
+                throw new ArgumentNullException("directoryPath");
+            }
+
+            FileName = fileName;
+            FilePath = Path.Combine(directoryPath, fileName);
+            DataSource = string.IsNullOrEmpty(password)
+                ? "Data Source=" + FilePath
+                : "Data Source=" + FilePath + ";Password=" + password;
+        }
+    }
+}

@@ -1,0 +1,37 @@
+﻿<#@ template language="C#" #>
+<#@ assembly name="$(TargetDir)DataSource.dll" #>
+<#@ assembly name="System.Xml.dll" #>
+<#@ assembly name="System.Data.dll" #>
+<#@ import namespace="System.Xml.Serialization" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="DataSource" #>
+<#
+var tmp = new XmlSerializer(typeof(Software))
+                             .Deserialize(
+                                 new FileStream("Last.xml",
+                                                FileMode.Open,
+                                                FileAccess.ReadWrite,
+                                                FileShare.ReadWrite)) as Software;
+#>
+using <#=tmp.DALNameSpace #>.Models;
+
+namespace <#=tmp.DALNameSpace #>
+{
+    public static class DataSourceRepository
+    {
+<#
+foreach (var database in tmp.Databases)
+{
+    var name = database.Name;
+#>
+        internal static DatabaseInfo <#=name #>DataSource { get; private set; }
+
+        public static void Set<#=name #>Path(string filePath)
+        {
+            <#=name #>DataSource = new DatabaseInfo("<#=name #>", "<#= database.Password ?? string.Empty #>", filePath);
+        }
+<#
+}
+#>
+    }
+}

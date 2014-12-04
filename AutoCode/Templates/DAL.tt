@@ -1,0 +1,385 @@
+﻿<#@ template language="C#" #>
+<#@ assembly name="$(TargetDir)DataSource.dll" #>
+<#@ assembly name="System.Xml.dll" #>
+<#@ assembly name="System.Data.dll" #>
+<#@ import namespace="System.Xml.Serialization" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="DataSource" #>
+<#
+var tmp = new XmlSerializer(typeof(Software))
+                             .Deserialize(
+                                 new FileStream("Last.xml",
+                                                FileMode.Open,
+                                                FileAccess.ReadWrite,
+                                                FileShare.ReadWrite)) as Software;
+foreach (var database in tmp.Databases)
+{
+    var name = "DataSourceRepository." + database.Name + "DataSource";
+    var dataSource = name + ".DataSource";
+    foreach (var table in database.Tables)
+    {
+#>
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Data;
+using System.Data.SQLite;
+using System.Linq;
+using System.Text;
+using <#=tmp.ModelNameSpace #>.<#=database.Name #>;
+
+namespace <#=tmp.DALNameSpace #>.Services.<#=database.Name #>
+{
+    public static class DAL<#=table.Name #>Service
+    {
+        /// <summary>
+        /// 增加多条数据
+        /// </summary>
+        /// <param name="model">不需要指定ID</param>
+        /// <returns>插入的数据的ID</returns>
+        /// <exception cref="SQLiteException"></exception>
+        /// <exception cref="ArgumentNullException"></exception>
+        public static List<int> AddList(IList<Model<#=table.Name #>> model)
+        {
+            if (model == null)
+            {
+                throw new ArgumentNullException("model");
+            }
+
+            if (!model.Any())
+            {
+                return new List<int>();
+            }
+
+            var strSqlList = new Collection<string>();
+            var parametersList = new Collection<SQLiteParameter[]>();
+            foreach (var tableModel in model)
+            {
+                var strSql = new StringBuilder();
+                strSql.Append("insert into <#=table.Name #>(");
+                                strSql.Append("<#for (int i = 1; i < table.Columns.Count; i++)
+{#><#=table.Columns[i].Name #><#if (i != table.Columns.Count - 1)
+    {#>,<#}
+    }#>)");
+                strSql.Append(" values (");
+                                strSql.Append("<#for (int i = 1; i < table.Columns.Count; i++)
+       {#>@<#=table.Columns[i].Name #><#if (i != table.Columns.Count - 1)
+    {#>,<#}
+}#>)");
+                strSql.Append(";select LAST_INSERT_ROWID()");
+                var parameters = new[]
+                    {
+                            <#for (int i = 1; i < table.Columns.Count; i++)
+{#>new SQLiteParameter("@<#=table.Columns[i].Name #>", DbType.<#=table.Columns[i].Type.ToString() #>)<#if (i != table.Columns.Count - 1)
+    {#>,
+                            <#}
+}#>
+                
+                    };
+                <#for (int i = 1; i < table.Columns.Count; i++)
+{#>parameters[<#=i - 1 #>].Value = tableModel.<#=table.Columns[i].Name #>;
+                <#}#>
+
+                strSqlList.Add(strSql.ToString());
+                parametersList.Add(parameters);
+            }
+
+            var obj = DbHelperSQLite.GetSingle(DataSourceRepository.<#=database.Name #>DataSource.DataSource, strSqlList, parametersList);
+            return obj.Select(o => o == null ? 0 : Convert.ToInt32(o)).ToList();
+        }
+
+        /// <summary>
+        /// 删除多条数据
+        /// </summary>
+        /// <param name="idList">待删除的数据的ID的列表，以“,”分割</param>
+        /// <returns>true表示删除成功</returns>
+        /// <exception cref="SQLiteException"></exception>
+        /// <exception cref="ArgumentNullException"></exception>
+        public static bool DeleteList(string idList)
+        {
+            if (idList == null)
+            {
+                throw new ArgumentNullException("idList");
+            }
+
+            if (idList.Length == 0)
+            {
+                return true;
+            }
+
+            var strSql = new StringBuilder();
+            strSql.Append("delete from <#=table.Name #> ");
+            strSql.Append(" where <#=table.Columns[0].Name #> in (" + idList + ")  ");
+            return DbHelperSQLite.ExecuteSql(<#=dataSource #>, strSql.ToString()) > 0;
+        }
+
+        /// <summary>
+        /// 更新多条数据
+        /// </summary>
+        /// <param name="modelList">待更新的数据需要指定ID</param>
+        /// <returns>true表示更新成功</returns>
+        /// <exception cref="SQLiteException"></exception>
+        /// <exception cref="ArgumentNullException"></exception>
+        public static bool UpdateList(IList<Model<#=table.Name #>> modelList)
+        {
+            if (modelList == null)
+            {
+                throw new ArgumentNullException("modelList");
+            }
+
+            if (!modelList.Any())
+            {
+                return true;
+            }
+
+            var strSqlList = new Collection<string>();
+            var parametersList = new Collection<SQLiteParameter[]>();
+            foreach (var model in modelList)
+            {
+                var strSql = new StringBuilder();
+                strSql.Append("update <#=table.Name #> set ");
+                <#for (int i = 1; i < table.Columns.Count; i++)
+{#>strSql.Append("<#=table.Columns[i].Name #>=@<#=table.Columns[i].Name #><#if (i != table.Columns.Count - 1)
+{#>,<#}#>");
+                <#}#>
+            
+                strSql.Append(" where <#=table.Columns[0].Name #>=@<#=table.Columns[0].Name #>");
+                var parameters = new[]
+                    {
+                        <#for (int i = 0; i < table.Columns.Count; i++)
+{#>new SQLiteParameter("@<#=table.Columns[i].Name #>", DbType.<#=table.Columns[i].Type.ToString() #>)<#if (i != table.Columns.Count - 1)
+{#>,
+                        <#}
+}#>
+
+                    };
+                <#for (int i = 0; i < table.Columns.Count; i++)
+{#>parameters[<#=i #>].Value = model.<#=table.Columns[i].Name #>;
+                <#}#>
+
+                strSqlList.Add(strSql.ToString());
+                parametersList.Add(parameters);
+            }
+
+            return DbHelperSQLite.ExecuteSqlList(<#=dataSource #>, strSqlList, parametersList) > 0;
+        }
+
+        /// <summary>
+        /// 获得符合指定条件的数据列表
+        /// </summary>
+        /// <param name="strWhere">指定的条件，不需要包括“where”，当为null或string.Empty时表中所有数据列表</param>
+        /// <returns></returns>
+        /// <exception cref="SQLiteException"></exception>
+        internal static List<Model<#=table.Name #>> GetModelList(string strWhere)
+        {
+            return DataTableToList(GetList(strWhere).Tables[0]);
+        }
+
+        /// <summary>
+        /// 获得符合指定条件的分页数据列表
+        /// </summary>
+        /// <param name="strWhere">指定的条件，不需要包括“where”，当为null或string.Empty时表中所有数据列表</param>
+        /// <param name="strOrderby">排序字段，不需要包括“order by”,当为null或string.empty是为默认排序</param>
+        /// <param name="limit">所取的记录数</param>
+        /// <param name="offset">跳过的记录数</param>
+        /// <returns></returns>
+        /// <exception cref="SQLiteException"></exception>
+        /// <exception cref="ArgumentException"></exception>
+		internal static List<Model<#=table.Name #>> GetModelList(string strWhere, string strOrderby, int limit, int offset)
+        {
+            if (limit < 0)
+            {
+                throw new ArgumentException("Is Negative.", "limit");
+            }
+
+            if (offset < 0)
+            {
+                throw new ArgumentException("Is Negative.", "offset");
+            }
+
+            return DataTableToList(GetList(strWhere, strOrderby, limit, offset).Tables[0]);
+        }
+
+        /// <summary>
+        /// 比较并更新数据，对于增加了的数据，插入数据库；对于删除了的数据，从数据库中删除；对于修改了的数据，更新至数据库中。
+        /// </summary>
+        /// <param name="oldModels">旧数据列表，刚从数据查找出来的数据列表</param>
+        /// <param name="newModels">新数据列表，结果程序增加、删除或修改之后的数据列表</param>
+        /// <returns></returns>
+        /// <exception cref="SQLiteException"></exception>
+        /// <exception cref="ArgumentNullException"></exception>
+        internal static bool SaveChanges(IList<Model<#=table.Name #>> oldModels, IList<Model<#=table.Name #>> newModels)
+        {
+            if (oldModels == null)
+            {
+                throw new ArgumentNullException("oldModels");
+            }
+
+            if (newModels == null)
+            {
+                throw new ArgumentNullException("newModels");
+            }
+
+            if (!oldModels.Any() && !newModels.Any())
+            {
+                return true;
+            }
+
+            var addedModels = newModels.Where(m => m.ID == 0).ToList();
+            var oldModelIds = oldModels.Select(m => m.ID).ToList();
+            var newModelIds = newModels.Select(m => m.ID);
+            var deletedIds = oldModelIds.Where(i => !newModelIds.Contains(i)).ToList();
+            var b = newModels.Select(model => new { model, index = oldModelIds.IndexOf(model.ID) });
+            var updatedModels = b.Where(m => m.index >= 0)
+                                          .Where(m => oldModels[m.index].NotEquals(m.model))
+                                          .Select(m => m.model).ToList();
+            var addedIDs = AddList(addedModels);
+            for (var i = 0; i < addedModels.Count && i < addedIDs.Count; i++)
+            {
+                addedModels[i].ID = addedIDs[i];
+            }
+
+            var ids = deletedIds.Aggregate(string.Empty, (s, d) => s + "," + d).Trim(',');
+            return (ids.Length == 0 || DeleteList(ids)) 
+                && (updatedModels.Count == 0 || UpdateList(updatedModels));
+        }
+
+        /// <param name="strWhere"></param>
+        /// <returns></returns>
+        /// <exception cref="SQLiteException"></exception>
+        private static DataSet GetList(string strWhere)
+        {
+            var strSql = new StringBuilder();
+            strSql.Append("select * ");
+            strSql.Append(" FROM <#=table.Name #> ");
+            if (strWhere != null && strWhere.Trim().Length != 0)
+            {
+                strSql.Append(" where " + strWhere);
+            }
+
+            return DbHelperSQLite.Query(<#=dataSource #>, strSql.ToString());
+        }
+
+        /// <exception cref="SQLiteException"></exception>
+        /// <exception cref="ArgumentException"></exception>
+        private static DataSet GetList(string strWhere, string strOrderby, int limit, int offset)
+        {
+            if (limit < 0)
+            {
+                throw new ArgumentException("Is Negative.", "limit");
+            }
+
+            if (offset < 0)
+            {
+                throw new ArgumentException("Is Negative.", "offset");
+            }
+
+            var strSql = new StringBuilder();
+            strSql.Append("select * ");
+            strSql.Append(" FROM <#=table.Name #> ");
+            if (strWhere != null && strWhere.Trim().Length != 0)
+            {
+                strSql.Append(" where " + strWhere);
+            }
+
+            if (strOrderby != null && strOrderby.Trim().Length != 0)
+            {
+                strSql.Append(" order by " + strOrderby);
+            }
+
+            strSql.Append(" limit " + limit);
+            strSql.Append(" offset " + offset + ";");
+            return DbHelperSQLite.Query(<#=dataSource #>, strSql.ToString());
+        }
+
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ArgumentException"></exception>
+        private static List<Model<#=table.Name #>> DataTableToList(DataTable dt)
+        {
+            if (dt == null)
+            {
+                throw new ArgumentNullException("dt");
+            }
+
+            if (dt.Rows == null)
+            {
+                throw new ArgumentException("Rows are Null.", "dt");
+            }
+
+            var modelList = new List<Model<#=table.Name #>>();
+            for (var n = 0; n < dt.Rows.Count; n++)
+            {
+                var model = DataRowToModel(dt.Rows[n]);
+                modelList.Add(model);
+            }
+
+            return modelList;
+        }
+
+        /// <exception cref="ArgumentNullException"></exception>
+        private static Model<#=table.Name #> DataRowToModel(DataRow row)
+        {
+            if (row == null)
+            {
+                throw new ArgumentNullException("row");
+            }
+
+            var model = new Model<#=table.Name #>();
+<#foreach (var column in table.Columns)
+{
+    var isString = column.Type.ToString() == "String";
+    var isBool = column.Type.ToString() == "Boolean";#>
+            if (row["<#=column.Name #>"] != null<#if (!isString){#> && row["<#=column.Name #>"].ToString().Length != 0<#}#>)
+            {
+<#
+    if (!isBool)
+    {
+#>
+                model.<#=column.Name #> = <#if (!isString)
+{#><#=column.Type.ToString() #>.Parse(<#}#>row["<#=column.Name #>"].ToString()<#if (!isString)
+{#>)<#}#>;
+<#
+    }
+    else
+    {
+#>
+                model.<#=column.Name #> = Convert.ToBoolean(Convert.ToInt32(row["<#=column.Name #>"]));
+<#
+    }
+#>
+            }
+
+<#
+}
+#>
+            return model;
+        }
+        private static bool NotEquals(this Model<#=table.Name #> model1,
+                                       Model<#=table.Name #> model2)
+        {
+            if (model1 == null && model2 == null)
+            {
+                return true;
+            }
+
+            if (model1 == null || model2 == null)
+            {
+                return false;
+            }
+
+            return <#
+for (int i = 0; i < table.Columns.Count; i++)
+{
+    var column = table.Columns[i];
+#>model1.<#=column.Name #> != model2.<#=column.Name #><#
+if (i != table.Columns.Count - 1)
+{
+#> || <#
+}
+}
+#>;
+        }
+    }
+}DALRemark20130426<#}
+}#>

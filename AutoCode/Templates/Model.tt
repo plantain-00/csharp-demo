@@ -1,0 +1,54 @@
+﻿<#@ template language="C#" #>
+<#@ assembly name="$(TargetDir)DataSource.dll" #>
+<#@ assembly name="System.Xml.dll" #>
+<#@ assembly name="System.Data.dll" #>
+<#@ import namespace="System.Xml.Serialization" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="DataSource" #>
+<#@ Import Namespace="System.Linq" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#
+var tmp = new XmlSerializer(typeof(Software))
+                             .Deserialize(
+                                 new FileStream("Last.xml",
+                                                FileMode.Open,
+                                                FileAccess.ReadWrite,
+                                                FileShare.ReadWrite)) as Software;
+foreach (var database in tmp.Databases)
+{
+    foreach (var table in database.Tables)
+    {
+#>
+using System;
+using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
+
+namespace <#=tmp.ModelNameSpace #>.<#=database.Name #>
+{
+    [Serializable]
+    public class Model<#=table.Name #>
+    {
+<#
+foreach (var column in table.Columns)
+{
+#>
+        public <#=column.Type.ToString() #> <#=column.Name #> { get; set; }
+<#
+}
+#>
+
+        public Model<#=table.Name #> Clone()
+        {
+            using (var stream = new MemoryStream())
+            {
+                var formatter = new BinaryFormatter();
+                formatter.Serialize(stream, this);
+                stream.Seek(0, SeekOrigin.Begin);
+                return (Model<#=table.Name #>)formatter.Deserialize(stream);
+            }
+        }
+    }
+}ModelRemark20130426<#
+}
+}
+#>

@@ -1,0 +1,294 @@
+﻿<#@ template language="C#" #>
+<#@ assembly name="$(TargetDir)DataSource.dll" #>
+<#@ assembly name="System.Xml.dll" #>
+<#@ assembly name="System.Data.dll" #>
+<#@ import namespace="System.Xml.Serialization" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ import namespace="DataSource" #>
+<#
+var tmp = new XmlSerializer(typeof(Software))
+                             .Deserialize(
+                                 new FileStream("Last.xml",
+                                                FileMode.Open,
+                                                FileAccess.ReadWrite,
+                                                FileShare.ReadWrite)) as Software;
+#>
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Data;
+using System.Data.SQLite;
+
+namespace <#=tmp.DALNameSpace #>.Services
+{
+    internal static class DbHelperSQLite
+    {
+        /// <exception cref="SQLiteException"></exception>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ArgumentException"></exception>
+        internal static int ExecuteSql(string dataSource, string sqlString, params SQLiteParameter[] cmdParms)
+        {
+            if (dataSource == null)
+            {
+                throw new ArgumentNullException("dataSource");
+            }
+
+            if (sqlString == null)
+            {
+                throw new ArgumentNullException("sqlString");
+            }
+
+            if (dataSource.Length == 0)
+            {
+                throw new ArgumentException("Empty String.", "dataSource");
+            }
+
+            if (sqlString.Length == 0)
+            {
+                throw new ArgumentException("Empty String.", "sqlString");
+            }
+
+            using (var connection = new SQLiteConnection(dataSource))
+            {
+                using (var cmd = new SQLiteCommand())
+                {
+                    if (connection.State != ConnectionState.Open)
+                    {
+                        connection.Open();
+                    }
+
+                    cmd.Connection = connection;
+                    cmd.CommandText = sqlString;
+                    cmd.CommandType = CommandType.Text;
+                    if (cmdParms != null)
+                    {
+                        foreach (var parm in cmdParms)
+                        {
+                            cmd.Parameters.Add(parm);
+                        }
+                    }
+
+                    var rows = cmd.ExecuteNonQuery();
+                    cmd.Parameters.Clear();
+                    return rows;
+                }
+            }
+        }
+
+        /// <exception cref="SQLiteException"></exception>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ArgumentException"></exception>
+        internal static int ExecuteSqlList(string dataSource, IList<string> sqlString, IList<SQLiteParameter[]> cmdParms)
+        {
+            if (dataSource == null)
+            {
+                throw new ArgumentNullException("dataSource");
+            }
+
+            if (sqlString == null)
+            {
+                throw new ArgumentNullException("sqlString");
+            }
+
+            if (cmdParms == null)
+            {
+                throw new ArgumentNullException("cmdParms");
+            }
+
+            if (dataSource.Length == 0)
+            {
+                throw new ArgumentException("Empty String.", "dataSource");
+            }
+
+            if (sqlString.Count == 0)
+            {
+                throw new ArgumentException("Empty Collection.", "sqlString");
+            }
+
+            if (cmdParms.Count == 0)
+            {
+                throw new ArgumentException("Empty Collection.", "cmdParms");
+            }
+
+            var result = 0;
+            using (var connection = new SQLiteConnection(dataSource))
+            {
+                if (connection.State != ConnectionState.Open)
+                {
+                    connection.Open();
+                }
+
+                using (var transaction = connection.BeginTransaction())
+                {
+                    using (var cmd = new SQLiteCommand())
+                    {
+                        cmd.Connection = connection;
+                        try
+                        {
+                            for (var i = 0; i < cmdParms.Count; i++)
+                            {
+                                cmd.CommandText = sqlString[i];
+                                cmd.Transaction = transaction;
+                                cmd.CommandType = CommandType.Text;
+                                if (cmdParms[i] != null)
+                                {
+                                    foreach (var parm in cmdParms[i])
+                                    {
+                                        cmd.Parameters.Add(parm);
+                                    }
+                                }
+
+                                var rows = cmd.ExecuteNonQuery();
+                                cmd.Parameters.Clear();
+                                result += rows;
+                            }
+
+                            transaction.Commit();
+                            return result;
+                        }
+                        catch
+                        {
+                            transaction.Rollback();
+                            throw;
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <exception cref="SQLiteException"></exception>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ArgumentException"></exception>
+        internal static IList<object> GetSingle(string dataSource, IList<string> sqlString, IList<SQLiteParameter[]> cmdParms)
+        {
+            if (dataSource == null)
+            {
+                throw new ArgumentNullException("dataSource");
+            }
+
+            if (sqlString == null)
+            {
+                throw new ArgumentNullException("sqlString");
+            }
+
+            if (cmdParms == null)
+            {
+                throw new ArgumentNullException("cmdParms");
+            }
+
+            if (dataSource.Length == 0)
+            {
+                throw new ArgumentException("Empty String.", "dataSource");
+            }
+            if (sqlString.Count == 0)
+            {
+                throw new ArgumentException("Empty Collection.", "sqlString");
+            }
+
+            if (cmdParms.Count == 0)
+            {
+                throw new ArgumentException("Empty Collection.", "cmdParms");
+            }
+
+            var result = new Collection<object>();
+            using (var connection = new SQLiteConnection(dataSource))
+            {
+                if (connection.State != ConnectionState.Open)
+                {
+                    connection.Open();
+                }
+
+                using (var transaction = connection.BeginTransaction())
+                {
+                    using (var cmd = new SQLiteCommand())
+                    {
+                        cmd.Connection = connection;
+                        try
+                        {
+                            for (var i = 0; i < cmdParms.Count; i++)
+                            {
+                                cmd.CommandText = sqlString[i];
+                                cmd.Transaction = transaction;
+                                cmd.CommandType = CommandType.Text;
+                                if (cmdParms[i] != null)
+                                {
+                                    foreach (var parm in cmdParms[i])
+                                    {
+                                        cmd.Parameters.Add(parm);
+                                    }
+                                }
+
+                                var obj = cmd.ExecuteScalar();
+                                cmd.Parameters.Clear();
+                                result.Add(obj == DBNull.Value ? null : obj);
+                            }
+
+                            transaction.Commit();
+                            return result;
+                        }
+                        catch
+                        {
+                            transaction.Rollback();
+                            throw;
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <exception cref="SQLiteException"></exception>
+        /// <exception cref="ArgumentNullException"></exception>
+        /// <exception cref="ArgumentException"></exception>
+        internal static DataSet Query(string dataSource, string sqlString, params SQLiteParameter[] cmdParms)
+        {
+            if (dataSource == null)
+            {
+                throw new ArgumentNullException("dataSource");
+            }
+
+            if (sqlString == null)
+            {
+                throw new ArgumentNullException("sqlString");
+            }
+
+            if (dataSource.Length == 0)
+            {
+                throw new ArgumentException("Empty String.", "dataSource");
+            }
+
+            if (sqlString.Length == 0)
+            {
+                throw new ArgumentException("Empty String.", "sqlString");
+            }
+
+            using (var connection = new SQLiteConnection(dataSource))
+            {
+                var cmd = new SQLiteCommand();
+                if (connection.State != ConnectionState.Open)
+                {
+                    connection.Open();
+                }
+
+                cmd.Connection = connection;
+                cmd.CommandText = sqlString;
+                cmd.CommandType = CommandType.Text;
+                if (cmdParms != null)
+                {
+                    foreach (var parm in cmdParms)
+                    {
+                        cmd.Parameters.Add(parm);
+                    }
+                }
+
+                using (var adapter = new SQLiteDataAdapter(cmd))
+                {
+                    var dataSet = new DataSet();
+                    adapter.Fill(dataSet, "dataSet");
+                    cmd.Parameters.Clear();
+                    return dataSet;
+                }
+            }
+        }
+    }
+}
