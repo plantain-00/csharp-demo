@@ -1,0 +1,26 @@
+﻿@using BPM.Data
+@using BPM.Service
+@{
+    var permissions = ViewData["permissions"] as List<Permission>;
+}
+<h2 class="text-center">@Protocols.PROCESS</h2>
+<table class="table table-bordered">
+    <tr>
+        <th>序号</th>
+        <th>流程</th>
+        <th>操作</th>
+    </tr>
+    @if (permissions.Contains(Permission.WorkDistribution))
+    {
+        <tr>
+            <td>1</td>
+            <td>@Protocols.WORK_ASSIGNMENT</td>
+            <td>
+                <a href="javascript:void(0);" class="btn btn-primary" onclick=" Process.newWorkAssignment(); ">启动流程</a>
+                &nbsp;
+                <a href="javascript:void(0);" class="btn btn-primary" onclick=" Process.showImage(); ">流程图</a>
+            </td>
+        </tr>
+    }
+</table>
+<div id="detail" style="display: none;text-align: center;"></div>

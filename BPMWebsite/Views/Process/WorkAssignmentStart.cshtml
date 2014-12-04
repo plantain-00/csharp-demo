@@ -1,0 +1,125 @@
+﻿@using BPM.Service.Models
+@{
+    var departments = ViewData["departments"] as List<DepartmentDTO>;
+    var assigner = ViewData["assigner"] as string;
+    var draft = new DraftJs("WorkAssignmentStart");
+    draft.Items.Add("projectID");
+    draft.Items.Add("projectName");
+    draft.Items.Add("workContent");
+    draft.Items.Add("reportDate");
+    draft.Items.Add("remarks");
+}
+<form class="form-horizontal" role="form">
+    <div class="form-group">
+        <label for="projectID" class="col-sm-2 control-label">项目编号</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="projectID" placeholder="项目编号">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="projectName" class="col-sm-2 control-label">项目名称</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="projectName" placeholder="项目名称">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="workContent" class="col-sm-2 control-label">工作内容</label>
+        <div class="col-sm-10">
+            <textarea class="form-control" id="workContent" placeholder="工作内容" style="height: 100px;"></textarea>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="reportDate" class="col-sm-2 control-label">工作汇报时间</label>
+        <div class="col-sm-2">
+            <input type="text" class="form-control" id="reportDate">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="remarks" class="col-sm-2 control-label">备注</label>
+        <div class="col-sm-10">
+            <textarea class="form-control" id="remarks" placeholder="备注" style="height: 100px;"></textarea>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="assigner" class="col-sm-2 control-label">派发人</label>
+        <div class="col-sm-2">
+            <input type="text" class="form-control" id="assigner" readonly="readonly" value="@assigner">
+        </div>
+    </div>
+    @foreach (var department in departments.OrderBy(d => d.Name))
+    {
+        <div class="form-group">
+            <label for="remarks" class="col-sm-2 control-label">@department.Name</label>
+            <div class="col-sm-10">
+                @foreach (var user in department.Users.OrderBy(p => p.Name))
+                {
+                    string name;
+                    switch (department.Name)
+                    {
+                        case "财务部":
+                            name = "financial";
+                            break;
+                        case "化验室":
+                            name = "test";
+                            break;
+                        default:
+                            name = string.Empty;
+                            break;
+                    }
+                    <label class="radio-inline">
+                        <input type="radio" name="@name" value="@user.ID"> @user.Name
+                    </label>
+                }
+            </div>
+        </div>
+    }
+    <div class="text-center">
+        <button class="btn btn-primary" onclick=" submitForm();return false; ">提交</button>
+        &nbsp;
+        <button class="btn" onclick=" saveAsDraft(); return false; ">保存草稿</button>
+        &nbsp;
+        <button class="btn" onclick=" recover(); return false; ">从草稿恢复</button>
+    </div>
+</form>
+<script type="text/javascript">
+    $('#reportDate').datepicker({
+        format : "yyyy-mm-dd",
+        todayBtn : "linked",
+        language : "zh-CN",
+        autoclose : true
+    });
+
+    function submitForm() {
+        $.post("@Url.Action("WorkAssignmentStartSubmit")", {
+            projectID : $("#projectID").val(),
+            projectName : $("#projectName").val(),
+            workContent : $("#workContent").val(),
+            reportDate : $("#reportDate").val(),
+            remarks : $("#remarks").val(),
+            financial : $('input[name="financial"]:checked').val(),
+            test : $('input[name="test"]:checked').val()
+        }, function(data) {
+            showTips(data.message);
+            if (data.isSuccess) {
+                defaultPage();
+            }
+        });
+    }
+
+    function saveAsDraft() {
+        $.post("@Url.Action("Save", "Home")", {
+            @Html.Raw(draft.GetJson())
+        }, function(data) {
+            showTips(data.message);
+        });
+    }
+
+    function recover() {
+        $.post("@Url.Action("Recover", "Home")", {
+            names: '@Html.Raw(draft.GetNames())'
+        }, function(data) {
+            @Html.Raw(draft.GetRecover())
+            showTips("恢复完成");
+        });
+    }
+</script>

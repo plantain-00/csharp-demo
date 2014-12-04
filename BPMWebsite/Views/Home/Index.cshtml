@@ -1,0 +1,110 @@
+﻿@using BPM.Data
+@using BPM.Service
+@{
+    Layout = "~/Views/Shared/HomeLayout.cshtml";
+    var permissions = ViewData["permissions"] as List<Permission>;
+    var permissionClasses = ViewData["permissionClasses"] as List<string>;
+    var realName = HttpUtility.UrlDecode(Request.Cookies["RealName"].Value);
+}
+<div style="height: 100%; margin-left: 200px; margin-right: 200px;">
+    <div id="main" style="margin: 10px;"></div>
+    <div class="panel-group" id="accordion" style="height: 100%; left: 10px; position: absolute; top: 100px; width: 190px;">
+        @if (permissionClasses.Contains(Protocols.MY_DESKTOP))
+        {
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+                            @Protocols.MY_DESKTOP
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapseOne" class="panel-collapse collapse in">
+                    <div class="panel-body">
+                        <div class="btn-group-vertical">
+                            @if (permissions.Contains(Permission.NewApplication))
+                            {
+                                <button type="button" class="btn btn-link" onclick=" applyNew(); ">@Protocols.NEW_APPLICATION</button>
+                            }
+                            @if (permissions.Contains(Permission.ToDoList))
+                            {
+                                <button type="button" class="btn btn-link" onclick=" myToDo(); ">@Protocols.MY_TO_DO</button>
+                            }
+                            @if (permissions.Contains(Permission.ToReadList))
+                            {
+                                <button type="button" class="btn btn-link" onclick=" myToBeRead(); ">@Protocols.TO_BE_READ</button>
+                            }
+                            @if (permissions.Contains(Permission.History))
+                            {
+                                <button type="button" class="btn btn-link" onclick=" processHistory(); ">@Protocols.HISTORY</button>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (permissionClasses.Contains(Protocols.SYSTEM_SETTINGS))
+        {
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">
+                            @Protocols.SYSTEM_SETTINGS
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapse2" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <div class="btn-group-vertical">
+                            @if (permissions.Contains(Permission.AllUsers))
+                            {
+                                <button type="button" class="btn btn-link" onclick=" allUsersAndDepartments(); ">@Protocols.ALL_USERS_AND_DEPARTMENTS</button>
+                            }
+                            @if (permissions.Contains(Permission.UserManagement))
+                            {
+                                <button type="button" class="btn btn-link" onclick=" userManagement(); ">@Protocols.USER_MANAGEMENT</button>
+                            }
+                            @if (permissions.Contains(Permission.DepartmentManagement))
+                            {
+                                <button type="button" class="btn btn-link" onclick=" departmentManagement(); ">@Protocols.DEPARTMENT_MANAGEMENT</button>
+                            }
+                            @if (permissions.Contains(Permission.RoleManagement))
+                            {
+                                <button type="button" class="btn btn-link" onclick=" roleManagement(); ">@Protocols.ROLE_MANAGEMENT</button>
+                            }
+                            @if (permissions.Contains(Permission.AllPermissions))
+                            {
+                                <button type="button" class="btn btn-link" onclick=" allPermissions(); ">@Protocols.ALL_PERMISSIONS</button>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+        @if (permissionClasses.Contains(Protocols.PERSONAL_SETTINGS))
+        {
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">
+                            @Protocols.PERSONAL_SETTINGS
+                        </a>
+                    </h4>
+                </div>
+                <div id="collapse3" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <div class="btn-group-vertical">
+                            @if (permissions.Contains(Permission.ModifyPassword))
+                            {
+                                <button type="button" class="btn btn-link" onclick=" modifyPassword(); ">@Protocols.MODIFY_PASSWORD</button>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    <div style="height: 100%; padding: 10px; position: absolute; right: 10px; top: 100px; width: 190px;">
+        你好，@realName
+    </div>
+</div>

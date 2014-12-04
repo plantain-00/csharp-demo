@@ -1,0 +1,102 @@
+﻿@using BPM.Service.Models
+@{
+    var workAssignmentDTO = ViewData["workAssignmentDTO"] as WorkAssignmentDTO;
+}
+<form class="form-horizontal" role="form">
+    <div class="form-group">
+        <label for="sheetID" class="col-sm-2 control-label">编号</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="sheetID" placeholder="编号" value="@workAssignmentDTO.SheetID" readonly="readonly">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="projectID" class="col-sm-2 control-label">项目编号</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="projectID" placeholder="项目编号" value="@workAssignmentDTO.ProjectID" readonly="readonly">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="projectName" class="col-sm-2 control-label">项目名称</label>
+        <div class="col-sm-10">
+            <input type="text" class="form-control" id="projectName" placeholder="项目名称" value="@workAssignmentDTO.ProjectName" readonly="readonly">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="workContent" class="col-sm-2 control-label">工作内容</label>
+        <div class="col-sm-10">
+            <textarea class="form-control" id="workContent" placeholder="工作内容" style="height: 100px;" readonly="readonly">@workAssignmentDTO.WorkContent</textarea>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="reportDate" class="col-sm-2 control-label">工作汇报时间</label>
+        <div class="col-sm-2">
+            <input type="text" class="form-control" id="reportDate" value="@(workAssignmentDTO.ReportDate == null ? "" : workAssignmentDTO.ReportDate.Value.ToString("yyyy-MM-dd"))" readonly="readonly">
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="remarks" class="col-sm-2 control-label">备注</label>
+        <div class="col-sm-10">
+            <textarea class="form-control" id="remarks" placeholder="备注" style="height: 100px;" readonly="readonly">@workAssignmentDTO.Remarks</textarea>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="assigner" class="col-sm-2 control-label">派发人</label>
+        <div class="col-sm-2">
+            <input type="text" class="form-control" id="assigner" readonly="readonly" value="@workAssignmentDTO.ApplierName">
+        </div>
+    </div>
+    @if (!string.IsNullOrEmpty(workAssignmentDTO.FinancialSituation))
+    {
+        <div class="form-group">
+            <label for="financialFinishDate" class="col-sm-2 control-label">财务部完成时间</label>
+            <div class="col-sm-2">
+                <input type="text" class="form-control" id="financialFinishDate" value="@(workAssignmentDTO.FinancialFinishDate == null ? "" : workAssignmentDTO.FinancialFinishDate.Value.ToString("yyyy-MM-dd"))" readonly="readonly">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="financialSituation" class="col-sm-2 control-label">财务部完成情况</label>
+            <div class="col-sm-10">
+                <textarea class="form-control" id="financialSituation" placeholder="财务部完成情况" style="height: 100px;" readonly="readonly">@workAssignmentDTO.FinancialSituation</textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="financialDelayReason" class="col-sm-2 control-label">财务部延迟原因</label>
+            <div class="col-sm-10">
+                <textarea class="form-control" id="financialDelayReason" placeholder="财务部延迟原因" style="height: 100px;" readonly="readonly">@workAssignmentDTO.FinancialDelayReason</textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="financialExecutor" class="col-sm-2 control-label">财务部执行人</label>
+            <div class="col-sm-2">
+                <input type="text" class="form-control" id="financialExecutor" readonly="readonly" value="@workAssignmentDTO.FinancialUserName">
+            </div>
+        </div>
+    }
+    @if (!string.IsNullOrEmpty(workAssignmentDTO.TestSituation))
+    {
+        <div class="form-group">
+            <label for="testFinishDate" class="col-sm-2 control-label">化验室完成时间</label>
+            <div class="col-sm-2">
+                <input type="text" class="form-control" id="testFinishDate" value="@(workAssignmentDTO.TestFinishDate == null ? "" : workAssignmentDTO.TestFinishDate.Value.ToString("yyyy-MM-dd"))" readonly="readonly">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="testSituation" class="col-sm-2 control-label">化验室完成情况</label>
+            <div class="col-sm-10">
+                <textarea class="form-control" id="testSituation" placeholder="化验室完成情况" style="height: 100px;" readonly="readonly">@workAssignmentDTO.TestSituation</textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="testDelayReason" class="col-sm-2 control-label">化验室延迟原因</label>
+            <div class="col-sm-10">
+                <textarea class="form-control" id="testDelayReason" placeholder="化验室延迟原因" style="height: 100px;" readonly="readonly">@workAssignmentDTO.TestDelayReason</textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="testExecutor" class="col-sm-2 control-label">化验室执行人</label>
+            <div class="col-sm-2">
+                <input type="text" class="form-control" id="testExecutor" readonly="readonly" value="@workAssignmentDTO.TestUserName">
+            </div>
+        </div>
+    }
+</form>
