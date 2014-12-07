@@ -1,8 +1,9 @@
-﻿using System.Collections;
+﻿#define Second
 using System.Collections.Generic;
 
 namespace SevenQueens
 {
+#if First
     internal class Program
     {
         private static void Main(string[] args)
@@ -170,4 +171,105 @@ namespace SevenQueens
             return true;
         }
     }
+#endif
+#if Second
+    internal class Program
+    {
+        public static bool IsValid(params int[] queens)
+        {
+            var queen1X = queens.Length - 1;
+            var queen1Y = queens[queens.Length - 1];
+            for (var i = 0; i < queens.Length - 1; i++)
+            {
+                var queen2X = i;
+                var queen2Y = queens[i];
+                if (queen1X == queen2X)
+                {
+                    return false;
+                }
+                if (queen1Y == queen2Y)
+                {
+                    return false;
+                }
+                if (queen1X - queen2X == queen1Y - queen2Y)
+                {
+                    return false;
+                }
+                if (queen1X - queen2X + queen1Y - queen2Y == 0)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private static void Main(string[] args)
+        {
+            var result = new List<int[]>();
+            for (var i0 = 0; i0 < 8; i0++)
+            {
+                for (var i1 = 0; i1 < 8; i1++)
+                {
+                    if (!IsValid(i0, i1))
+                    {
+                        continue;
+                    }
+                    for (var i2 = 0; i2 < 8; i2++)
+                    {
+                        if (!IsValid(i0, i1, i2))
+                        {
+                            continue;
+                        }
+                        for (var i3 = 0; i3 < 8; i3++)
+                        {
+                            if (!IsValid(i0, i1, i2, i3))
+                            {
+                                continue;
+                            }
+                            for (var i4 = 0; i4 < 8; i4++)
+                            {
+                                if (!IsValid(i0, i1, i2, i3, i4))
+                                {
+                                    continue;
+                                }
+                                for (var i5 = 0; i5 < 8; i5++)
+                                {
+                                    if (!IsValid(i0, i1, i2, i3, i4, i5))
+                                    {
+                                        continue;
+                                    }
+                                    for (var i6 = 0; i6 < 8; i6++)
+                                    {
+                                        if (!IsValid(i0, i1, i2, i3, i4, i5, i6))
+                                        {
+                                            continue;
+                                        }
+                                        for (var i7 = 0; i7 < 8; i7++)
+                                        {
+                                            if (!IsValid(i0, i1, i2, i3, i4, i5, i6, i7))
+                                            {
+                                                continue;
+                                            }
+                                            result.Add(new[]
+                                                       {
+                                                           i0,
+                                                           i1,
+                                                           i2,
+                                                           i3,
+                                                           i4,
+                                                           i5,
+                                                           i6,
+                                                           i7
+                                                       });
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+#endif
 }
