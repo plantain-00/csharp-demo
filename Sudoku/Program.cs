@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace Sudoku
 {
@@ -33,16 +32,16 @@ namespace Sudoku
 
             var result = board.GetResult();
 
-            foreach (var positionse in result)
+            foreach (var positions in result)
             {
                 Console.WriteLine();
-                Print(positionse);
+                Print(positions);
             }
 
             Console.Read();
         }
 
-        public static void Print(Position[,] positions)
+        private static void Print(Position[,] positions)
         {
             for (var i = 0; i < positions.GetLength(0); i++)
             {
@@ -55,22 +54,23 @@ namespace Sudoku
         }
     }
 
-    public class SudokuBoard
+    internal sealed class SudokuBoard
     {
-        public Position[,] Positions = new Position[9, 9];
+        private const int RANK = 9;
+        public readonly Position[,] Positions = new Position[RANK, RANK];
 
         public SudokuBoard()
         {
-            for (var i = 0; i < 9; i++)
+            for (var i = 0; i < RANK; i++)
             {
-                for (var j = 0; j < 9; j++)
+                for (var j = 0; j < RANK; j++)
                 {
                     Positions[i, j] = new Position();
                 }
             }
         }
 
-        public bool IsValid(int x, int y, int value)
+        private bool IsValid(int x, int y, int value)
         {
             for (var i = 0; i < x; i++)
             {
@@ -80,7 +80,7 @@ namespace Sudoku
                 }
             }
 
-            for (var i = x + 1; i < 9; i++)
+            for (var i = x + 1; i < RANK; i++)
             {
                 if (Positions[i, y].IsFixed
                     && Positions[i, y].Value == value)
@@ -97,7 +97,7 @@ namespace Sudoku
                 }
             }
 
-            for (var j = y + 1; j < 9; j++)
+            for (var j = y + 1; j < RANK; j++)
             {
                 if (Positions[x, j].IsFixed
                     && Positions[x, j].Value == value)
@@ -135,12 +135,12 @@ namespace Sudoku
             return true;
         }
 
-        public Position[,] Copy()
+        private Position[,] Copy()
         {
-            var result = new Position[9, 9];
-            for (var i = 0; i < 9; i++)
+            var result = new Position[RANK, RANK];
+            for (var i = 0; i < RANK; i++)
             {
-                for (var j = 0; j < 9; j++)
+                for (var j = 0; j < RANK; j++)
                 {
                     result[i, j] = new Position(Positions[i, j].Value);
                 }
@@ -148,7 +148,7 @@ namespace Sudoku
             return result;
         }
 
-        public void Do(List<Position[,]> result, int x, int y)
+        private void Do(ICollection<Position[,]> result, int x, int y)
         {
             if (Positions[x, y].IsFixed)
             {
@@ -192,7 +192,7 @@ namespace Sudoku
             }
         }
 
-        public List<Position[,]> GetResult()
+        public IEnumerable<Position[,]> GetResult()
         {
             var result = new List<Position[,]>();
 
@@ -201,12 +201,12 @@ namespace Sudoku
             return result;
         }
 
-        public void Set(int x, int y, int value)
+        private void Set(int x, int y, int value)
         {
             Positions[x, y].Set(value);
         }
 
-        public void Set(int x, params int[] values)
+        internal void Set(int x, params int[] values)
         {
             for (var i = 0; i < values.Length; i++)
             {
@@ -218,7 +218,7 @@ namespace Sudoku
         }
     }
 
-    public class Position
+    internal sealed class Position
     {
         public Position(int value)
         {
@@ -230,7 +230,7 @@ namespace Sudoku
             IsFixed = false;
         }
 
-        public bool IsFixed { get; set; }
+        public bool IsFixed { get; private set; }
         public int Value { get; set; }
 
         public void Set(int value)
