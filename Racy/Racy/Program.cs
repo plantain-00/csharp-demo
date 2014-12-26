@@ -25,16 +25,17 @@ namespace Racy
         {
             var phoneCall = new StateMachine<State, Trigger>(State.OffHook);
 
-            phoneCall[State.OffHook].CanBeFired(Trigger.CallDialled).To(State.Ringing);
+            phoneCall.Config(State.OffHook, Trigger.CallDialled, State.Ringing);
 
-            phoneCall[State.Ringing].CanBeFired(Trigger.HungUp).To(State.OffHook);
-            phoneCall[State.Ringing].CanBeFired(Trigger.CallConnected).To(State.Connected);
+            phoneCall.Config(State.Ringing, Trigger.HungUp, State.OffHook);
+            phoneCall.Config(State.Ringing, Trigger.CallConnected, State.Connected);
 
-            phoneCall[State.Connected].OnEntry += (s1, t, s2) => Console.WriteLine("entry {0} from {1} by {2}", s2, s1, t);
-            phoneCall[State.Connected].OnExit += (s1, t, s2) => Console.WriteLine("exit {0} to {1} by {2}", s1, s2, t);
-            phoneCall[State.Connected].CanBeFired(Trigger.LeftMessage).To(State.OffHook);
-            phoneCall[State.Connected].CanBeFired(Trigger.HungUp).To(State.OffHook);
-            phoneCall[State.Connected].CanBeFired(Trigger.PlacedOnHold).To(State.OnHold);
+            phoneCall.Config(State.Connected, Trigger.LeftMessage, State.OffHook);
+            phoneCall.Config(State.Connected, Trigger.HungUp, State.OffHook);
+            phoneCall.Config(State.Connected, Trigger.PlacedOnHold, State.OnHold);
+
+            phoneCall.ConfigOnEntry(State.Connected, r => Console.WriteLine("{0} {1} {2}", r.By, r.From, r.To));
+            phoneCall.ConfigOnExit(State.Connected, r => Console.WriteLine("{0} {1} {2}", r.By, r.From, r.To));
 
             phoneCall.Fire(Trigger.CallDialled);
             Console.WriteLine(phoneCall.State);
