@@ -63,6 +63,7 @@
     <Compile Include="Models\HistoryItem.cs" />
     <Compile Include="PM25Now.cs" />
     <Compile Include="SingleInstanceAppliction.cs" />
+    <Compile Include="TV.cs" />
     <Compile Include="V2ex.cs" />
     <Compile Include="XArt.cs" />
     <Compile Include="XmlSerializerHelper.cs" />

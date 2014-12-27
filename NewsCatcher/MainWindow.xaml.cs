@@ -74,6 +74,10 @@ namespace NewsCatcher
                     _itemsSource.RemoveAll(i => i.Url == V2ex.FAILS_MESSAGE);
                     await V2exTask();
                     break;
+                case TV.FAILS_MESSAGE:
+                    _itemsSource.RemoveAll(i => i.Url == TV.FAILS_MESSAGE);
+                    await TVTask();
+                    break;
                 default:
                     {
                         var uri = e.Uri.AbsoluteUri;
@@ -121,6 +125,7 @@ namespace NewsCatcher
             XArtTask();
             PM25NowTask();
             V2exTask();
+            TVTask();
         }
         private void Refactor()
         {
@@ -171,6 +176,14 @@ namespace NewsCatcher
         private async Task CnblogsTask()
         {
             var result = await Cnblogs.DoAsync();
+            await _deserialization;
+            _itemsSource.AddRange(result.Where(i => History.All(h => h.Url != i.Url)));
+            Refactor();
+            listView.Items.Refresh();
+        }
+        private async Task TVTask()
+        {
+            var result = await TV.DoAsync();
             await _deserialization;
             _itemsSource.AddRange(result.Where(i => History.All(h => h.Url != i.Url)));
             Refactor();
