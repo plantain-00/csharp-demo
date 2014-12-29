@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Nodes\Attribute.cs" />
+    <Compile Include="Nodes\ScriptText.cs" />
     <Compile Include="Parsers\AttributeParser.cs" />
     <Compile Include="Parsers\AttributesParser.cs" />
     <Compile Include="CHAR.cs" />

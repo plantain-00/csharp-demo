@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
 
 using Ridge.Nodes;
 
@@ -37,29 +38,48 @@ namespace Ridge.Parsers
             {
                 var endIndex = FindEndMarkOfCurrentTag();
 
-                while (Index < endIndex)
+                SkipSpaces();
+
+                if (Tag.Name.Equals("script", StringComparison.CurrentCultureIgnoreCase))
                 {
-                    SkipSpaces();
-
-                    if (Strings[Index] == STRING.LESS_THAN
-                        && Strings[Index + 1].StartsWith(STRING.COMMENT_START))
+                    var builder = new StringBuilder(string.Empty);
+                    for (var i = Index; i < endIndex; i++)
                     {
-                        ParseComment();
-                    }
-                    else if (Strings[Index] == STRING.LESS_THAN
-                             && Strings[Index + 1] != STRING.SLASH)
-                    {
-                        ParseTag();
-                    }
-                    else
-                    {
-                        ParsePlainText();
+                        builder.Append(Strings[i]);
                     }
 
-                    SkipSpaces();
+                    Tag.Children.Add(new ScriptText
+                                     {
+                                         Text = builder.ToString()
+                                     });
+                    Index = endIndex + 4;
                 }
+                else
+                {
+                    while (Index < endIndex)
+                    {
+                        SkipSpaces();
 
-                Index = endIndex + 4;
+                        if (Strings[Index] == STRING.LESS_THAN
+                            && Strings[Index + 1].StartsWith(STRING.COMMENT_START))
+                        {
+                            ParseComment();
+                        }
+                        else if (Strings[Index] == STRING.LESS_THAN
+                                 && Strings[Index + 1] != STRING.SLASH)
+                        {
+                            ParseTag();
+                        }
+                        else
+                        {
+                            ParsePlainText();
+                        }
+
+                        SkipSpaces();
+                    }
+
+                    Index = endIndex + 4;
+                }
             }
         }
 

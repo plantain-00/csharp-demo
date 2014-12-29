@@ -11,7 +11,7 @@ namespace Ridge.Console
             var html = new WebClient
                        {
                            Encoding = Encoding.UTF8
-                       }.DownloadString("http://www.cnblogs.com");
+                       }.DownloadString("http://www.cnbeta.com/");
             var result = new Parser().Parse(html);
             var streamWriter = new StreamWriter("a.txt", false);
             foreach (var node in result)

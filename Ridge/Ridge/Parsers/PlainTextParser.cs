@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Text;
 
 using Ridge.Nodes;
 
@@ -17,10 +18,7 @@ namespace Ridge.Parsers
 
         internal override void Parse()
         {
-            PlainText = new PlainText
-                        {
-                            Text = string.Empty
-                        };
+            PlainText = new PlainText();
             FindEndOfPlainText();
 
             PlainText.Depth = _depth;
@@ -28,44 +26,60 @@ namespace Ridge.Parsers
 
         private void FindEndOfPlainText()
         {
-            do
+            var builder = new StringBuilder(string.Empty);
+
+            builder.Append(Strings[Index]);
+
+            if (Strings[Index] == STRING.SLASH
+                && Strings[Index + 1] == STRING.SLASH)
             {
-                PlainText.Text += Strings[Index];
+                ContainSingleLineComment(builder);
+            }
+            else
+            {
+                Index++;
+            }
+
+            while (Index < Strings.Count
+                   && Strings[Index] != STRING.LESS_THAN)
+            {
+                builder.Append(Strings[Index]);
+
                 if (Strings[Index] == STRING.SLASH
                     && Strings[Index + 1] == STRING.SLASH)
                 {
-                    ContainSingleLineComment();
+                    ContainSingleLineComment(builder);
                 }
                 else
                 {
                     Index++;
                 }
             }
-            while (Index < Strings.Count
-                   && Strings[Index] != STRING.LESS_THAN);
+
+            PlainText.Text = builder.ToString();
         }
 
-        private void ContainSingleLineComment()
+        private void ContainSingleLineComment(StringBuilder builder)
         {
             Index++;
-            PlainText.Text += Strings[Index];
+            builder.Append(Strings[Index]);
             Index++;
 
-            FindEndOfSingleLineComment();
+            FindEndOfSingleLineComment(builder);
 
             if (Index < Strings.Count)
             {
-                PlainText.Text += Strings[Index];
+                builder.Append(Strings[Index]);
                 Index++;
             }
         }
 
-        private void FindEndOfSingleLineComment()
+        private void FindEndOfSingleLineComment(StringBuilder builder)
         {
             while (Index < Strings.Count
-                   && (Strings[Index] != STRING.NEW_LINE || Strings[Index] != STRING.RETURN))
+                   && (Strings[Index] != STRING.NEW_LINE && Strings[Index] != STRING.RETURN))
             {
-                PlainText.Text += Strings[Index];
+                builder.Append(Strings[Index]);
                 Index++;
             }
         }

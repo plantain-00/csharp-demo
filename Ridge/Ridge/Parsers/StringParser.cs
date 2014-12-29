@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace Ridge.Parsers
 {
@@ -32,11 +33,12 @@ namespace Ridge.Parsers
 
         private void GetString(int startIndex)
         {
-            String = String.Empty;
+            var builder = new StringBuilder(string.Empty);
             for (var i = startIndex + 1; i < Index; i++)
             {
-                String += Strings[i];
+                builder.Append(Strings[i]);
             }
+            String = builder.ToString();
         }
 
         private void FindNextQuote(string quote)

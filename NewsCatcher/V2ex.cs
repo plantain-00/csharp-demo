@@ -29,7 +29,7 @@ namespace NewsCatcher
                 var html = new XWebClient
                            {
                                Encoding = Encoding.UTF8
-                           }.DownloadString("http://www.v2ex.com/?tab=tech");
+                           }.DownloadString("http://www.v2ex.com/?tab=hot");
                 doc.LoadHtml(html);
                 var models = new List<Model>();
                 for (var i = 0; i < 40; i++)

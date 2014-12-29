@@ -55,5 +55,30 @@ namespace Ridge.Test
             Assert.IsTrue(parser.Tag.Children.Count == 1);
             Assert.IsTrue((parser.Tag.Children[0] as Tag).Children.Count == 1);
         }
+
+        [TestMethod]
+        public void Script_Tag()
+        {
+            var s = "<script type=\"text/javascript\">\r\n";
+            s += "SINA:\"http://widget.weibo.com/relationship/followbutton.php?language=zh_cn&width=136&height=22&uid=2769378403&style=2&btn=red&dpc=1\",\r\n";
+            s += "</script>";
+            var html = new LexicalAnalysis().Analyse(s);
+            var parser = new TagParser(html, 0, 0);
+            parser.Parse();
+            Assert.IsTrue(parser.Index == html.Count);
+            Assert.IsTrue(!(parser.Tag.Children[0] as ScriptText).Text.EndsWith("</script>"));
+        }
+
+        [TestMethod]
+        public void Tags_In_Script_Tag()
+        {
+            var s = "<script type=\"text/javascript\">\r\n";
+            s += "$(\"#comments_jh_area\").append('<dl><dt><p>');\r\n";
+            s += "</script>";
+            var html = new LexicalAnalysis().Analyse(s);
+            var parser = new TagParser(html, 0, 0);
+            parser.Parse();
+            Assert.IsTrue(parser.Index == html.Count);
+        }
     }
 }
