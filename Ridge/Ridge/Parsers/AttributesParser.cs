@@ -15,40 +15,41 @@ namespace Ridge.Parsers
 
         internal override void Parse()
         {
-            bool willContinue;
+            var meetEndOfAllAttributes = false;
             do
             {
-                while (Index < Strings.Count
-                       && (Strings[Index] == STRING.SPACE || Strings[Index] == STRING.RETURN || Strings[Index] == STRING.NEW_LINE))
-                {
-                    Index++;
-                }
+                SkipSpaces();
                 if (Strings[Index] == STRING.SLASH
                     && Strings[Index + 1] == STRING.LARGER_THAN)
                 {
-                    willContinue = false;
+                    meetEndOfAllAttributes = true;
                     Index += 2;
                     HasSlash = true;
                 }
                 else if (Strings[Index] == STRING.LARGER_THAN)
                 {
-                    willContinue = false;
+                    meetEndOfAllAttributes = true;
                     Index++;
                 }
                 else
                 {
-                    willContinue = true;
-                    var attributeParser = new AttributeParser(Strings, Index);
-                    attributeParser.Parse();
-                    if (Attributes == null)
-                    {
-                        Attributes = new List<Attribute>();
-                    }
-                    Attributes.Add(attributeParser.Attribute);
-                    Index = attributeParser.Index;
+                    ParseNextAttribute();
                 }
             }
-            while (willContinue && Index < Strings.Count);
+            while (!meetEndOfAllAttributes
+                   && Index < Strings.Count);
+        }
+
+        private void ParseNextAttribute()
+        {
+            var attributeParser = new AttributeParser(Strings, Index);
+            attributeParser.Parse();
+            if (Attributes == null)
+            {
+                Attributes = new List<Attribute>();
+            }
+            Attributes.Add(attributeParser.Attribute);
+            Index = attributeParser.Index;
         }
     }
 }

@@ -30,12 +30,18 @@ namespace Ridge.Parsers
                       };
             Index++;
 
+            FindEndOfComment_GetComment();
+        }
+
+        private void FindEndOfComment_GetComment()
+        {
             while (!Strings[Index].EndsWith(STRING.COMMENT_END)
                    || Strings[Index + 1] != STRING.LARGER_THAN)
             {
                 Comment.Text += Strings[Index];
                 Index++;
             }
+
             Comment.Text += Strings[Index];
             Index += 2;
         }

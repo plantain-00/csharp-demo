@@ -15,12 +15,7 @@ namespace Ridge.Parsers
 
         internal override void Parse()
         {
-            if (Strings[Index] == STRING.SPACE
-                || Strings[Index] == STRING.RETURN
-                || Strings[Index] == STRING.NEW_LINE
-                || Strings[Index] == STRING.LESS_THAN
-                || Strings[Index] == STRING.LARGER_THAN
-                || Strings[Index] == STRING.SLASH)
+            if (IsNotAName())
             {
                 throw new Exception();
             }
@@ -30,34 +25,42 @@ namespace Ridge.Parsers
                         };
             Index++;
 
-            bool willContinue;
+            GetTagValue();
+        }
+
+        private void GetTagValue()
+        {
+            var meetEndOfAttribute = false;
             do
             {
-                willContinue = false;
-                switch (Strings[Index])
+                if (IsSpaces())
                 {
-                    case STRING.SPACE:
-                    case STRING.RETURN:
-                    case STRING.NEW_LINE:
-                        willContinue = true;
-                        Index++;
-                        break;
-                    case STRING.EQUAL:
-                        Index++;
-                        while (Index < Strings.Count
-                               && (Strings[Index] == STRING.SPACE || Strings[Index] == STRING.RETURN || Strings[Index] == STRING.NEW_LINE))
-                        {
-                            Index++;
-                        }
-                        var stringParser = new StringParser(Strings, Index);
-                        stringParser.Parse();
+                    Index++;
+                }
+                else if (Strings[Index] == STRING.EQUAL)
+                {
+                    Index++;
 
-                        Index = stringParser.Index;
-                        Attribute.Value = stringParser.String;
-                        return;
+                    SkipSpaces();
+
+                    var stringParser = new StringParser(Strings, Index);
+                    stringParser.Parse();
+
+                    Index = stringParser.Index;
+                    Attribute.Value = stringParser.String;
+                }
+                else
+                {
+                    meetEndOfAttribute = true;
                 }
             }
-            while (willContinue && Index < Strings.Count);
+            while (Index < Strings.Count
+                   && !meetEndOfAttribute);
+        }
+
+        private bool IsNotAName()
+        {
+            return Strings[Index] == STRING.SPACE || Strings[Index] == STRING.RETURN || Strings[Index] == STRING.NEW_LINE || Strings[Index] == STRING.LESS_THAN || Strings[Index] == STRING.LARGER_THAN || Strings[Index] == STRING.SLASH;
         }
     }
 }

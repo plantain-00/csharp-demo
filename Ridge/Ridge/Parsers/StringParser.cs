@@ -14,33 +14,39 @@ namespace Ridge.Parsers
         internal override void Parse()
         {
             var startIndex = Index;
-            switch (Strings[Index])
+
+            if (Strings[Index] == STRING.SINGLE_QUOTE
+                || Strings[Index] == STRING.DOUBLE_QUOTE)
             {
-                case STRING.SINGLE_QUOTE:
-                    do
-                    {
-                        Index++;
-                    }
-                    while (Strings[Index] != STRING.SINGLE_QUOTE
-                           && Index < Strings.Count);
-                    break;
-                case STRING.DOUBLE_QUOTE:
-                    do
-                    {
-                        Index++;
-                    }
-                    while (Strings[Index] != STRING.DOUBLE_QUOTE
-                           && Index < Strings.Count);
-                    break;
-                default:
-                    throw new Exception();
+                FindNextQuote(Strings[Index]);
             }
+            else
+            {
+                throw new Exception();
+            }
+
+            GetString(startIndex);
+
             Index++;
+        }
+
+        private void GetString(int startIndex)
+        {
             String = String.Empty;
-            for (var i = startIndex + 1; i < Index - 1; i++)
+            for (var i = startIndex + 1; i < Index; i++)
             {
                 String += Strings[i];
             }
+        }
+
+        private void FindNextQuote(string quote)
+        {
+            do
+            {
+                Index++;
+            }
+            while (Strings[Index] != quote
+                   && Index < Strings.Count);
         }
     }
 }

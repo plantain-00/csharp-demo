@@ -21,26 +21,20 @@ namespace Ridge.Parsers
                         {
                             Text = string.Empty
                         };
+            FindEndOfPlainText();
+
+            PlainText.Depth = _depth;
+        }
+
+        private void FindEndOfPlainText()
+        {
             do
             {
                 PlainText.Text += Strings[Index];
                 if (Strings[Index] == STRING.SLASH
                     && Strings[Index + 1] == STRING.SLASH)
                 {
-                    Index++;
-                    PlainText.Text += Strings[Index];
-                    Index++;
-                    while (Index < Strings.Count
-                           && (Strings[Index] != STRING.NEW_LINE || Strings[Index] != STRING.RETURN))
-                    {
-                        PlainText.Text += Strings[Index];
-                        Index++;
-                    }
-                    if (Index < Strings.Count)
-                    {
-                        PlainText.Text += Strings[Index];
-                        Index++;
-                    }
+                    ContainSingleLineComment();
                 }
                 else
                 {
@@ -49,7 +43,31 @@ namespace Ridge.Parsers
             }
             while (Index < Strings.Count
                    && Strings[Index] != STRING.LESS_THAN);
-            PlainText.Depth = _depth;
+        }
+
+        private void ContainSingleLineComment()
+        {
+            Index++;
+            PlainText.Text += Strings[Index];
+            Index++;
+
+            FindEndOfSingleLineComment();
+
+            if (Index < Strings.Count)
+            {
+                PlainText.Text += Strings[Index];
+                Index++;
+            }
+        }
+
+        private void FindEndOfSingleLineComment()
+        {
+            while (Index < Strings.Count
+                   && (Strings[Index] != STRING.NEW_LINE || Strings[Index] != STRING.RETURN))
+            {
+                PlainText.Text += Strings[Index];
+                Index++;
+            }
         }
     }
 }

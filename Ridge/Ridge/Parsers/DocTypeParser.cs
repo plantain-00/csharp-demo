@@ -27,12 +27,19 @@ namespace Ridge.Parsers
                           Declaration = string.Empty
                       };
             Index += 2;
+
+            FindEndOfDocType_GetDeclaration();
+
+            Index++;
+        }
+
+        private void FindEndOfDocType_GetDeclaration()
+        {
             while (Strings[Index] != STRING.LARGER_THAN)
             {
                 DocType.Declaration += Strings[Index];
                 Index++;
             }
-            Index++;
         }
     }
 }
