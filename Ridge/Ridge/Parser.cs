@@ -11,7 +11,10 @@ namespace Ridge
             var result = new List<Node>();
 
             var strings = new LexicalAnalysis().Analyse(html);
-            for (var index = 0; index < strings.Count;)
+            var doctypeParser = new DocTypeParser(strings, 0);
+            result.Add(doctypeParser.DocType);
+
+            for (var index = doctypeParser.Index; index < strings.Count;)
             {
                 while (strings[index] == STRING.SPACE)
                 {
@@ -29,6 +32,11 @@ namespace Ridge
                     result.Add(plainTextParser.PlainText);
                     index = plainTextParser.Index;
                 }
+                while (index < strings.Count
+                       && strings[index] == STRING.SPACE)
+                {
+                    index++;
+                }
             }
 
             return result;
@@ -40,13 +48,43 @@ namespace Ridge
         protected internal int Index { get; protected set; }
     }
 
+    public class CommentParser : ParserBase
+    {
+        public CommentParser(IReadOnlyList<string> strings, int index, int depth)
+        {
+            if (strings[index] != STRING.LESS_THAN
+                || !strings[index + 1].StartsWith(STRING.COMMENT_START))
+            {
+                throw new Exception();
+            }
+            index++;
+            Comment = new Comment
+                      {
+                          Text = string.Empty,
+                          Depth = depth
+                      };
+            while (!strings[index].EndsWith(STRING.COMMENT_END)
+                   || strings[index + 1] != STRING.LARGER_THAN)
+            {
+                Comment.Text += strings[index];
+                index++;
+            }
+            Comment.Text += strings[index];
+            index += 2;
+            Index = index;
+        }
+
+        public Comment Comment { get; private set; }
+    }
+
     public class StringParser : ParserBase
     {
         public StringParser(IReadOnlyList<string> strings, int index)
         {
-            while (strings[index] == STRING.SPACE)
+            if (strings[index] != STRING.SINGLE_QUOTE
+                && strings[index] != STRING.DOUBLE_QUOTE)
             {
-                index++;
+                throw new Exception();
             }
             var startIndex = index;
             switch (strings[index])
@@ -56,16 +94,16 @@ namespace Ridge
                     {
                         index++;
                     }
-                    while (strings[index] != STRING.SINGLE_QUOTE
-                           || strings[index - 1].EndsWith(STRING.ESCAPE));
+                    while ((strings[index] != STRING.SINGLE_QUOTE || strings[index - 1].EndsWith(STRING.ESCAPE))
+                           && index < strings.Count);
                     break;
                 case STRING.DOUBLE_QUOTE:
                     do
                     {
                         index++;
                     }
-                    while (strings[index] != STRING.DOUBLE_QUOTE
-                           || strings[index - 1].EndsWith(STRING.ESCAPE));
+                    while ((strings[index] != STRING.DOUBLE_QUOTE || strings[index - 1].EndsWith(STRING.ESCAPE))
+                           && index < strings.Count);
                     break;
             }
             index++;
@@ -84,9 +122,12 @@ namespace Ridge
     {
         public AttributeParser(IReadOnlyList<string> strings, int index)
         {
-            while (strings[index] == STRING.SPACE)
+            if (strings[index] == STRING.SPACE
+                || strings[index] == STRING.LESS_THAN
+                || strings[index] == STRING.LARGER_THAN
+                || strings[index] == STRING.SLASH)
             {
-                index++;
+                throw new Exception();
             }
             Attribute = new Attribute
                         {
@@ -106,6 +147,11 @@ namespace Ridge
                         break;
                     case STRING.EQUAL:
                         index++;
+                        while (index < strings.Count
+                               && strings[index] == STRING.SPACE)
+                        {
+                            index++;
+                        }
                         var stringParser = new StringParser(strings, index);
                         Index = stringParser.Index;
                         Attribute.Value = stringParser.String;
@@ -142,8 +188,7 @@ namespace Ridge
                     && strings[index + 1] == STRING.LARGER_THAN)
                 {
                     willContinue = false;
-                    index++;
-                    index++;
+                    index += 2;
                     HasSlash = true;
                 }
                 else if (strings[index] == STRING.LARGER_THAN)
@@ -163,7 +208,7 @@ namespace Ridge
                     index = attributeParser.Index;
                 }
             }
-            while (willContinue);
+            while (willContinue && index < strings.Count);
             Index = index;
         }
 
@@ -179,12 +224,13 @@ namespace Ridge
                         {
                             Text = string.Empty
                         };
-            while (index < strings.Count
-                   && strings[index] != STRING.LESS_THAN)
+            do
             {
                 PlainText.Text += strings[index];
                 index++;
             }
+            while (index < strings.Count
+                   && strings[index] != STRING.LESS_THAN);
             Index = index;
             PlainText.Depth = depth;
         }
@@ -192,15 +238,43 @@ namespace Ridge
         public PlainText PlainText { get; private set; }
     }
 
+    public class DocTypeParser : ParserBase
+    {
+        public DocTypeParser(IReadOnlyList<string> strings, int index)
+        {
+            if (strings[index] != STRING.LESS_THAN
+                || strings[index + 1] != STRING.DOCTYPE)
+            {
+                throw new Exception();
+            }
+            DocType = new DocType
+                      {
+                          Name = STRING.DOCTYPE,
+                          Depth = 0,
+                          Declaration = string.Empty
+                      };
+            index += 2;
+            while (strings[index] != STRING.LARGER_THAN)
+            {
+                DocType.Declaration += strings[index];
+                index++;
+            }
+            index++;
+            Index = index;
+        }
+
+        public DocType DocType { get; private set; }
+    }
+
     public class TagParser : ParserBase
     {
         public TagParser(IReadOnlyList<string> strings, int index, int depth)
         {
-            while (strings[index] == STRING.SPACE)
+            if (strings[index] != STRING.LESS_THAN
+                || strings[index + 1] == STRING.SLASH)
             {
-                index++;
+                throw new Exception();
             }
-
             index++;
             Tag = new Tag
                   {
@@ -214,10 +288,11 @@ namespace Ridge
             Tag.HasSlash = attributesParser.HasSlash;
 
             if (Tag.Name.Equals("input", StringComparison.CurrentCultureIgnoreCase)
-                || Tag.Name.Equals("!DOCTYPE", StringComparison.CurrentCultureIgnoreCase)
                 || Tag.Name.Equals("meta", StringComparison.CurrentCultureIgnoreCase)
                 || Tag.Name.Equals("link", StringComparison.CurrentCultureIgnoreCase)
-                || Tag.Name.Equals("br", StringComparison.CurrentCultureIgnoreCase))
+                || Tag.Name.Equals("br", StringComparison.CurrentCultureIgnoreCase)
+                || Tag.Name.Equals("hr", StringComparison.CurrentCultureIgnoreCase)
+                || Tag.Name.Equals("img", StringComparison.CurrentCultureIgnoreCase))
             {
                 Index = attributesParser.Index;
             }
@@ -252,6 +327,10 @@ namespace Ridge
                 {
                     Tag.Children = new List<Node>();
                 }
+                else
+                {
+                    throw new Exception();
+                }
 
                 while (index < endIndex)
                 {
@@ -259,7 +338,15 @@ namespace Ridge
                     {
                         index++;
                     }
-                    if (strings[index] == STRING.LESS_THAN)
+                    if (strings[index] == STRING.LESS_THAN
+                        && strings[index + 1].StartsWith(STRING.COMMENT_START))
+                    {
+                        var commentParser = new CommentParser(strings, index, depth + 1);
+                        Tag.Children.Add(commentParser.Comment);
+                        index = commentParser.Index;
+                    }
+                    else if (strings[index] == STRING.LESS_THAN
+                             && strings[index + 1] != STRING.SLASH)
                     {
                         var tagParser = new TagParser(strings, index, depth + 1);
                         Tag.Children.Add(tagParser.Tag);
@@ -288,6 +375,17 @@ namespace Ridge
     {
         public List<Node> Children { get; set; }
         internal int Depth { get; set; }
+    }
+
+    public class DocType : Node
+    {
+        public string Name { get; set; }
+        public string Declaration { get; set; }
+
+        public override string ToString()
+        {
+            return string.Format("<{0}{1}>\n", Name, Declaration);
+        }
     }
 
     public class Tag : Node
@@ -333,6 +431,16 @@ namespace Ridge
                 children += child;
             }
             return string.Format("{3}<{0}{1}>\n{2}{3}</{0}>\n", Name, attributes, children, new string(CHAR.SPACE, Depth * 4));
+        }
+    }
+
+    public class Comment : Node
+    {
+        public string Text { get; set; }
+
+        public override string ToString()
+        {
+            return string.Format("{0}<{1}>\n", new string(CHAR.SPACE, Depth * 4), Text);
         }
     }
 

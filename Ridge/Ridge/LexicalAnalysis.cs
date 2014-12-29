@@ -64,5 +64,8 @@ namespace Ridge
         public const string SLASH = "/";
         public const string SPACE = " ";
         public const string ESCAPE = "\\";
+        public const string COMMENT_START = "!--";
+        public const string COMMENT_END = "--";
+        public const string DOCTYPE = "!DOCTYPE";
     }
 }
