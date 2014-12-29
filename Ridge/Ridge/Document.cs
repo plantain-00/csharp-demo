@@ -1,21 +1,25 @@
 ﻿using System.Collections.Generic;
+using System.Text;
 
 using Ridge.Nodes;
 using Ridge.Parsers;
 
 namespace Ridge
 {
-    public class Parser
+    public class Document
     {
-        public List<Node> Parse(string html)
+        public Document()
         {
-            var result = new List<Node>();
+            Nodes = new List<Node>();
+        }
 
+        public Document(string html) : this()
+        {
             var strings = new LexicalAnalysis().Analyse(html);
             var doctypeParser = new DocTypeParser(strings, 0);
             doctypeParser.Parse();
 
-            result.Add(doctypeParser.DocType);
+            Nodes.Add(doctypeParser.DocType);
 
             for (var index = doctypeParser.Index; index < strings.Count;)
             {
@@ -29,15 +33,15 @@ namespace Ridge
                     var tagParser = new TagParser(strings, index, 0);
                     tagParser.Parse();
 
-                    result.Add(tagParser.Tag);
+                    Nodes.Add(tagParser.Tag);
                     index = tagParser.Index;
                 }
                 else
                 {
                     var plainTextParser = new PlainTextParser(strings, index, 0);
                     plainTextParser.Parse();
-                    
-                    result.Add(plainTextParser.PlainText);
+
+                    Nodes.Add(plainTextParser.PlainText);
                     index = plainTextParser.Index;
                 }
                 while (index < strings.Count
@@ -46,8 +50,31 @@ namespace Ridge
                     index++;
                 }
             }
+        }
 
-            return result;
+        public List<Node> Nodes { get; set; }
+
+        public Node GetElementById(string id)
+        {
+            foreach (var node in Nodes)
+            {
+                var result = node.GetElementById(id);
+                if (result != null)
+                {
+                    return result;
+                }
+            }
+            return null;
+        }
+
+        public override string ToString()
+        {
+            var builder = new StringBuilder();
+            foreach (var node in Nodes)
+            {
+                builder.Append(node);
+            }
+            return builder.ToString();
         }
     }
 }

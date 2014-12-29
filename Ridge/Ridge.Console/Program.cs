@@ -12,13 +12,13 @@ namespace Ridge.Console
                        {
                            Encoding = Encoding.UTF8
                        }.DownloadString("http://www.cnbeta.com/");
-            var result = new Parser().Parse(html);
+            var document = new Document(html);
             var streamWriter = new StreamWriter("a.txt", false);
-            foreach (var node in result)
-            {
-                streamWriter.Write(node);
-            }
+            streamWriter.Write(document);
             streamWriter.Flush();
+            var node = document.GetElementById("cb_search");
+            System.Console.WriteLine(node);
+            System.Console.Read();
         }
     }
 }

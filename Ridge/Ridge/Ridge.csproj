@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Document.cs" />
     <Compile Include="Nodes\Attribute.cs" />
     <Compile Include="Nodes\ScriptText.cs" />
     <Compile Include="Parsers\AttributeParser.cs" />
@@ -55,7 +56,6 @@
     <Compile Include="Parsers\DocTypeParser.cs" />
     <Compile Include="LexicalAnalysis.cs" />
     <Compile Include="Nodes\Node.cs" />
-    <Compile Include="Parser.cs" />
     <Compile Include="ParserBase.cs" />
     <Compile Include="Nodes\PlainText.cs" />
     <Compile Include="Parsers\PlainTextParser.cs" />
