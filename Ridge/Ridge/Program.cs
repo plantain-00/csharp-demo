@@ -11,12 +11,12 @@ namespace Ridge
             var html = new WebClient
             {
                 Encoding = Encoding.UTF8
-            }.DownloadString("http://www.cnblogs.com/");
+            }.DownloadString("http://www.cnblogs.com");
             var result = new Parser().Parse(html);
-            //foreach (var node in result)
-            //{
-            //    Console.WriteLine(node);
-            //}
+            foreach (var node in result)
+            {
+                Console.WriteLine(node);
+            }
             Console.Read();
         }
     }
