@@ -2,9 +2,9 @@
 
 namespace Ridge
 {
-    public class LexicalAnalysis
+    internal class LexicalAnalysis
     {
-        public List<string> Analyse(string s)
+        internal List<string> Analyse(string s)
         {
             var result = new List<string>();
             var tmp = string.Empty;
@@ -23,49 +23,18 @@ namespace Ridge
                         result.Add(tmp);
                         tmp = string.Empty;
                     }
-                    if (c != CHAR.RETURN
-                        && c != CHAR.NEW_LINE)
-                    {
-                        result.Add(new string(c, 1));
-                    }
+                    result.Add(new string(c, 1));
                 }
                 else
                 {
                     tmp += c;
                 }
             }
+            if (!string.IsNullOrEmpty(tmp))
+            {
+                result.Add(tmp);
+            }
             return result;
         }
-    }
-
-    internal static class CHAR
-    {
-        public const char RETURN = '\r';
-        public const char NEW_LINE = '\n';
-        public const char SINGLE_QUOTE = '\'';
-        public const char DOUBLE_QUOTE = '\"';
-        public const char EQUAL = '=';
-        public const char LESS_THAN = '<';
-        public const char LARGER_THAN = '>';
-        public const char SLASH = '/';
-        public const char SPACE = ' ';
-        public const char ESCAPE = '\\';
-    }
-
-    internal static class STRING
-    {
-        public const string RETURN = "\r";
-        public const string NEW_LINE = "\n";
-        public const string SINGLE_QUOTE = "\'";
-        public const string DOUBLE_QUOTE = "\"";
-        public const string EQUAL = "=";
-        public const string LESS_THAN = "<";
-        public const string LARGER_THAN = ">";
-        public const string SLASH = "/";
-        public const string SPACE = " ";
-        public const string ESCAPE = "\\";
-        public const string COMMENT_START = "!--";
-        public const string COMMENT_END = "--";
-        public const string DOCTYPE = "!DOCTYPE";
     }
 }
