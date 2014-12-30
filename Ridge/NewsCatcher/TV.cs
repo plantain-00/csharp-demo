@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using HtmlAgilityPack;
-
 using NewsCatcher.Models;
+
+using Ridge;
+using Ridge.Nodes;
 
 namespace NewsCatcher
 {
@@ -26,24 +27,23 @@ namespace NewsCatcher
                          };
             try
             {
-                var doc = new HtmlDocument();
                 var html = new XWebClient
                            {
                                Encoding = Encoding.UTF8
                            }.DownloadString("https://kickass.so/");
-                doc.LoadHtml(html);
+                var doc = new Document(html);
                 var tvs = new List<Model>();
                 for (var i = 0; i < 10; i++)
                 {
-                    var tmp = String.Format("//*[@id=\"wrapperInner\"]/div[6]/table/tr/td[1]/div/table/tr[{0}]", i + 2);
+                    var tmp = doc["#wrapperInner"]["div", 5]["table"]["tr"]["td"]["div"]["table"]["tr", i + 1];
                     try
                     {
                         tvs.Add(new Model
                                 {
-                                    Title = doc.DocumentNode.SelectSingleNode(tmp + "/td[1]/div[2]/a").InnerText.Unescape(),
-                                    Size = doc.DocumentNode.SelectSingleNode(tmp + "/td[2]").InnerText,
-                                    Url = "https://kickass.so/" + doc.DocumentNode.SelectSingleNode(tmp + "/td[1]/div[2]/a").Attributes["href"].Value.Trim('/'),
-                                    Age = doc.DocumentNode.SelectSingleNode(tmp + "/td[4]").InnerText.Unescape()
+                                    Title = tmp["td"]["div", 1]["a"][0].As<PlainText>().Text.Unescape(),
+                                    Size = tmp["td", 1][0].As<PlainText>().Text + " " + tmp["td", 1]["span"][0].As<PlainText>().Text,
+                                    Url = "https://kickass.so/" + tmp["td"]["div", 1]["a"].As<Tag>()["href"].Trim('/'),
+                                    Age = tmp["td", 3][0].As<PlainText>().Text.Unescape()
                                 });
                     }
                     catch (Exception)
@@ -52,15 +52,15 @@ namespace NewsCatcher
                 }
                 for (var i = 0; i < 10; i++)
                 {
-                    var tmp = String.Format("//*[@id=\"wrapperInner\"]/div[6]/table/tr/td[1]/div/div/table/tr[{0}]", i + 2);
+                    var tmp = doc["#wrapperInner"]["div", 5]["table"]["tr"]["td"]["div"]["div"]["table"]["tr", i + 1];
                     try
                     {
                         tvs.Add(new Model
                                 {
-                                    Title = doc.DocumentNode.SelectSingleNode(tmp + "/td[1]/div[2]/a").InnerText.Unescape(),
-                                    Size = doc.DocumentNode.SelectSingleNode(tmp + "/td[2]").InnerText,
-                                    Url = "https://kickass.so/" + doc.DocumentNode.SelectSingleNode(tmp + "/td[1]/div[2]/a").Attributes["href"].Value.Trim('/'),
-                                    Age = doc.DocumentNode.SelectSingleNode(tmp + "/td[4]").InnerText.Unescape()
+                                    Title = tmp["td"]["div", 1]["a"][0].As<PlainText>().Text.Unescape(),
+                                    Size = tmp["td", 1][0].As<PlainText>().Text + " " + tmp["td", 1]["span"][0].As<PlainText>().Text,
+                                    Url = "https://kickass.so/" + tmp["td"]["div", 1]["a"].As<Tag>()["href"].Trim('/'),
+                                    Age = tmp["td", 3][0].As<PlainText>().Text.Unescape()
                                 });
                     }
                     catch (Exception)

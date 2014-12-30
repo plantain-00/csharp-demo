@@ -35,8 +35,9 @@ namespace NewsCatcher
                 var cnBetas = new List<Model>();
                 for (var i = 0; i < 60; i++)
                 {
-                    var node = doc["#allnews_all"][1];
-                    if (node.Children == null || node.Children.Count <= i)
+                    var node = doc["#allnews_all"]["div"];
+                    if (node.Children == null
+                        || node.Children.Count <= i)
                     {
                         break;
                     }
@@ -45,10 +46,10 @@ namespace NewsCatcher
                     {
                         cnBetas.Add(new Model
                                     {
-                                        Title = node[0][0][0][0].As<PlainText>().Text.Unescape(),
-                                        CommentNumber = Convert.ToInt32(node[2][1][1][1][0].As<PlainText>().Text),
-                                        Url = "http://www.cnbeta.com/" + node[0][0][0].As<Tag>()["href"].Trim('/'),
-                                        Time = Convert.ToDateTime(node[0][0][1][0][1][0].As<PlainText>().Text)
+                                        Title = node["div"]["div"]["a"][0].As<PlainText>().Text.Unescape(),
+                                        CommentNumber = Convert.ToInt32(node["div", 2]["ul"]["li", 1]["em"][0].As<PlainText>().Text),
+                                        Url = "http://www.cnbeta.com/" + node["div"]["div"]["a"].As<Tag>()["href"].Trim('/'),
+                                        Time = Convert.ToDateTime(node["div"]["div"]["div"]["span"]["em"][0].As<PlainText>().Text)
                                     });
                     }
                     catch (Exception)

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Ridge.Nodes
 {
@@ -12,6 +14,23 @@ namespace Ridge.Nodes
             get
             {
                 return Children[index];
+            }
+        }
+
+        public Node this[string tagName, int index]
+        {
+            get
+            {
+                var nodes = Children.Where(c => c is Tag && (c as Tag).Name.Equals(tagName, StringComparison.CurrentCultureIgnoreCase));
+                return nodes.ElementAt(index);
+            }
+        }
+
+        public Node this[string tagName]
+        {
+            get
+            {
+                return this[tagName, 0];
             }
         }
 

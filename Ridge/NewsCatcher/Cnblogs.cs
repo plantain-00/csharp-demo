@@ -76,7 +76,7 @@ namespace NewsCatcher
                 {
                     try
                     {
-                        var tmp = doc["#headline_block"][0][i][0];
+                        var tmp = doc["#headline_block"]["ul"][i]["a"];
                         headlines.Add(new Headline
                                       {
                                           Title = tmp[0].As<PlainText>().Text.Unescape(),
@@ -90,18 +90,25 @@ namespace NewsCatcher
             }
             for (var i = 0; i < 20; i++)
             {
-                var div1 = doc["#post_list"][i][0];
-                var div2 = doc["#post_list"][i][1];
-                var tmp2 = new string(div2[4][1].As<PlainText>().Text.TrimStart(' ', '\r', '\n').SkipWhile(c => c != '\n').Skip(9).TakeWhile(c => c != '阅').ToArray()).Trim();
-                result.Add(new Model
-                           {
-                               Digg = Convert.ToInt32(div1[0][0].As<PlainText>().Text.Trim()),
-                               Title = div2[0][0][0].As<PlainText>().Text.Unescape(),
-                               Url = div2[0][0].As<Tag>()["href"].Trim(),
-                               Summary = div2[1][1].As<PlainText>().Text.Trim().Unescape(),
-                               Time = Convert.ToDateTime(new string(tmp2.Take("0000-00-00 00:00".Length).ToArray())),
-                               CommentNumber = Convert.ToInt32(new string(tmp2.Skip("0000-00-00 00:00".Length).SkipWhile(c => c != '评').Skip(3).ToArray()).Trim(')'))
-                           });
+                try
+                {
+                    var div1 = doc["#post_list"][i]["div"];
+                    var div2 = doc["#post_list"][i]["div", 1];
+                    var date = new string(div2["div"][1].As<PlainText>().Text.Skip("发布于 ".Length).Take("0000-00-00 00:00".Length).ToArray());
+                    var commentNumber = new string(div2["div"]["span"]["a"][0].As<PlainText>().Text.Skip("评论(".Length).TakeWhile(c => c != ')').ToArray());
+                    result.Add(new Model
+                               {
+                                   Digg = Convert.ToInt32(div1["div"]["span"][0].As<PlainText>().Text.Trim()),
+                                   Title = div2[1][0][0].As<PlainText>().Text.Unescape(),
+                                   Url = div2["h3"]["a"].As<Tag>()["href"].Trim(),
+                                   Summary = div2["p"][1].As<PlainText>().Text.Trim().Unescape(),
+                                   Time = Convert.ToDateTime(date),
+                                   CommentNumber = Convert.ToInt32(commentNumber)
+                               });
+                }
+                catch (Exception)
+                {
+                }
             }
             return Tuple.Create(result, headlines);
         }

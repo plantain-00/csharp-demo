@@ -4,15 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using HtmlAgilityPack;
-
 using NewsCatcher.Models;
+
+using Ridge;
+using Ridge.Nodes;
 
 namespace NewsCatcher
 {
     internal static class V2ex
     {
         public const string FAILS_MESSAGE = "V2ex Fails";
+
         public static IEnumerable<ShowItem> Do()
         {
             var result = new List<ShowItem>
@@ -25,22 +27,21 @@ namespace NewsCatcher
                          };
             try
             {
-                var doc = new HtmlDocument();
                 var html = new XWebClient
                            {
                                Encoding = Encoding.UTF8
                            }.DownloadString("http://www.v2ex.com/?tab=tech");
-                doc.LoadHtml(html);
+                var doc = new Document(html);
                 var models = new List<Model>();
                 for (var i = 0; i < 40; i++)
                 {
-                    var tmp = String.Format("//*[@id='Main']/div[2]/div[{0}]/table/tr", i + 3);
-                    var name = doc.DocumentNode.SelectSingleNode(tmp + "/td[3]/span[1]/a").InnerText.Unescape();
-                    var url = doc.DocumentNode.SelectSingleNode(tmp + "/td[3]/span[1]/a").Attributes["href"].Value;
+                    var tmp = doc["#Main"]["div", 1]["div", i + 2]["table"]["tr"];
+                    var name = tmp["td", 2]["span"]["a"][0].As<PlainText>().Text.Unescape();
+                    var url = tmp["td", 2]["span"]["a"].As<Tag>()["href"];
                     int count;
                     try
                     {
-                        count = Convert.ToInt32(doc.DocumentNode.SelectSingleNode(tmp + "/td[4]/a").InnerText);
+                        count = Convert.ToInt32(tmp["td", 3]["a"][0].As<PlainText>().Text);
                     }
                     catch (Exception)
                     {
@@ -54,10 +55,10 @@ namespace NewsCatcher
                                });
                 }
                 result.AddRange(models.Where(m => m.Count >= 10).OrderByDescending(m => m.Count).Select(m => new ShowItem
-                                                                                                           {
-                                                                                                               Text = m.Count + " " + m.Name,
-                                                                                                               Url = m.Url
-                                                                                                           }));
+                                                                                                             {
+                                                                                                                 Text = m.Count + " " + m.Name,
+                                                                                                                 Url = m.Url
+                                                                                                             }));
             }
             catch (Exception exception)
             {
@@ -71,6 +72,7 @@ namespace NewsCatcher
             result.Add(new ShowItem());
             return result;
         }
+
         public static Task<IEnumerable<ShowItem>> DoAsync()
         {
             return Task.Factory.StartNew(() => Do());
