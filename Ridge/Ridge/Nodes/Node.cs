@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Ridge.Nodes
 {
-    public class Node
+    public abstract class Node
     {
         public List<Node> Children { get; set; }
         internal int Depth { get; set; }
@@ -55,5 +55,7 @@ namespace Ridge.Nodes
             }
             return null;
         }
+
+        public abstract string ToString(Formatting formatting, int spaceNumber = 4);
     }
 }

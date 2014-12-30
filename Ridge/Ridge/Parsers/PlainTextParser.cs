@@ -20,8 +20,6 @@ namespace Ridge.Parsers
         {
             PlainText = new PlainText();
             FindEndOfPlainText();
-
-            PlainText.Depth = _depth;
         }
 
         private void FindEndOfPlainText()
@@ -37,7 +35,17 @@ namespace Ridge.Parsers
             while (Index < EndIndex
                    && Strings[Index] != STRING.LESS_THAN);
 
-            PlainText.Text = builder.ToString();
+            var text = builder.ToString();
+
+            if (text.Trim(' ', '\r', '\n', '\t') != string.Empty)
+            {
+                PlainText.Text = text;
+                PlainText.Depth = _depth;
+            }
+            else
+            {
+                PlainText = null;
+            }
         }
     }
 }

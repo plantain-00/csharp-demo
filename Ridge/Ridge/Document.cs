@@ -49,7 +49,11 @@ namespace Ridge
                     var plainTextParser = new PlainTextParser(strings, i, 0, strings.Count);
                     plainTextParser.Parse();
 
-                    Nodes.Add(plainTextParser.PlainText);
+                    if (plainTextParser.PlainText != null)
+                    {
+                        Nodes.Add(plainTextParser.PlainText);
+                    }
+                    
                     i = plainTextParser.Index;
                 }
 
@@ -113,14 +117,19 @@ namespace Ridge
             return null;
         }
 
-        public override string ToString()
+        public string ToString(Formatting formatting, int spaceNumber = 4)
         {
             var builder = new StringBuilder();
             foreach (var node in Nodes)
             {
-                builder.Append(node);
+                builder.Append(node.ToString(formatting, spaceNumber));
             }
             return builder.ToString();
+        }
+
+        public override string ToString()
+        {
+            return ToString(Formatting.Indented);
         }
     }
 }

@@ -49,10 +49,16 @@ namespace Ridge.Parsers
                         builder.Append(Strings[i]);
                     }
 
-                    Tag.Children.Add(new ScriptText
-                                     {
-                                         Text = builder.ToString()
-                                     });
+                    var text = builder.ToString();
+                    if (text.Trim(' ', '\r', '\n', '\t') != string.Empty)
+                    {
+                        Tag.Children.Add(new ScriptText
+                                         {
+                                             Text = builder.ToString(),
+                                             Depth = _depth + 1
+                                         });
+                    }
+
                     Index = endIndex + 4;
                 }
                 else
@@ -89,7 +95,11 @@ namespace Ridge.Parsers
             var plainTextParser = new PlainTextParser(Strings, Index, _depth + 1, endIndex);
             plainTextParser.Parse();
 
-            Tag.Children.Add(plainTextParser.PlainText);
+            if (plainTextParser.PlainText != null)
+            {
+                Tag.Children.Add(plainTextParser.PlainText);
+            }
+            
             Index = plainTextParser.Index;
         }
 

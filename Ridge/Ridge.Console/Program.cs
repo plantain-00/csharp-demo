@@ -15,7 +15,7 @@ namespace Ridge.Console
                        }.DownloadString("https://kickass.so/");
             var document = new Document(html);
             var streamWriter = new StreamWriter("a.txt", false);
-            streamWriter.Write(document);
+            streamWriter.Write(document.ToString(Formatting.None));
             streamWriter.Flush();
         }
     }
