@@ -9,7 +9,7 @@ namespace Ridge.Parsers
     {
         private readonly int _depth;
 
-        internal CommentParser(IReadOnlyList<string> strings, int index, int depth) : base(strings, index)
+        internal CommentParser(IReadOnlyList<string> strings, int index, int depth, int endIndex) : base(strings, index, endIndex)
         {
             _depth = depth;
         }
@@ -35,8 +35,8 @@ namespace Ridge.Parsers
 
         private void FindEndOfComment_GetComment()
         {
-            while (!Strings[Index].EndsWith(STRING.COMMENT_END)
-                   || Strings[Index + 1] != STRING.LARGER_THAN)
+            while (Index < EndIndex
+                   && (!Strings[Index].EndsWith(STRING.COMMENT_END) || Strings[Index + 1] != STRING.LARGER_THAN))
             {
                 Comment.Text += Strings[Index];
                 Index++;

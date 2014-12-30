@@ -10,7 +10,7 @@ namespace Ridge.Parsers
     {
         private readonly int _depth;
 
-        internal TagParser(IReadOnlyList<string> strings, int index, int depth) : base(strings, index)
+        internal TagParser(IReadOnlyList<string> strings, int index, int depth, int endIndex) : base(strings, index, endIndex)
         {
             _depth = depth;
         }
@@ -63,16 +63,16 @@ namespace Ridge.Parsers
                         if (Strings[Index] == STRING.LESS_THAN
                             && Strings[Index + 1].StartsWith(STRING.COMMENT_START))
                         {
-                            ParseComment();
+                            ParseComment(endIndex);
                         }
                         else if (Strings[Index] == STRING.LESS_THAN
                                  && Strings[Index + 1] != STRING.SLASH)
                         {
-                            ParseTag();
+                            ParseTag(endIndex);
                         }
                         else
                         {
-                            ParsePlainText();
+                            ParsePlainText(endIndex);
                         }
 
                         SkipSpaces();
@@ -83,27 +83,27 @@ namespace Ridge.Parsers
             }
         }
 
-        private void ParsePlainText()
+        private void ParsePlainText(int endIndex)
         {
-            var plainTextParser = new PlainTextParser(Strings, Index, _depth + 1);
+            var plainTextParser = new PlainTextParser(Strings, Index, _depth + 1, endIndex);
             plainTextParser.Parse();
 
             Tag.Children.Add(plainTextParser.PlainText);
             Index = plainTextParser.Index;
         }
 
-        private void ParseTag()
+        private void ParseTag(int endIndex)
         {
-            var tagParser = new TagParser(Strings, Index, _depth + 1);
+            var tagParser = new TagParser(Strings, Index, _depth + 1, endIndex);
             tagParser.Parse();
 
             Tag.Children.Add(tagParser.Tag);
             Index = tagParser.Index;
         }
 
-        private void ParseComment()
+        private void ParseComment(int endIndex)
         {
-            var commentParser = new CommentParser(Strings, Index, _depth + 1);
+            var commentParser = new CommentParser(Strings, Index, _depth + 1, endIndex);
             commentParser.Parse();
 
             Tag.Children.Add(commentParser.Comment);
@@ -112,9 +112,9 @@ namespace Ridge.Parsers
 
         private int FindEndMarkOfCurrentTag()
         {
-            var endIndex = -1;
+            var endIndex = EndIndex;
             var stackDepth = 0;
-            for (var i = Index; i + 3 < Strings.Count; i++)
+            for (var i = Index; i + 3 < EndIndex; i++)
             {
                 if (Strings[i] == STRING.LESS_THAN
                     && Strings[i + 1] == STRING.SLASH
@@ -135,14 +135,7 @@ namespace Ridge.Parsers
                 }
             }
 
-            if (endIndex != -1)
-            {
-                Tag.Children = new List<Node>();
-            }
-            else
-            {
-                throw new Exception();
-            }
+            Tag.Children = new List<Node>();
             return endIndex;
         }
 
@@ -153,7 +146,7 @@ namespace Ridge.Parsers
 
         private void ParseAttributes()
         {
-            var attributesParser = new AttributesParser(Strings, Index);
+            var attributesParser = new AttributesParser(Strings, Index, EndIndex);
             attributesParser.Parse();
 
             Tag.Attributes = attributesParser.Attributes;

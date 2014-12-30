@@ -6,7 +6,7 @@ namespace Ridge.Parsers
 {
     internal class StringParser : ParserBase
     {
-        internal StringParser(IReadOnlyList<string> strings, int index) : base(strings, index)
+        internal StringParser(IReadOnlyList<string> strings, int index, int endIndex) : base(strings, index, endIndex)
         {
         }
 
@@ -48,7 +48,7 @@ namespace Ridge.Parsers
                 Index++;
             }
             while (Strings[Index] != quote
-                   && Index < Strings.Count);
+                   && Index < EndIndex);
         }
     }
 }

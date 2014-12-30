@@ -11,7 +11,7 @@ namespace Ridge.Test
         public void Normal()
         {
             var html = new LexicalAnalysis().Analyse("id=\"abc\" name=\"def\"");
-            var parser = new AttributesParser(html, 0);
+            var parser = new AttributesParser(html, 0, html.Count);
             parser.Parse();
             Assert.IsTrue(parser.Index == html.Count);
             Assert.IsTrue(parser.Attributes.Count == 2);
@@ -25,7 +25,7 @@ namespace Ridge.Test
         public void End_By_Slash()
         {
             var html = new LexicalAnalysis().Analyse("id=\"abc\" name=\"def\" />");
-            var parser = new AttributesParser(html, 0);
+            var parser = new AttributesParser(html, 0, html.Count);
             parser.Parse();
             Assert.IsTrue(parser.Index == html.Count);
             Assert.IsTrue(parser.Attributes.Count == 2);
@@ -39,7 +39,7 @@ namespace Ridge.Test
         public void End_By_LargerThan()
         {
             var html = new LexicalAnalysis().Analyse("id=\"abc\" name=\"def\" >");
-            var parser = new AttributesParser(html, 0);
+            var parser = new AttributesParser(html, 0, html.Count);
             parser.Parse();
             Assert.IsTrue(parser.Index == html.Count);
             Assert.IsTrue(parser.Attributes.Count == 2);

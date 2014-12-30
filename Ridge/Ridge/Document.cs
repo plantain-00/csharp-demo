@@ -17,7 +17,7 @@ namespace Ridge
         public Document(string html) : this()
         {
             var strings = new LexicalAnalysis().Analyse(html);
-            var doctypeParser = new DocTypeParser(strings, 0);
+            var doctypeParser = new DocTypeParser(strings, 0, strings.Count);
             doctypeParser.Parse();
 
             Nodes.Add(doctypeParser.DocType);
@@ -31,7 +31,7 @@ namespace Ridge
                 }
                 if (strings[index] == STRING.LESS_THAN)
                 {
-                    var tagParser = new TagParser(strings, index, 0);
+                    var tagParser = new TagParser(strings, index, 0, strings.Count);
                     tagParser.Parse();
 
                     Nodes.Add(tagParser.Tag);
@@ -39,7 +39,7 @@ namespace Ridge
                 }
                 else
                 {
-                    var plainTextParser = new PlainTextParser(strings, index, 0);
+                    var plainTextParser = new PlainTextParser(strings, index, 0, strings.Count);
                     plainTextParser.Parse();
 
                     Nodes.Add(plainTextParser.PlainText);

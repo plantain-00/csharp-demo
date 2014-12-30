@@ -12,7 +12,7 @@ namespace Ridge.Test
         public void Normal()
         {
             var html = new LexicalAnalysis().Analyse("<div id=\"abc\"><span>def</span></div>");
-            var parser = new TagParser(html, 0, 0);
+            var parser = new TagParser(html, 0, 0, html.Count);
             parser.Parse();
             Assert.IsTrue(parser.Index == html.Count);
             Assert.IsTrue(parser.Tag.HasSlash == false);
@@ -38,7 +38,7 @@ namespace Ridge.Test
         public void Has_Slash()
         {
             var html = new LexicalAnalysis().Analyse("<input type=\"text\"/>");
-            var parser = new TagParser(html, 0, 0);
+            var parser = new TagParser(html, 0, 0, html.Count);
             parser.Parse();
             Assert.IsTrue(parser.Index == html.Count);
             Assert.IsTrue(parser.Tag.HasSlash);
@@ -49,7 +49,7 @@ namespace Ridge.Test
         public void Same_Tag_Name()
         {
             var html = new LexicalAnalysis().Analyse("<div><div>def</div></div>");
-            var parser = new TagParser(html, 0, 0);
+            var parser = new TagParser(html, 0, 0, html.Count);
             parser.Parse();
             Assert.IsTrue(parser.Index == html.Count);
             Assert.IsTrue(parser.Tag.Children.Count == 1);
@@ -63,7 +63,7 @@ namespace Ridge.Test
             s += "SINA:\"http://widget.weibo.com/relationship/followbutton.php?language=zh_cn&width=136&height=22&uid=2769378403&style=2&btn=red&dpc=1\",\r\n";
             s += "</script>";
             var html = new LexicalAnalysis().Analyse(s);
-            var parser = new TagParser(html, 0, 0);
+            var parser = new TagParser(html, 0, 0, html.Count);
             parser.Parse();
             Assert.IsTrue(parser.Index == html.Count);
             Assert.IsTrue(!(parser.Tag.Children[0] as ScriptText).Text.EndsWith("</script>"));
@@ -76,7 +76,7 @@ namespace Ridge.Test
             s += "$(\"#comments_jh_area\").append('<dl><dt><p>');\r\n";
             s += "</script>";
             var html = new LexicalAnalysis().Analyse(s);
-            var parser = new TagParser(html, 0, 0);
+            var parser = new TagParser(html, 0, 0, html.Count);
             parser.Parse();
             Assert.IsTrue(parser.Index == html.Count);
         }

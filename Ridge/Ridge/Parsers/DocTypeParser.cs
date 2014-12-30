@@ -7,7 +7,7 @@ namespace Ridge.Parsers
 {
     internal class DocTypeParser : ParserBase
     {
-        internal DocTypeParser(IReadOnlyList<string> strings, int index) : base(strings, index)
+        internal DocTypeParser(IReadOnlyList<string> strings, int index, int endIndex) : base(strings, index, endIndex)
         {
         }
 
@@ -35,7 +35,8 @@ namespace Ridge.Parsers
 
         private void FindEndOfDocType_GetDeclaration()
         {
-            while (Strings[Index] != STRING.LARGER_THAN)
+            while (Index < EndIndex
+                   && Strings[Index] != STRING.LARGER_THAN)
             {
                 DocType.Declaration += Strings[Index];
                 Index++;

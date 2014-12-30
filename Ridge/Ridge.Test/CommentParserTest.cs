@@ -11,7 +11,7 @@ namespace Ridge.Test
         public void Normal()
         {
             var html = new LexicalAnalysis().Analyse("<!--abc-->");
-            var parser = new CommentParser(html, 0, 0);
+            var parser = new CommentParser(html, 0, 0, html.Count);
             parser.Parse();
             Assert.IsTrue(parser.Index == html.Count);
             Assert.IsTrue(parser.Comment.Text == "!--abc--");

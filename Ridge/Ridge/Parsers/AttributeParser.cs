@@ -7,7 +7,7 @@ namespace Ridge.Parsers
 {
     internal class AttributeParser : ParserBase
     {
-        internal AttributeParser(IReadOnlyList<string> strings, int index) : base(strings, index)
+        internal AttributeParser(IReadOnlyList<string> strings, int index, int endIndex) : base(strings, index, endIndex)
         {
         }
 
@@ -43,7 +43,7 @@ namespace Ridge.Parsers
 
                     SkipSpaces();
 
-                    var stringParser = new StringParser(Strings, Index);
+                    var stringParser = new StringParser(Strings, Index, EndIndex);
                     stringParser.Parse();
 
                     Index = stringParser.Index;
@@ -54,7 +54,7 @@ namespace Ridge.Parsers
                     meetEndOfAttribute = true;
                 }
             }
-            while (Index < Strings.Count
+            while (Index < EndIndex
                    && !meetEndOfAttribute);
         }
 

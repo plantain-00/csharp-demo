@@ -11,7 +11,7 @@ namespace Ridge.Test
         public void Normal()
         {
             var html = new LexicalAnalysis().Analyse("<!DOCTYPE html>");
-            var parser = new DocTypeParser(html, 0);
+            var parser = new DocTypeParser(html, 0, html.Count);
             parser.Parse();
             Assert.IsTrue(parser.Index == html.Count);
             Assert.IsTrue(parser.DocType.Name == "!DOCTYPE");
@@ -22,11 +22,22 @@ namespace Ridge.Test
         public void HTML_401_Strict()
         {
             var html = new LexicalAnalysis().Analyse("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">");
-            var parser = new DocTypeParser(html, 0);
+            var parser = new DocTypeParser(html, 0, html.Count);
             parser.Parse();
             Assert.IsTrue(parser.Index == html.Count);
             Assert.IsTrue(parser.DocType.Name == "!DOCTYPE");
             Assert.IsTrue(parser.DocType.Declaration == " HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\"");
+        }
+
+        [TestMethod]
+        public void No_EndMark()
+        {
+            var html = new LexicalAnalysis().Analyse("<!DOCTYPE html");
+            var parser = new DocTypeParser(html, 0, html.Count);
+            parser.Parse();
+            Assert.IsTrue(parser.Index == html.Count);
+            Assert.IsTrue(parser.DocType.Name == "!DOCTYPE");
+            Assert.IsTrue(parser.DocType.Declaration == " html");
         }
     }
 }

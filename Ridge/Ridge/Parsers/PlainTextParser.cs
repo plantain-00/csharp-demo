@@ -9,7 +9,7 @@ namespace Ridge.Parsers
     {
         private readonly int _depth;
 
-        internal PlainTextParser(IReadOnlyList<string> strings, int index, int depth) : base(strings, index)
+        internal PlainTextParser(IReadOnlyList<string> strings, int index, int depth, int endIndex) : base(strings, index, endIndex)
         {
             _depth = depth;
         }
@@ -28,7 +28,7 @@ namespace Ridge.Parsers
         {
             var builder = new StringBuilder(string.Empty);
 
-            while (Index < Strings.Count
+            while (Index < EndIndex
                    && Strings[Index] != STRING.LESS_THAN)
             {
                 builder.Append(Strings[Index]);

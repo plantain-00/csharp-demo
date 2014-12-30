@@ -10,7 +10,7 @@ namespace Ridge.Nodes
         public List<Attribute> Attributes { get; set; }
         public bool HasSlash { get; set; }
 
-        public string this[string name]
+        public new string this[string name]
         {
             get
             {

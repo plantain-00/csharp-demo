@@ -11,7 +11,7 @@ namespace Ridge.Test
         public void Normal()
         {
             var html = new LexicalAnalysis().Analyse("abc");
-            var parser = new PlainTextParser(html, 0, 0);
+            var parser = new PlainTextParser(html, 0, 0, html.Count);
             parser.Parse();
             Assert.IsTrue(parser.Index == html.Count);
             Assert.IsTrue(parser.PlainText.Text == "abc");
@@ -21,7 +21,7 @@ namespace Ridge.Test
         public void With_Spaces()
         {
             var html = new LexicalAnalysis().Analyse("  a  b  c  ");
-            var parser = new PlainTextParser(html, 0, 0);
+            var parser = new PlainTextParser(html, 0, 0, html.Count);
             parser.Parse();
             Assert.IsTrue(parser.Index == html.Count);
             Assert.IsTrue(parser.PlainText.Text == "  a  b  c  ");

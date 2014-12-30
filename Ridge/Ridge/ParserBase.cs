@@ -4,13 +4,15 @@ namespace Ridge
 {
     internal abstract class ParserBase
     {
-        protected ParserBase(IReadOnlyList<string> strings, int index)
+        protected ParserBase(IReadOnlyList<string> strings, int index, int endIndex)
         {
             Strings = strings;
             Index = index;
+            EndIndex = endIndex;
         }
 
         protected internal int Index { get; protected set; }
+        protected internal int EndIndex { get; protected set; }
         protected internal IReadOnlyList<string> Strings { get; protected set; }
         internal abstract void Parse();
 

@@ -11,7 +11,7 @@ namespace Ridge.Test
         public void Single_Quote()
         {
             var html = new LexicalAnalysis().Analyse("'abc'");
-            var parser = new StringParser(html, 0);
+            var parser = new StringParser(html, 0, html.Count);
             parser.Parse();
             Assert.IsTrue(parser.Index == html.Count);
             Assert.IsTrue(parser.String == "abc");
@@ -21,7 +21,7 @@ namespace Ridge.Test
         public void Double_Quote()
         {
             var html = new LexicalAnalysis().Analyse("\"abc\"");
-            var parser = new StringParser(html, 0);
+            var parser = new StringParser(html, 0, html.Count);
             parser.Parse();
             Assert.IsTrue(parser.Index == html.Count);
             Assert.IsTrue(parser.String == "abc");
@@ -31,7 +31,7 @@ namespace Ridge.Test
         public void Double_Quote_With_Spaces()
         {
             var html = new LexicalAnalysis().Analyse("\"  a  b  c  \"");
-            var parser = new StringParser(html, 0);
+            var parser = new StringParser(html, 0, html.Count);
             parser.Parse();
             Assert.IsTrue(parser.Index == html.Count);
             Assert.IsTrue(parser.String == "  a  b  c  ");
@@ -41,7 +41,7 @@ namespace Ridge.Test
         public void Single_Quote_In_Double_Quote()
         {
             var html = new LexicalAnalysis().Analyse("\"'\"");
-            var parser = new StringParser(html, 0);
+            var parser = new StringParser(html, 0, html.Count);
             parser.Parse();
             Assert.IsTrue(parser.Index == html.Count);
             Assert.IsTrue(parser.String == "'");
@@ -51,7 +51,7 @@ namespace Ridge.Test
         public void Double_Quote_In_Single_Quote()
         {
             var html = new LexicalAnalysis().Analyse("'\"'");
-            var parser = new StringParser(html, 0);
+            var parser = new StringParser(html, 0, html.Count);
             parser.Parse();
             Assert.IsTrue(parser.Index == html.Count);
             Assert.IsTrue(parser.String == "\"");
