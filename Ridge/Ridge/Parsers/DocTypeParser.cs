@@ -29,8 +29,6 @@ namespace Ridge.Parsers
             Index += 2;
 
             FindEndOfDocType_GetDeclaration();
-
-            Index++;
         }
 
         private void FindEndOfDocType_GetDeclaration()
@@ -39,6 +37,11 @@ namespace Ridge.Parsers
                    && Strings[Index] != STRING.LARGER_THAN)
             {
                 DocType.Declaration += Strings[Index];
+                Index++;
+            }
+
+            if (Index < EndIndex)
+            {
                 Index++;
             }
         }

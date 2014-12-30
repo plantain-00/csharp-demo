@@ -28,13 +28,14 @@ namespace Ridge.Parsers
         {
             var builder = new StringBuilder(string.Empty);
 
-            while (Index < EndIndex
-                   && Strings[Index] != STRING.LESS_THAN)
+            do
             {
                 builder.Append(Strings[Index]);
 
                 Index++;
             }
+            while (Index < EndIndex
+                   && Strings[Index] != STRING.LESS_THAN);
 
             PlainText.Text = builder.ToString();
         }

@@ -17,9 +17,6 @@ namespace Ridge.Console
             var streamWriter = new StreamWriter("a.txt", false);
             streamWriter.Write(document);
             streamWriter.Flush();
-            var node = document["#cb_search"];
-            System.Console.WriteLine(node);
-            System.Console.Read();
         }
     }
 

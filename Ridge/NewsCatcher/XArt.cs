@@ -39,14 +39,12 @@ namespace NewsCatcher
                         var tmp = doc["#content"]["div", 1]["ul"]["li", i]["ul"]["li", j]["a"]["span"];
                         var text = tmp["span"]["b"][0].As<PlainText>().Text;
                         var type = tmp["span", 2][0].As<PlainText>().Text;
-                        var summary = tmp["span", 3][0].As<PlainText>().Text.Trim(' ', '\n', '\"').Unescape();
                         if (type == "HD video")
                         {
                             result.Add(new ShowItem
                                        {
                                            Text = tmp["span", 1][0].As<PlainText>().Text + " " + type + " " + text,
-                                           Url = String.Format("http://kickass.to/usearch/{0}/", HttpUtility.UrlEncode(text).Replace("+", "%20")),
-                                           Summary = summary
+                                           Url = String.Format("http://kickass.to/usearch/{0}/", HttpUtility.UrlEncode(text).Replace("+", "%20"))
                                        });
                         }
                     }

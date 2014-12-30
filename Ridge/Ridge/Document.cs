@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 using Ridge.Nodes;
@@ -17,39 +18,42 @@ namespace Ridge
         public Document(string html) : this()
         {
             var strings = new LexicalAnalysis().Analyse(html);
-            var doctypeParser = new DocTypeParser(strings, 0, strings.Count);
-            doctypeParser.Parse();
 
-            Nodes.Add(doctypeParser.DocType);
+            var i = SkipSpaces(strings, 0);
 
-            for (var index = doctypeParser.Index; index < strings.Count;)
+            if (strings[i] == STRING.LESS_THAN
+                && strings[i + 1].Equals(STRING.DOCTYPE, StringComparison.CurrentCultureIgnoreCase))
             {
-                while (index < strings.Count
-                       && (strings[index] == STRING.SPACE || strings[index] == STRING.RETURN || strings[index] == STRING.NEW_LINE))
+                var doctypeParser = new DocTypeParser(strings, i, strings.Count);
+                doctypeParser.Parse();
+
+                Nodes.Add(doctypeParser.DocType);
+
+                i = doctypeParser.Index;
+            }
+
+            while (i < strings.Count)
+            {
+                i = SkipSpaces(strings, i);
+
+                if (strings[i] == STRING.LESS_THAN)
                 {
-                    index++;
-                }
-                if (strings[index] == STRING.LESS_THAN)
-                {
-                    var tagParser = new TagParser(strings, index, 0, strings.Count);
+                    var tagParser = new TagParser(strings, i, 0, strings.Count);
                     tagParser.Parse();
 
                     Nodes.Add(tagParser.Tag);
-                    index = tagParser.Index;
+                    i = tagParser.Index;
                 }
                 else
                 {
-                    var plainTextParser = new PlainTextParser(strings, index, 0, strings.Count);
+                    var plainTextParser = new PlainTextParser(strings, i, 0, strings.Count);
                     plainTextParser.Parse();
 
                     Nodes.Add(plainTextParser.PlainText);
-                    index = plainTextParser.Index;
+                    i = plainTextParser.Index;
                 }
-                while (index < strings.Count
-                       && (strings[index] == STRING.SPACE || strings[index] == STRING.RETURN || strings[index] == STRING.NEW_LINE))
-                {
-                    index++;
-                }
+
+                i = SkipSpaces(strings, i);
             }
         }
 
@@ -65,7 +69,16 @@ namespace Ridge
                     var id = param.Substring(1);
                     return GetElementById(id);
                 }
-                throw new NotImplementedException();
+                return this[param, 0];
+            }
+        }
+
+        public Node this[string tagName, int index]
+        {
+            get
+            {
+                var nodes = Nodes.Where(c => c is Tag && (c as Tag).Name.Equals(tagName, StringComparison.CurrentCultureIgnoreCase));
+                return nodes.ElementAt(index);
             }
         }
 
@@ -75,6 +88,16 @@ namespace Ridge
             {
                 return Nodes[index];
             }
+        }
+
+        private int SkipSpaces(IReadOnlyList<string> strings, int i)
+        {
+            while (i < strings.Count
+                   && (strings[i] == STRING.SPACE || strings[i] == STRING.RETURN || strings[i] == STRING.NEW_LINE))
+            {
+                i++;
+            }
+            return i;
         }
 
         public Node GetElementById(string id)

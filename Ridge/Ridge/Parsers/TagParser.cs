@@ -32,6 +32,7 @@ namespace Ridge.Parsers
                   };
 
             Index++;
+            //Console.WriteLine(Index);
             ParseAttributes();
 
             if (!IsSingleLineTag())
