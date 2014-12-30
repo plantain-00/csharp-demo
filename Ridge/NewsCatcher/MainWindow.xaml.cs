@@ -108,7 +108,7 @@ namespace NewsCatcher
         {
             try
             {
-                var json = JsonConvert.SerializeObject(History);
+                var json = JsonConvert.SerializeObject(History, Formatting.Indented);
                 using (var writer = new StreamWriter(NEWSHISTORY_JSON, false))
                 {
                     writer.Write(json);

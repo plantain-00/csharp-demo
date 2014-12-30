@@ -16,14 +16,20 @@ namespace Ridge
                     || c == CHAR.LARGER_THAN
                     || c == CHAR.LESS_THAN
                     || c == CHAR.EQUAL
-                    || c == CHAR.SLASH)
+                    || c == CHAR.SLASH
+                    || c == CHAR.RETURN
+                    || c == CHAR.NEW_LINE)
                 {
                     if (tmp != string.Empty)
                     {
                         result.Add(tmp);
                         tmp = string.Empty;
                     }
-                    result.Add(new string(c, 1));
+                    if (c != CHAR.NEW_LINE
+                        && c != CHAR.RETURN)
+                    {
+                        result.Add(new string(c, 1));
+                    }
                 }
                 else
                 {
