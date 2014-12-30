@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text;
 
 using Ridge.Nodes;
@@ -53,6 +54,28 @@ namespace Ridge
         }
 
         public List<Node> Nodes { get; set; }
+
+        public Node this[string param]
+        {
+            get
+            {
+                if (param.StartsWith("#")
+                    && param.Length > 1)
+                {
+                    var id = param.Substring(1);
+                    return GetElementById(id);
+                }
+                throw new NotImplementedException();
+            }
+        }
+
+        public Node this[int index]
+        {
+            get
+            {
+                return Nodes[index];
+            }
+        }
 
         public Node GetElementById(string id)
         {

@@ -10,6 +10,19 @@ namespace Ridge.Nodes
         public List<Attribute> Attributes { get; set; }
         public bool HasSlash { get; set; }
 
+        public string this[string name]
+        {
+            get
+            {
+                if (Attributes == null)
+                {
+                    return null;
+                }
+                var attribute = Attributes.FirstOrDefault(a => a.Name == name);
+                return attribute == null ? null : attribute.Value;
+            }
+        }
+
         internal override Node GetElementById(string id)
         {
             if (Attributes != null)

@@ -7,6 +7,19 @@ namespace Ridge.Nodes
         public List<Node> Children { get; set; }
         internal int Depth { get; set; }
 
+        public Node this[int index]
+        {
+            get
+            {
+                return Children[index];
+            }
+        }
+
+        public T As<T>() where T : class
+        {
+            return this as T;
+        }
+
         internal virtual Node GetElementById(string id)
         {
             if (Children == null)
