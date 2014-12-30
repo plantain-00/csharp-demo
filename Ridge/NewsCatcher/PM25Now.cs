@@ -3,15 +3,17 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 
-using HtmlAgilityPack;
-
 using NewsCatcher.Models;
+
+using Ridge;
+using Ridge.Nodes;
 
 namespace NewsCatcher
 {
-    static internal class PM25Now
+    internal static class PM25Now
     {
         public const string FAILS_MESSAGE = "PM2.5Now Fails";
+
         public static IEnumerable<ShowItem> Do()
         {
             var result = new List<ShowItem>
@@ -24,21 +26,21 @@ namespace NewsCatcher
                          };
             try
             {
-                var doc = new HtmlDocument();
                 var html = new XWebClient
                            {
                                Encoding = Encoding.UTF8
                            }.DownloadString("http://www.chapm25.com/city/shanghai.html");
-                doc.LoadHtml(html);
+                var doc = new Document(html);
                 for (var i = 1; i < 5; i++)
                 {
                     for (var j = 0; j < 3; j++)
                     {
+                        var tmp = doc["html"]["body"]["div", 1]["div"]["div", 1]["div", i]["div", j]["h2"]["div"];
                         try
                         {
-                            var name = doc.DocumentNode.SelectSingleNode(String.Format("/html/body/div[2]/div/div[2]/div[{0}]/div[{1}]/h2/div/div[1]/a", i + 1, j + 1)).InnerText;
-                            var value = doc.DocumentNode.SelectSingleNode(String.Format("/html/body/div[2]/div/div[2]/div[{0}]/div[{1}]/h2/div/div[2]/span", i + 1, j + 1)).InnerText;
-                            var title = doc.DocumentNode.SelectSingleNode(String.Format("/html/body/div[2]/div/div[2]/div[{0}]/div[{1}]/h2/div/div[2]/span", i + 1, j + 1)).Attributes["title"].Value;
+                            var name = tmp["div"]["a"][0].As<PlainText>().Text;
+                            var value = tmp["div", 1]["span"][0].As<PlainText>().Text;
+                            var title = tmp["div", 1]["span"].As<Tag>()["title"];
                             result.Add(new ShowItem
                                        {
                                            Text = name + ":" + value,
@@ -64,6 +66,7 @@ namespace NewsCatcher
             result.Add(new ShowItem());
             return result;
         }
+
         public static Task<IEnumerable<ShowItem>> DoAsync()
         {
             return Task.Factory.StartNew(() => Do());

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
@@ -13,26 +14,32 @@ using System.Windows.Navigation;
 
 using NewsCatcher.Models;
 
+using Newtonsoft.Json;
+
 namespace NewsCatcher
 {
     public partial class MainWindow
     {
         private const string NEWSHISTORY_XML = "NewsHistory.xml";
+        private const string NEWSHISTORY_JSON = "NewsHistory.json";
+        internal static List<HistoryItem> History;
         private readonly List<ShowItem> _itemsSource;
         private Task _deserialization;
-        internal static List<HistoryItem> History;
+
         public MainWindow()
         {
             InitializeComponent();
             _itemsSource = new List<ShowItem>();
             listView.ItemsSource = _itemsSource;
         }
+
         protected override void OnSourceInitialized(EventArgs e)
         {
             base.OnSourceInitialized(e);
             var source = PresentationSource.FromVisual(this) as HwndSource;
             source.AddHook(WndProc);
         }
+
         private IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
         {
             if (msg == SingleInstanceAppliction.WM_SHOWME)
@@ -47,6 +54,7 @@ namespace NewsCatcher
             }
             return IntPtr.Zero;
         }
+
         private async void Hyperlink_OnRequestNavigate(object sender, RequestNavigateEventArgs e)
         {
             (sender as Hyperlink).Foreground = Brushes.Red;
@@ -79,46 +87,53 @@ namespace NewsCatcher
                     await TVTask();
                     break;
                 default:
+                {
+                    var uri = e.Uri.AbsoluteUri;
+                    History.Add(new HistoryItem
+                                {
+                                    Url = uri,
+                                    Time = DateTime.Now.ToInt32()
+                                });
+                    if (!Keyboard.Modifiers.HasFlag(ModifierKeys.Control))
                     {
-                        var uri = e.Uri.AbsoluteUri;
-                        History.Add(new HistoryItem
-                                     {
-                                         Url = uri,
-                                         Time = DateTime.Now.ToInt32()
-                                     });
-                        if (!Keyboard.Modifiers.HasFlag(ModifierKeys.Control))
-                        {
-                            Process.Start(new ProcessStartInfo(WindowsHelper.GetDefaultBrowser(), uri));
-                        }
+                        Process.Start(new ProcessStartInfo(WindowsHelper.GetDefaultBrowser(), uri));
                     }
+                }
                     break;
             }
             e.Handled = true;
         }
+
         private void MainWindow_OnClosing(object sender, CancelEventArgs e)
         {
             try
             {
-                History.Serialize(NEWSHISTORY_XML);
+                var json = JsonConvert.SerializeObject(History);
+                using (var writer = new StreamWriter(NEWSHISTORY_JSON, false))
+                {
+                    writer.Write(json);
+                    writer.Flush();
+                }
             }
             catch (Exception)
             {
             }
         }
+
         private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
             _deserialization = new Task(delegate
-                                        {
-                                            try
-                                            {
-                                                History = NEWSHISTORY_XML.Deserialize<List<HistoryItem>>();
-                                                History.RemoveAll(h => h.Time < DateTime.Now.AddDays(-14).ToInt32());
-                                            }
-                                            catch (Exception)
-                                            {
-                                                History = new List<HistoryItem>();
-                                            }
-                                        });
+            {
+                try
+                {
+                    History = NEWSHISTORY_XML.Deserialize<List<HistoryItem>>();
+                    History.RemoveAll(h => h.Time < DateTime.Now.AddDays(-14).ToInt32());
+                }
+                catch (Exception)
+                {
+                    History = new List<HistoryItem>();
+                }
+            });
             _deserialization.Start();
             CnblogsTask();
             CnBetaTask();
@@ -127,6 +142,7 @@ namespace NewsCatcher
             V2exTask();
             TVTask();
         }
+
         private void Refactor()
         {
             var isEmpty = true;
@@ -141,6 +157,7 @@ namespace NewsCatcher
                 isEmpty = string.IsNullOrEmpty(_itemsSource[i].Text);
             }
         }
+
         private async Task V2exTask()
         {
             var result = await V2ex.DoAsync();
@@ -149,6 +166,7 @@ namespace NewsCatcher
             Refactor();
             listView.Items.Refresh();
         }
+
         private async Task PM25NowTask()
         {
             var result = await PM25Now.DoAsync();
@@ -157,6 +175,7 @@ namespace NewsCatcher
             Refactor();
             listView.Items.Refresh();
         }
+
         private async Task XArtTask()
         {
             var result = await XArt.DoAsync();
@@ -165,6 +184,7 @@ namespace NewsCatcher
             Refactor();
             listView.Items.Refresh();
         }
+
         private async Task CnBetaTask()
         {
             var result = await CnBeta.DoAsync();
@@ -173,6 +193,7 @@ namespace NewsCatcher
             Refactor();
             listView.Items.Refresh();
         }
+
         private async Task CnblogsTask()
         {
             var result = await Cnblogs.DoAsync();
@@ -181,6 +202,7 @@ namespace NewsCatcher
             Refactor();
             listView.Items.Refresh();
         }
+
         private async Task TVTask()
         {
             var result = await TV.DoAsync();
