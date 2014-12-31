@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace Ridge.Nodes
@@ -48,38 +47,40 @@ namespace Ridge.Nodes
                 }
             }
 
+            var slash = GetSlash();
+
             if (formatting == Formatting.None)
             {
                 if (Children == null)
                 {
-                    return string.Format("<{0}{1}{2}>", Name, attributes, GetSlash());
+                    return string.Format("<{0}{1}{2}>", Name, attributes, slash);
                 }
                 if (Children.Count == 0)
                 {
-                    return string.Format("<{0}{1}{2}></{0}>", Name, attributes, GetSlash());
+                    return string.Format("<{0}{1}{2}></{0}>", Name, attributes, slash);
                 }
                 var children = string.Empty;
                 foreach (var child in Children)
                 {
                     children += child.ToString(Formatting.None);
                 }
-                return string.Format("<{0}{1}{3}>{2}</{0}>", Name, attributes, children, GetSlash());
+                return string.Format("<{0}{1}{3}>{2}</{0}>", Name, attributes, children, slash);
             }
             else
             {
                 if (Children == null)
                 {
-                    return string.Format("{2}<{0}{1}{3}>\n", Name, attributes, new string(CHAR.SPACE, Depth * spaceNumber), GetSlash());
+                    return string.Format("{2}<{0}{1}{3}>\n", Name, attributes, new string(CHAR.SPACE, Depth * spaceNumber), slash);
                 }
                 if (Children.Count == 0)
                 {
-                    return string.Format("{2}<{0}{1}{3}></{0}>\n", Name, attributes, new string(CHAR.SPACE, Depth * spaceNumber), GetSlash());
+                    return string.Format("{2}<{0}{1}{3}></{0}>\n", Name, attributes, new string(CHAR.SPACE, Depth * spaceNumber), slash);
                 }
                 if (Children.Count == 1
                     && Children[0] is PlainText)
                 {
                     var plainText = Children[0] as PlainText;
-                    return string.Format("{3}<{0}{1}{4}>{2}</{0}>\n", Name, attributes, plainText.ToString(Formatting.None), new string(CHAR.SPACE, Depth * spaceNumber), GetSlash());
+                    return string.Format("{3}<{0}{1}{4}>{2}</{0}>\n", Name, attributes, plainText.ToString(Formatting.None), new string(CHAR.SPACE, Depth * spaceNumber), slash);
                 }
 
                 var children = string.Empty;
@@ -88,13 +89,8 @@ namespace Ridge.Nodes
                     children += child.ToString(formatting, spaceNumber);
                 }
 
-                return string.Format("{3}<{0}{1}{4}>\n{2}{3}</{0}>\n", Name, attributes, children, new string(CHAR.SPACE, Depth * spaceNumber), GetSlash());
+                return string.Format("{3}<{0}{1}{4}>\n{2}{3}</{0}>\n", Name, attributes, children, new string(CHAR.SPACE, Depth * spaceNumber), slash);
             }
-        }
-
-        private bool NameIs(string tagName)
-        {
-            return Name.Equals(tagName, StringComparison.CurrentCultureIgnoreCase);
         }
 
         private string GetSlash()
