@@ -99,7 +99,7 @@ namespace NewsCatcher
                     result.Add(new Model
                                {
                                    Digg = Convert.ToInt32(div1["div"]["span"][0].As<PlainText>().Text.Trim()),
-                                   Title = div2[1][0][0].As<PlainText>().Text.Unescape(),
+                                   Title = div2["h3"]["a"][0].As<PlainText>().Text.Unescape(),
                                    Url = div2["h3"]["a"].As<Tag>()["href"].Trim(),
                                    Summary = div2["p"][1].As<PlainText>().Text.Trim().Unescape(),
                                    Time = Convert.ToDateTime(date),
