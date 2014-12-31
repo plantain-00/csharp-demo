@@ -126,7 +126,12 @@ namespace NewsCatcher
             {
                 try
                 {
-                    History = NEWSHISTORY_XML.Deserialize<List<HistoryItem>>();
+                    using (var reader = new StreamReader(NEWSHISTORY_JSON))
+                    {
+                        History = JsonConvert.DeserializeObject<List<HistoryItem>>(reader.ReadToEnd());
+                    }
+                   
+                    //History = NEWSHISTORY_XML.Deserialize<List<HistoryItem>>();
                     History.RemoveAll(h => h.Time < DateTime.Now.AddDays(-14).ToInt32());
                 }
                 catch (Exception)
