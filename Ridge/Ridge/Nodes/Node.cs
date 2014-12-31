@@ -34,7 +34,7 @@ namespace Ridge.Nodes
             }
         }
 
-        public T As<T>() where T : class
+        public T As<T>() where T : Node
         {
             return this as T;
         }
