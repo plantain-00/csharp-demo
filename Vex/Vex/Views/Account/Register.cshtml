@@ -7,6 +7,16 @@
 }
 <div class="row">
     <div class="panel panel-default">
+        <div class="panel-body">
+            <ol class="breadcrumb">
+                <li><a href="@Url.Action("Index", "Home")">主页 / Home</a></li>
+                <li class="active">会员注册 / Membership Registration</li>
+            </ol>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="panel panel-default">
         <div class="panel-heading">
             <h3 class="panel-title">注册 / Register</h3>
         </div>
@@ -172,7 +182,7 @@
                         <textarea name="personalInterest" rows="5" class="form-control" id="personalInterest" placeholder="可选 / Optional"></textarea>
                     </div>
                 </div>
-                <div class="form-group" style="bottom: 20px; position: fixed; right: 100px;">
+                <div class="form-group" style="bottom: 30px; position: fixed; right: 100px;">
                     <div class="col-sm-offset-3 col-sm-10">
                         <button id="apply" type="submit" class="btn btn-primary">申请 / Apply</button>
                     </div>

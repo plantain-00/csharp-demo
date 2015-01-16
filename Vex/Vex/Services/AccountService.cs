@@ -573,19 +573,23 @@ namespace Vex.Services
 
         public async Task<List<User>> Unregister(List<string> emails)
         {
+            var userEmails = new List<string>();
             foreach (var email in emails)
             {
-                var user = Entities.Users.FirstOrDefault(u => u.Email == email);
-                if (user != null)
+                var localEmail = email;
+                var user = await Entities.Users.FirstOrDefaultAsync(u => u.Email == localEmail);
+                if (user != null
+                    && user.Status == UserStatus.Active)
                 {
-                    user.Status = UserStatus.Unregistered;
+                    user.Status = UserStatus.Inactive;
+                    userEmails.Add(user.Email);
                 }
             }
             await Entities.SaveChangesAsync();
 
             ClearAllSession();
 
-            return Entities.Users.Where(u => emails.Contains(u.Email)).ToList();
+            return await Entities.Users.Where(u => userEmails.Contains(u.Email)).ToListAsync();
         }
     }
 }

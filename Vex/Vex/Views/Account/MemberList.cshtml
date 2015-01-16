@@ -7,7 +7,16 @@
     var costCenters = ViewData["CostCenters"] as CostCenter[];
     var pagination = ViewData["pagination"] as Pagination;
 }
-
+<div class="row">
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <ol class="breadcrumb">
+                <li><a href="@Url.Action("Index", "Home")">主页 / Home</a></li>
+                <li class="active">成员表 / Member List</li>
+            </ol>
+        </div>
+    </div>
+</div>
 <div class="row">
     <div class="panel panel-default">
         <div class="panel-heading">
@@ -122,8 +131,8 @@
     @Html.Partial("GetMemberList")
 </div>
 
-<button class="btn btn-success" style="bottom: 20px; margin-bottom: 20px; margin-top: 20px; position: fixed; right: 220px;" onclick=" navigateTo(1); ">搜索 / Search</button>
-<button class="btn btn-success" style="bottom: 20px; margin-bottom: 20px; margin-top: 20px; position: fixed; right: 100px;" onclick=" exportToExcel(); ">导出 / Export</button>
+<button class="btn btn-success" style="bottom: 40px; margin-bottom: 20px; margin-top: 20px; position: fixed; right: 220px;" onclick=" navigateTo(1); ">搜索 / Search</button>
+<button class="btn btn-success" style="bottom: 40px; margin-bottom: 20px; margin-top: 20px; position: fixed; right: 100px;" onclick=" exportToExcel(); ">导出 / Export</button>
 <script type="text/javascript">
     var isDesc = false;
     var theColumn = "";
@@ -181,7 +190,7 @@
         $.ajax({
             url : "@Url.Action("GetMemberList")",
             data : getCondition(page),
-            success: function (data) {
+            success : function(data) {
                 $("#list").html(data);
                 if (theColumn != ""
                     && $("#" + theColumn) != undefined) {

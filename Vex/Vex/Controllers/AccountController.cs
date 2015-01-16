@@ -80,7 +80,6 @@ namespace Vex.Controllers
             return View();
         }
 
-        [Authentication(Constants.MODIFY_PROFILE)]
         public ActionResult ModifyMyProfile()
         {
             ViewData["WorkingLocations"] = Base.Account.WorkingLocations;
@@ -112,7 +111,16 @@ namespace Vex.Controllers
 
             await Base.Account.ModifyProfile(user);
 
-            return RedirectToAction("Index", "Home");
+            if (Base.Account.CurrentUser.Id != user.Id)
+            {
+                return Content(string.Format("<script>alert(\"success.\"); location.href='{0}';</script>",
+                                             Url.Action("ModifyProfile",
+                                                        new
+                                                        {
+                                                            ID = user.Id
+                                                        })));
+            }
+            return Content(string.Format("<script>alert(\"success.\"); location.href='{0}';</script>", Url.Action("ModifyMyProfile")));
         }
 
 

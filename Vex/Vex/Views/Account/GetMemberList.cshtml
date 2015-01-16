@@ -104,7 +104,7 @@
                         <a href="@Url.Action("ModifyProfile", new
                                                               {
                                                                   id = user.Id
-                                                              })">@user.ChineseName</a>
+                                                              })" target="_blank">@user.ChineseName</a>
                     </td>
                     <td>@user.GetEnglishName()</td>
                     <td>@(user.Gender ? "Male" : "Female")</td>
