@@ -1,0 +1,136 @@
+﻿@using Bootstrap.Pagination
+@using Vex.DbModels
+@{
+    Layout = null;
+    var users = ViewData["users"] as List<User>;
+    var pagination = ViewData["pagination"] as Pagination;
+}
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">
+            成员表 / Member List
+        </h3>
+    </div>
+    <div class="panel-body" style="overflow: auto;">
+        <table class="table table-striped table-hover table-bordered">
+            <tr>
+                <th></th>
+                <th>
+                    中文名 / Chinese Name
+                    <span id="chineseNameOrder" class="glyphicon glyphicon-sort hand" aria-hidden="true" onclick=" navigateTo(1, 'chineseNameOrder') "></span>
+                </th>
+                <th>
+                    英文名 / English Name
+                    <span id="englishNameOrder" class="glyphicon glyphicon-sort hand" aria-hidden="true" onclick=" navigateTo(1, 'englishNameOrder') "></span>
+                </th>
+                <th>
+                    性别 / Gender
+                    <span id="genderOrder" class="glyphicon glyphicon-sort hand" aria-hidden="true" onclick=" navigateTo(1, 'genderOrder') "></span>
+                </th>
+                <th>
+                    生日 / Birthday
+                    <span id="birthdayOrder" class="glyphicon glyphicon-sort hand" aria-hidden="true" onclick=" navigateTo(1, 'birthdayOrder') "></span>
+                </th>
+                <th>
+                    员工号 / Employee ID
+                    <span id="employeeIdOrder" class="glyphicon glyphicon-sort hand" aria-hidden="true" onclick=" navigateTo(1, 'employeeIdOrder') "></span>
+                </th>
+                <th>
+                    电子邮箱 / Email
+                    <span id="emailOrder" class="glyphicon glyphicon-sort hand" aria-hidden="true" onclick=" navigateTo(1, 'emailOrder') "></span>
+                </th>
+                <th>
+                    手机 / Cellphone
+                    <span id="cellphoneOrder" class="glyphicon glyphicon-sort hand" aria-hidden="true" onclick=" navigateTo(1, 'cellphoneOrder') "></span>
+                </th>
+                <th>
+                    办公电话 / Office Phone
+                    <span id="officephoneOrder" class="glyphicon glyphicon-sort hand" aria-hidden="true" onclick=" navigateTo(1, 'officephoneOrder') "></span>
+                </th>
+                <th>
+                    办公地址 / Office Address
+                    <span id="officeAddressOrder" class="glyphicon glyphicon-sort hand" aria-hidden="true" onclick=" navigateTo(1, 'officeAddressOrder') "></span>
+                </th>
+                <th>
+                    收货地址 / Delivery Address
+                    <span id="deliveryAddressOrder" class="glyphicon glyphicon-sort hand" aria-hidden="true" onclick=" navigateTo(1, 'deliveryAddressOrder') "></span>
+                </th>
+                <th>
+                    工作地点 / Work Location
+                    <span id="workLocationOrder" class="glyphicon glyphicon-sort hand" aria-hidden="true" onclick=" navigateTo(1, 'workLocationOrder') "></span>
+                </th>
+                <th>
+                    部门 / Sector
+                    <span id="sectorOrder" class="glyphicon glyphicon-sort hand" aria-hidden="true" onclick=" navigateTo(1, 'sectorOrder') "></span>
+                </th>
+                <th>
+                    业务分类 / Business Funloc
+                    <span id="funlocOrder" class="glyphicon glyphicon-sort hand" aria-hidden="true" onclick=" navigateTo(1, 'funlocOrder') "></span>
+                </th>
+                <th>
+                    成本中心 / Cost Center
+                    <span id="costCenterOrder" class="glyphicon glyphicon-sort hand" aria-hidden="true" onclick=" navigateTo(1, 'costCenterOrder') "></span>
+                </th>
+                <th>
+                    状态 / Status
+                    <span id="statusOrder" class="glyphicon glyphicon-sort hand" aria-hidden="true" onclick=" navigateTo(1, 'statusOrder') "></span>
+                </th>
+                <th>
+                    注册时间 / Register Time
+                    <span id="registerOrder" class="glyphicon glyphicon-sort hand" aria-hidden="true" onclick=" navigateTo(1, 'registerOrder') "></span>
+                </th>
+            </tr>
+            @foreach (var user in users)
+            {
+                <tr>
+                    <td>
+                        @switch (user.Status)
+                        {
+                            case UserStatus.Applied:
+                                <a href="javascript:void(0);" onclick=" modifyStatus(@user.Id, @((int) UserStatus.Active)); ">Active</a>
+                                <a href="javascript:void(0);" onclick=" modifyStatus(@user.Id, @((int) UserStatus.Inactive)); ">Inactive</a>
+                                break;
+                            case UserStatus.Active:
+                                <a href="javascript:void(0);" onclick=" modifyStatus(@user.Id, @((int) UserStatus.Inactive)); ">Inactive</a>
+                                <a href="javascript:void(0);" onclick=" modifyStatus(@user.Id, @((int) UserStatus.Suspended)); ">Suspended</a>
+                                break;
+                            case UserStatus.Suspended:
+                            case UserStatus.Inactive:
+                                <a href="javascript:void(0);" onclick=" modifyStatus(@user.Id, @((int) UserStatus.Active)); ">Active</a>
+                                break;
+                        }
+                    </td>
+                    <td>
+                        <a href="@Url.Action("ModifyProfile", new
+                                                              {
+                                                                  id = user.Id
+                                                              })">@user.ChineseName</a>
+                    </td>
+                    <td>@user.GetEnglishName()</td>
+                    <td>@(user.Gender ? "Male" : "Female")</td>
+                    <td>@user.Birthday.ToString("yyyy-MM-dd")</td>
+                    <td>@user.EmployeeId</td>
+                    <td>@user.Email</td>
+                    <td>@user.MobilePhone</td>
+                    <td>@user.OfficePhone</td>
+                    <td>@user.OfficeAddress</td>
+                    <td>@user.DeliveryAddress</td>
+                    <td>@user.WorkingLocation.Name</td>
+                    <td>@user.Sector.Name</td>
+                    <td>@user.BusinessFunloc.Name</td>
+                    <td>@user.CostCenter.Name</td>
+                    <td>
+                        @UserHelper.UserStatus(user)
+                    </td>
+                    <td>@user.RegisterTime.ToString("yyyy-MM-dd HH:mm")</td>
+                </tr>
+            }
+        </table>
+        <div>
+            @Html.Partial("Pagination")
+        </div>
+        <div style="margin-bottom: 30px; text-align: right;">
+            总共 @pagination.TotalItems 条记录 / @pagination.TotalItems records in total
+        </div>
+    </div>
+</div>

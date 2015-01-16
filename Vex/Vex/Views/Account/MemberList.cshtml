@@ -1,0 +1,194 @@
+﻿@using Bootstrap.Pagination
+@using Vex.DbModels
+@{
+    var workingLocations = ViewData["WorkingLocations"] as WorkingLocation[];
+    var sectors = ViewData["Sectors"] as Sector[];
+    var businessFunlocs = ViewData["BusinessFunlocs"] as BusinessFunloc[];
+    var costCenters = ViewData["CostCenters"] as CostCenter[];
+    var pagination = ViewData["pagination"] as Pagination;
+}
+
+<div class="row">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                搜索条件 / Search Condition
+            </h3>
+        </div>
+        <div class="panel-body">
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <label for="employeeName" class="col-sm-3 control-label">员工姓名 / Employee Name:</label>
+                    <div class="col-sm-3">
+                        <input type="text" name="employeeName" class="form-control" id="employeeName">
+                    </div>
+                    <label for="gender" class="col-sm-3 control-label">性别 / Gender:</label>
+                    <div class="col-sm-3">
+                        <select class="form-control" id="gender">
+                            <option value="">--select--</option>
+                            <option value="true">男 / Male</option>
+                            <option value="false">女 / Female</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="year" class="col-sm-3 control-label">生日 / Birthday:</label>
+                    <div class="col-sm-1">
+                        <input type="text" name="year" required id="year" class="form-control" placeholder="Year"/>
+                    </div>
+                    <div class="col-sm-1">
+                        <input type="text" name="month" required id="month" class="form-control" placeholder="Month"/>
+                    </div>
+                    <div class="col-sm-1">
+                        <input type="text" name="day" required id="day" class="form-control" placeholder="Day"/>
+                    </div>
+                    <label for="employeeId" class="col-sm-3 control-label">员工号 / Employee ID:</label>
+                    <div class="col-sm-3">
+                        <input type="text" name="employeeId" required class="form-control" id="employeeId">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="email" class="col-sm-3 control-label">电子邮箱 / Email:</label>
+                    <div class="col-sm-3">
+                        <input type="email" name="email" required class="form-control" id="email">
+                    </div>
+                    <label for="mobilePhone" class="col-sm-3 control-label">移动电话 / Mobile Phone:</label>
+                    <div class="col-sm-3">
+                        <input type="text" name="mobilePhone" required class="form-control" id="mobilePhone">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="workingLocation" class="col-sm-3 control-label">工作地点 / Working Location:</label>
+                    <div class="col-sm-3">
+                        <select name="workingLocationId" class="form-control" id="workingLocation">
+                            <option value="">--select--</option>
+                            @foreach (var workingLocation in workingLocations)
+                            {
+                                <option value="@workingLocation.Id">@workingLocation.Name</option>
+                            }
+                        </select>
+                    </div>
+                    <label for="sector" class="col-sm-3 control-label">部门 / Sector:</label>
+                    <div class="col-sm-3">
+                        <select name="sectorId" class="form-control" id="sector">
+                            <option value="">--select--</option>
+                            @foreach (var sector in sectors)
+                            {
+                                <option value="@sector.Id">@sector.Name</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="businessFunloc" class="col-sm-3 control-label">业务分类 / Business Funloc:</label>
+                    <div class="col-sm-3">
+                        <select name="businessFunlocId" class="form-control" id="businessFunloc">
+                            <option value="">--select--</option>
+                            @foreach (var businessFunloc in businessFunlocs)
+                            {
+                                <option value="@businessFunloc.Id">@businessFunloc.Name</option>
+                            }
+                        </select>
+                    </div>
+                    <label for="costCenter" class="col-sm-3 control-label">成本中心 / Cost Center:</label>
+                    <div class="col-sm-3">
+                        <select name="costCenterId" class="form-control" id="costCenter">
+                            <option value="">--select--</option>
+                            @foreach (var costCenter in costCenters)
+                            {
+                                <option value="@costCenter.Id">@costCenter.Name</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="status" class="col-sm-3 control-label">会籍状态 / Membership Status:</label>
+                    <div class="col-sm-3">
+                        <select name="status" class="form-control" id="status">
+                            <option value="">--select--</option>
+                            <option value="@((int) UserStatus.Active)">@UserStatus.Active</option>
+                            <option value="@((int) UserStatus.Suspended)">@UserStatus.Suspended</option>
+                            <option value="@((int) UserStatus.Inactive)">@UserStatus.Inactive</option>
+                            <option value="@((int) UserStatus.Applied)">@UserStatus.Applied</option>
+                        </select>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div id="list" class="row">
+    @Html.Partial("GetMemberList")
+</div>
+
+<button class="btn btn-success" style="bottom: 20px; margin-bottom: 20px; margin-top: 20px; position: fixed; right: 220px;" onclick=" navigateTo(1); ">搜索 / Search</button>
+<button class="btn btn-success" style="bottom: 20px; margin-bottom: 20px; margin-top: 20px; position: fixed; right: 100px;" onclick=" exportToExcel(); ">导出 / Export</button>
+<script type="text/javascript">
+    var isDesc = false;
+    var theColumn = "";
+
+    function getDirection() {
+        return isDesc ? "glyphicon-arrow-down" : "glyphicon-arrow-up";
+    }
+
+    function getCondition(page) {
+        return {
+            page : page,
+            name : $.trim($("#employeeName").val()),
+            gender : $.trim($("#gender").val()),
+            year : $.trim($("#year").val()),
+            month : $.trim($("#month").val()),
+            day : $.trim($("#day").val()),
+            employeeId : $.trim($("#employeeId").val()),
+            email : $.trim($("#email").val()),
+            mobilePhone : $.trim($("#mobilePhone").val()),
+            location : $.trim($("#workingLocation").val()),
+            sector : $.trim($("#sector").val()),
+            funloc : $.trim($("#businessFunloc").val()),
+            costCenter : $.trim($("#costCenter").val()),
+            status : $.trim($("#status").val()),
+            isDesc : isDesc,
+            column : theColumn
+        }
+    }
+
+    function exportToExcel() {
+        location.href = '@Url.Action("ExportMembers")?' + $.param(getCondition(1));
+    }
+
+    function modifyStatus(id, status) {
+        $.post("@Url.Action("ModifyStatus")", {
+                id : id,
+                status : status
+            },
+            function(data) {
+                if (data.isSuccess) {
+                    alert("success.");
+                    navigateTo(@pagination.CurrentPage);
+                } else {
+                    alert(data.message);
+                }
+            }
+        );
+    }
+
+    function navigateTo(page, column) {
+        if (column != undefined) {
+            theColumn = column;
+            isDesc = !isDesc;
+        }
+        $.ajax({
+            url : "@Url.Action("GetMemberList")",
+            data : getCondition(page),
+            success: function (data) {
+                $("#list").html(data);
+                if (theColumn != ""
+                    && $("#" + theColumn) != undefined) {
+                    var direction = getDirection();
+                    $("#" + theColumn).removeClass("glyphicon-sort").addClass(direction);
+                }
+            }
+        });
+    }
+</script>

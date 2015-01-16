@@ -1,0 +1,72 @@
+﻿@using Vex.DbModels
+@{
+    var message = ViewData["message"] as string;
+    var isSuccess = ViewData["isSuccess"] as bool?;
+    var users = ViewData["users"] as List<User>;
+}
+<div class="row">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                导入雇员 / Import Employees
+            </h3>
+        </div>
+        <div class="panel-body">
+            <form action="@Url.Action("GetImportedEmails")" method="POST" enctype="multipart/form-data">
+                <input type="file" name="employees"/>
+                <br/>
+                <button type="submit" class="btn btn-primary">导入</button>
+            </form>
+        </div>
+    </div>
+</div>
+@if (isSuccess != null)
+{
+    <div class="row">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    结果 / Result
+                </h3>
+            </div>
+            <div class="panel-body">
+                @message
+            </div>
+        </div>
+    </div>
+}
+@if (isSuccess == true)
+{
+    <div class="row">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    已导入的雇员 / Imported Employees
+                </h3>
+            </div>
+            <div class="panel-body">
+                <table class="table table-striped table-hover table-bordered">
+                    <tr>
+                        <th>中文名 / Chinese Name</th>
+                        <th>英文名 / English Name</th>
+                        <th>电子邮箱 / Email</th>
+                        <th>注册时间 / Register Time</th>
+                        <th>状态 / Status</th>
+                    </tr>
+                    @foreach (var user in users)
+                    {
+                        <tr>
+                            <td>@user.ChineseName</td>
+                            <td>@user.GetEnglishName()</td>
+                            <td>@user.Email</td>
+                            <td>@user.RegisterTime</td>
+                            <td>
+                                @UserHelper.UserStatus(user)
+                            </td>
+                        </tr>
+                    }
+                </table>
+            </div>
+        </div>
+    </div>
+}

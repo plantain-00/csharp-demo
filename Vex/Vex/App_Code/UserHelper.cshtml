@@ -1,0 +1,29 @@
+@using Vex.DbModels
+@helper UserStatus(User user)
+{
+    if (user == null)
+    {
+        <span class="label label-primary">Unregistered</span>
+    }
+    else
+    {
+        switch (user.Status)
+        {
+            case Vex.DbModels.UserStatus.Inactive:
+                <span class="label label-danger">Inactive</span>
+                break;
+            case Vex.DbModels.UserStatus.Active:
+                <span class="label label-success">Active</span>
+                break;
+            case Vex.DbModels.UserStatus.Suspended:
+                <span class="label label-default">Suspended</span>
+                break;
+            case Vex.DbModels.UserStatus.Applied:
+                <span class="label label-warning">Applied</span>
+                break;
+            case Vex.DbModels.UserStatus.Unregistered:
+                <span class="label label-primary">Unregistered</span>
+                break;
+        }
+    }
+}

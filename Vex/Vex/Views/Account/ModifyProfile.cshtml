@@ -1,0 +1,327 @@
+﻿@using Vex.DbModels
+@{
+    var workingLocations = ViewData["WorkingLocations"] as WorkingLocation[];
+    var sectors = ViewData["Sectors"] as Sector[];
+    var businessFunlocs = ViewData["BusinessFunlocs"] as BusinessFunloc[];
+    var costCenters = ViewData["CostCenters"] as CostCenter[];
+
+    var user = ViewData["user"] as User;
+    var currentUser = ViewData["currentUser"] as User;
+}
+<div class="row">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                修改个人资料 / Modify Profile
+                @UserHelper.UserStatus(user)
+            </h3>
+        </div>
+        <div class="panel-body" style="padding-bottom: 50px;">
+            <form class="form-horizontal" role="form" method="POST" action="@Url.Action("ModifyProfile")">
+                <input type="hidden" value="@user.Id" name="id" id="id"/>
+                <div class="form-group">
+                    <label for="ChineseName" class="col-sm-3 control-label">中文名 / Chinese Name:</label>
+                    <div class="col-sm-3">
+                        <input type="text" value="@user.ChineseName" name="ChineseName" class="form-control" id="ChineseName" placeholder="可选 / Optional">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="FirstName" class="col-sm-3 control-label">英文名 / English Name:</label>
+                    <div class="col-sm-3">
+                        <input type="text" value="@user.FirstName" name="FirstName" class="form-control" id="FirstName" placeholder="First Name">
+                    </div>
+                    <div class="col-sm-3">
+                        <input type="text" value="@user.LastName" name="LastName" class="form-control" id="LastName" placeholder="Last Name">
+                    </div>
+                </div>
+                @if (currentUser.Id != user.Id
+                     || currentUser.Status == UserStatus.Unregistered)
+                {
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">性别 / Gender:</label>
+                        <div class="col-sm-9">
+                            <div class="radio">
+                                <label>
+                                    @if (user.Gender)
+                                    {
+                                        <input type="radio" name="gender" checked="checked">
+                                        @:男 / Male
+                                    }
+                                    else
+                                    {
+                                        <input type="radio" name="gender">
+                                        @:男 / Male
+                                    }
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    @if (user.Gender)
+                                    {
+                                        <input type="radio" name="gender">
+                                        @:女 / Female
+                                    }
+                                    else
+                                    {
+                                        <input type="radio" name="gender" checked="checked">
+                                        @:女 / Female
+                                    }
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="birthday" class="col-sm-3 control-label">生日 / Birthday:</label>
+                        <div class="col-sm-9">
+                            <div class="input-group date" id="birthday-container" style="width: 170px;">
+                                <input type="text" name="birthday" required id="birthday" class="form-control" value="@user.Birthday.ToString("yyyy-MM-dd")" style="width: 130px;" />
+                                <span class="input-group-addon">
+                                    <i class="glyphicon glyphicon-th"></i>
+                                </span>
+                                <p class="help-block"></p>
+                            </div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">性别 / Gender:</label>
+                        <div class="col-sm-9">
+                            <div class="radio">
+                                <label>
+                                    @if (user.Gender)
+                                    {
+                                        <input type="radio" name="gender" checked="checked" disabled="disabled">
+                                        @:男 / Male
+                                    }
+                                    else
+                                    {
+                                        <input type="radio" name="gender" disabled="disabled">
+                                        @:男 / Male
+                                    }
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    @if (user.Gender)
+                                    {
+                                        <input type="radio" name="gender" disabled="disabled">
+                                        @:女 / Female
+                                    }
+                                    else
+                                    {
+                                        <input type="radio" name="gender" checked="checked" disabled="disabled">
+                                        @:女 / Female
+                                    }
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="birthday" class="col-sm-3 control-label">生日 / Birthday:</label>
+                        <div class="col-sm-9">
+                            <div class="input-group date" id="birthday-container" style="width: 170px;">
+                                <input type="text" name="birthday" required id="birthday" class="form-control" value="@user.Birthday.ToString("yyyy-MM-dd")" style="width: 130px;" disabled="disabled" />
+                            </div>
+                        </div>
+                    </div>
+                }
+                <div class="form-group">
+                    <label for="employeeId" class="col-sm-3 control-label">员工号 / Employee ID:</label>
+                    <div class="col-sm-3">
+                        <input type="text" name="employeeId" required class="form-control" id="employeeId" value="@user.EmployeeId">
+                        <p class="help-block"></p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="email" class="col-sm-3 control-label">电子邮箱 / Email:</label>
+                    <div class="col-sm-3">
+                        <input type="email" value="@user.Email" name="email" required class="form-control" id="email" placeholder="必选 / Mandatory">
+                        <p class="help-block"></p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="personalEmail" class="col-sm-3 control-label">个人电子邮箱 / Personal Email:</label>
+                    <div class="col-sm-3">
+                        <input type="email" value="@user.PersonalEmail" name="personalEmail" class="form-control" id="personalEmail" placeholder="可选 / Optional">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="mobilePhone" class="col-sm-3 control-label">移动电话 / Mobile Phone:</label>
+                    <div class="col-sm-3">
+                        <input type="text" value="@user.MobilePhone" name="mobilePhone" required class="form-control" id="mobilePhone" placeholder="必选 / Mandatory">
+                        <p class="help-block"></p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="fixedPhone" class="col-sm-3 control-label">固定电话 / Fixed Phone:</label>
+                    <div class="col-sm-3">
+                        <input type="text" value="@user.FixedPhone" name="fixedPhone" class="form-control" id="fixedPhone" placeholder="可选 / Optional">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="officePhone" class="col-sm-3 control-label">办公电话 / Office Phone:</label>
+                    <div class="col-sm-3">
+                        <input type="text" value="@user.OfficePhone" name="officePhone" class="form-control" id="officePhone" placeholder="可选 / Optional">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="emergencyContact" class="col-sm-3 control-label">紧急联系 / Emergency Contact:</label>
+                    <div class="col-sm-3">
+                        <input type="text" value="@user.EmergencyContact" name="emergencyContact" required class="form-control" id="emergencyContact" placeholder="Contact">
+                        <p class="help-block"></p>
+                    </div>
+                    <div class="col-sm-3">
+                        <input type="text" value="@user.EmergencyPhone" name="emergencyPhone" required class="form-control" id="emergencyPhone" placeholder="Phone">
+                        <p class="help-block"></p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="officeAddress" class="col-sm-3 control-label">办公地址 / Office Address:</label>
+                    <div class="col-sm-9">
+                        <input type="text" value="@user.OfficeAddress" name="officeAddress" required class="form-control" id="officeAddress" placeholder="必选 / Mandatory">
+                        <p class="help-block"></p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="deliveryAddress" class="col-sm-3 control-label">递送地址 / Delivery Address:</label>
+                    <div class="col-sm-9">
+                        <input type="text" value="@user.DeliveryAddress" name="deliveryAddress" required class="form-control" id="deliveryAddress" placeholder="必选 / Mandatory">
+                        <p class="help-block"></p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="workingLocation" class="col-sm-3 control-label">工作地点 / Working Location:</label>
+                    <div class="col-sm-3">
+                        <select name="workingLocationId" class="form-control" id="workingLocation">
+                            @foreach (var workingLocation in workingLocations)
+                            {
+                                if (workingLocation.Id == user.WorkingLocationId)
+                                {
+                                    <option value="@workingLocation.Id" selected="selected">@workingLocation.Name</option>
+                                }
+                                else
+                                {
+                                    <option value="@workingLocation.Id">@workingLocation.Name</option>
+                                }
+                            }
+                        </select>
+                        <p class="help-block"></p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="sector" class="col-sm-3 control-label">部门 / Sector:</label>
+                    <div class="col-sm-3">
+                        <select name="sectorId" class="form-control" id="sector">
+                            @foreach (var sector in sectors)
+                            {
+                                if (sector.Id == user.SectorId)
+                                {
+                                    <option value="@sector.Id" selected="selected">@sector.Name</option>
+                                }
+                                else
+                                {
+                                    <option value="@sector.Id">@sector.Name</option>
+                                }
+                            }
+                        </select>
+                        <p class="help-block"></p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="businessFunloc" class="col-sm-3 control-label">业务分类 / Business Funloc:</label>
+                    <div class="col-sm-3">
+                        <select name="businessFunlocId" class="form-control" id="businessFunloc">
+                            @foreach (var businessFunloc in businessFunlocs)
+                            {
+                                if (businessFunloc.Id == user.BusinessFunlocId)
+                                {
+                                    <option value="@businessFunloc.Id" selected="selected">@businessFunloc.Name</option>
+                                }
+                                else
+                                {
+                                    <option value="@businessFunloc.Id">@businessFunloc.Name</option>
+                                }
+                            }
+                        </select>
+                        <p class="help-block"></p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="costCenter" class="col-sm-3 control-label">成本中心 / Cost Center:</label>
+                    <div class="col-sm-3">
+                        <select name="costCenterId" class="form-control" id="costCenter">
+                            @foreach (var costCenter in costCenters)
+                            {
+                                if (costCenter.Id == user.Id)
+                                {
+                                    <option value="@costCenter.Id" selected="selected">@costCenter.Name</option>
+                                }
+                                else
+                                {
+                                    <option value="@costCenter.Id">@costCenter.Name</option>
+                                }
+                            }
+                        </select>
+                        <p class="help-block"></p>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="personalInterest" class="col-sm-3 control-label">个人兴趣 / Personal Interest:</label>
+                    <div class="col-sm-9">
+                        <textarea name="personalInterest" rows="5" class="form-control" id="personalInterest" placeholder="可选 / Optional">@user.PersonalInterest</textarea>
+                    </div>
+                </div>
+                <div class="form-group" style="bottom: 20px; position: fixed; right: 100px;">
+                    <div class="col-sm-offset-3 col-sm-10">
+                        <button id="modify" type="submit" class="btn btn-primary">修改 / Modify</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    @if (currentUser.Id != user.Id
+         || currentUser.Status == UserStatus.Unregistered)
+    {
+        @:$('#birthday-container').datepicker({
+            @:format : "yyyy-mm-dd",
+            @:language : "zh-CN",
+            @:autoclose : true
+        @:});
+    }
+
+    $(function() {
+        $("input, select, textarea").not("[type=submit]").jqBootstrapValidation();
+    });
+
+    $("#modify").mouseenter(function() {
+        if ($.trim($("#ChineseName").val()) == "") {
+            if ($.trim($("#FirstName").val()) == "" || $.trim($("#LastName").val()) == "") {
+                alert("Need at least one Name");
+                $("#modify").attr("disabled", "disabled");
+            }
+        }
+    });
+
+    $("#ChineseName").focus(function() {
+        $("#modify").removeAttr("disabled");
+    });
+    $("#FirstName").focus(function() {
+        $("#modify").removeAttr("disabled");
+    });
+    $("#LastName").focus(function() {
+        $("#modify").removeAttr("disabled");
+    });
+    $("#ChineseName").keypress(function() {
+        $("#modify").removeAttr("disabled");
+    });
+    $("#FirstName").keypress(function() {
+        $("#modify").removeAttr("disabled");
+    });
+    $("#LastName").keypress(function() {
+        $("#modify").removeAttr("disabled");
+    });
+</script>
