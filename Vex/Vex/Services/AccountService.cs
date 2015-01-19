@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.Entity;
+using System.DirectoryServices;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -12,6 +15,9 @@ namespace Vex.Services
 {
     public class AccountService : BaseService
     {
+        private static readonly string accountName = ConfigurationManager.AppSettings["account_name"];
+        private static readonly string accountPassword = ConfigurationManager.AppSettings["account_password"];
+        private static readonly string directoryEntryPath = ConfigurationManager.AppSettings["directory_entry_path"];
         private BusinessFunloc[] _businessFunlocs;
         private CostCenter[] _costCenters;
         private User _currentUser;
@@ -137,6 +143,7 @@ namespace Vex.Services
             user.Birthday_Month = user.Birthday.Month;
             user.Birthday_Day = user.Birthday.Day;
             user.RegisterTime = DateTime.Now;
+            user.Email = GetEmailByAccountName(HttpContext.Current.User.Identity.Name);
 
             Entities.Users.Add(user);
             await Entities.SaveChangesAsync();
@@ -166,7 +173,6 @@ namespace Vex.Services
                 oldUser.Birthday_Day = user.Birthday.Day;
             }
             oldUser.EmployeeId = user.EmployeeId;
-            oldUser.Email = user.Email;
             oldUser.PersonalEmail = user.PersonalEmail;
             oldUser.MobilePhone = user.MobilePhone;
             oldUser.FixedPhone = user.FixedPhone;
@@ -187,11 +193,6 @@ namespace Vex.Services
             {
                 ClearAllSession();
             }
-        }
-
-        public List<User> GetUnverifiedUsers()
-        {
-            return Entities.Users.Include(u => u.WorkingLocation).Include(u => u.Sector).Include(u => u.BusinessFunloc).Include(u => u.CostCenter).Where(u => u.Status == UserStatus.Applied).ToList();
         }
 
         public List<User> GetMembers()
@@ -509,7 +510,7 @@ namespace Vex.Services
                     }
                     break;
             }
-            
+
             return orderedUsers.Skip(skipped).Take(taked).ToList();
         }
 
@@ -592,6 +593,25 @@ namespace Vex.Services
             ClearAllSession();
 
             return await Entities.Users.Where(u => userEmails.Contains(u.Email)).ToListAsync();
+        }
+
+        public string GetEmailByAccountName(string ntAccount)
+        {
+            var entry = new DirectoryEntry(directoryEntryPath, accountName, accountPassword, AuthenticationTypes.Secure);
+            ntAccount = ntAccount.Split('\\')[1];
+            var searcher = new DirectorySearcher(entry, string.Format("(&(objectClass=user)(SAMAccountName={0}))", ntAccount));
+            var result = searcher.FindAll();
+            var email = string.Empty;
+            foreach (DictionaryEntry property in result[0].Properties)
+            {
+                if ((string) property.Key == "msrtcsip-primaryuseraddress")
+                {
+                    email = (string) ((ResultPropertyValueCollection) property.Value)[0];
+                    email = email.Split(':')[1];
+                    break;
+                }
+            }
+            return email;
         }
     }
 }

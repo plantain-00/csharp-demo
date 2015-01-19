@@ -3,11 +3,11 @@ using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
 
-using MailKit.Net.Smtp;
-
 using MimeKit;
 
 using Vex.DbModels;
+
+using SmtpClient = MailKit.Net.Smtp.SmtpClient;
 
 namespace Vex.Businesses
 {
@@ -39,7 +39,10 @@ namespace Vex.Businesses
             {
                 await client.ConnectAsync(smtpServerAddress);
                 client.AuthenticationMechanisms.Remove("XOAUTH2");
-                await client.AuthenticateAsync(GetName(email), emailPassword);
+                if (!string.IsNullOrEmpty(emailPassword))
+                {
+                    await client.AuthenticateAsync(GetName(email), emailPassword);
+                }
                 await client.SendAsync(message);
                 await client.DisconnectAsync(true);
             }

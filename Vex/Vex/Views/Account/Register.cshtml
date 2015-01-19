@@ -4,6 +4,7 @@
     var sectors = ViewData["Sectors"] as Sector[];
     var businessFunlocs = ViewData["BusinessFunlocs"] as BusinessFunloc[];
     var costCenters = ViewData["CostCenters"] as CostCenter[];
+    var email = ViewData["email"] as string;
 }
 @section BreadCrumb{
     <ol class="breadcrumb">
@@ -70,8 +71,7 @@
                 <div class="form-group">
                     <label for="email" class="col-sm-3 control-label">电子邮箱 / Email:</label>
                     <div class="col-sm-3">
-                        <input type="email" name="email" required class="form-control" id="email" placeholder="必选 / Mandatory">
-                        <p class="help-block"></p>
+                        <input type="email" name="email" required class="form-control" id="email" value="@email" readonly="readonly">
                     </div>
                 </div>
                 <div class="form-group">
