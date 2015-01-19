@@ -194,6 +194,7 @@
     <Content Include="App_Code\UserHelper.cshtml" />
     <None Include="Properties\PublishProfiles\My.pubxml" />
     <None Include="Scripts\jquery-1.9.1.intellisense.js" />
+    <Content Include="Images\logo.png" />
     <Content Include="Scripts\bootstrap-datepicker.js" />
     <Content Include="Scripts\bootstrap-datepicker.zh-CN.js" />
     <Content Include="Scripts\bootstrap.js" />

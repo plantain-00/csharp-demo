@@ -155,7 +155,9 @@ namespace Vex.Services
             oldUser.FirstName = user.FirstName;
             oldUser.LastName = user.LastName;
             if (CurrentUser.Id != user.Id
-                || CurrentUser.Status == UserStatus.Unregistered)
+                || CurrentUser.Status == UserStatus.Unregistered
+                || CurrentUser.Roles.Any(r => r.Name == Constants.HR_ROLE_NAME)
+                || CurrentUser.Roles.Any(r => r.Name == Constants.ADMIN_ROLE_NAME))
             {
                 oldUser.Gender = user.Gender;
                 oldUser.Birthday = user.Birthday;

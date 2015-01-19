@@ -1,4 +1,5 @@
-﻿@using Vex.DbModels
+﻿@using Vex
+@using Vex.DbModels
 @{
     var workingLocations = ViewData["WorkingLocations"] as WorkingLocation[];
     var sectors = ViewData["Sectors"] as Sector[];
@@ -8,25 +9,21 @@
     var user = ViewData["user"] as User;
     var currentUser = ViewData["currentUser"] as User;
 }
-<div class="row">
-    <div class="panel panel-default">
-        <div class="panel-body">
-            <ol class="breadcrumb">
-                <li><a href="@Url.Action("Index", "Home")">主页 / Home</a></li>
-                @if (currentUser.Id != user.Id
-                     || currentUser.Status == UserStatus.Unregistered)
-                {
-                    <li><a href="@Url.Action("MemberList", "Account")"> 成员表 / Member List</a></li>
-                    <li class="active">修改个人资料 / Modify Profile</li>
-                }
-                else
-                {
-                    <li class="active">修改个人资料 / Modify Profile</li>
-                }
-            </ol>
-        </div>
-    </div>
-</div>
+@section BreadCrumb{
+    <ol class="breadcrumb">
+        <li><a href="@Url.Action("Index", "Home")">主页 / Home</a></li>
+        @if (currentUser.Id != user.Id
+             || currentUser.Status == UserStatus.Unregistered)
+        {
+            <li><a href="@Url.Action("MemberList", "Account")"> 成员表 / Member List</a></li>
+            <li class="active">修改个人资料 / Modify Profile</li>
+        }
+        else
+        {
+            <li class="active">修改个人资料 / Modify Profile</li>
+        }
+    </ol>
+}
 <div class="row">
     <div class="panel panel-default">
         <div class="panel-heading">
@@ -54,7 +51,9 @@
                     </div>
                 </div>
                 @if (currentUser.Id != user.Id
-                     || currentUser.Status == UserStatus.Unregistered)
+                     || currentUser.Status == UserStatus.Unregistered
+                     || currentUser.Roles.Any(r => r.Name == Constants.HR_ROLE_NAME)
+                     || currentUser.Roles.Any(r => r.Name == Constants.ADMIN_ROLE_NAME))
                 {
                     <div class="form-group">
                         <label class="col-sm-3 control-label">性别 / Gender:</label>
@@ -63,12 +62,12 @@
                                 <label>
                                     @if (user.Gender)
                                     {
-                                        <input type="radio" name="gender" checked="checked">
+                                        <input type="radio" value="true" name="gender" checked="checked">
                                         @:男 / Male
                                     }
                                     else
                                     {
-                                        <input type="radio" name="gender">
+                                        <input type="radio" value="true" name="gender">
                                         @:男 / Male
                                     }
                                 </label>
@@ -77,12 +76,12 @@
                                 <label>
                                     @if (user.Gender)
                                     {
-                                        <input type="radio" name="gender">
+                                        <input type="radio" value="false" name="gender">
                                         @:女 / Female
                                     }
                                     else
                                     {
-                                        <input type="radio" name="gender" checked="checked">
+                                        <input type="radio" value="false" name="gender" checked="checked">
                                         @:女 / Female
                                     }
                                 </label>
@@ -111,12 +110,12 @@
                                 <label>
                                     @if (user.Gender)
                                     {
-                                        <input type="radio" name="gender" checked="checked" disabled="disabled">
+                                        <input type="radio" value="true" name="gender" checked="checked" disabled="disabled">
                                         @:男 / Male
                                     }
                                     else
                                     {
-                                        <input type="radio" name="gender" disabled="disabled">
+                                        <input type="radio" value="true" name="gender" disabled="disabled">
                                         @:男 / Male
                                     }
                                 </label>
@@ -125,12 +124,12 @@
                                 <label>
                                     @if (user.Gender)
                                     {
-                                        <input type="radio" name="gender" disabled="disabled">
+                                        <input type="radio" value="false" name="gender" disabled="disabled">
                                         @:女 / Female
                                     }
                                     else
                                     {
-                                        <input type="radio" name="gender" checked="checked" disabled="disabled">
+                                        <input type="radio" value="false" name="gender" checked="checked" disabled="disabled">
                                         @:女 / Female
                                     }
                                 </label>
@@ -303,12 +302,14 @@
 </div>
 <script type="text/javascript">
     @if (currentUser.Id != user.Id
-         || currentUser.Status == UserStatus.Unregistered)
+         || currentUser.Status == UserStatus.Unregistered
+         || currentUser.Roles.Any(r => r.Name == Constants.HR_ROLE_NAME)
+         || currentUser.Roles.Any(r => r.Name == Constants.ADMIN_ROLE_NAME))
     {
         @:$('#birthday-container').datepicker({
-            @:format : "yyyy-mm-dd",
-            @:language : "zh-CN",
-            @:autoclose : true
+        @:format : "yyyy-mm-dd",
+        @:language : "zh-CN",
+        @:autoclose : true
         @:});
     }
 
