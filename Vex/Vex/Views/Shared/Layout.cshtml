@@ -17,6 +17,18 @@
             .wait { cursor: wait; }
 
             .hand { cursor: pointer; }
+
+            .cover {
+                background: #808080;
+                bottom: 0;
+                display: none;
+                filter: alpha(opacity: 50);
+                left: 0;
+                opacity: 0.5;
+                position: fixed;
+                right: 0;
+                top: 0;
+            }
         </style>
 
         <script src="~/Scripts/jquery-1.9.1.min.js"></script>
@@ -33,10 +45,12 @@
         <![endif]-->
         
         <script type="text/javascript">
-            $(document).ajaxSend(function() {
+            $(document).ajaxSend(function () {
+                $("#cover").css("display", "block");
                 $("html").addClass("wait");
             });
-            $(document).ajaxStop(function() {
+            $(document).ajaxStop(function () {
+                $("#cover").css("display", "none");
                 $("html").removeClass("wait");
             });
 
@@ -50,7 +64,14 @@
         </script>
     </head>
     <body>
-        <nav class="navbar navbar-default navbar-fixed-top navbar-inverse" role="navigation">
+        <div>
+            <img style="height: 100px; width: 150px;" src="~/Images/logo.png"/>
+            discriptions.
+            <div style="position: absolute; right: 5px; top: 50px;">
+                @RenderSection("BreadCrumb", false)
+            </div>
+        </div>
+        <nav id="nav" style="position: static;" class="navbar navbar-default navbar-fixed-top navbar-inverse" role="navigation">
             <div class="container-fluid">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
@@ -108,12 +129,26 @@
             </div>
         </nav>
 
-        <div class="container" style="margin-top: 80px;">
+        <div id="body" class="container" style="margin-top: 30px;">
             @RenderBody()
         </div>
         
         <div class="container-fluid">
-            <p style="height: 10px;text-align: center;">Copyrights - Support information</p>
+            <p style="height: 10px; text-align: center;">Copyrights - Support information</p>
         </div>
+        
+        <div id="cover" class="cover"></div>
+        
+        <script type="text/javascript">
+            $(document).scroll(function() {
+                if (window.pageYOffset > 100) {
+                    $("#nav").css("position", "fixed");
+                    $("#body").css("margin-top", "80px");
+                } else {
+                    $("#nav").css("position", "static");
+                    $("#body").css("margin-top", "30px");
+                }
+            });
+        </script>
     </body>
 </html>

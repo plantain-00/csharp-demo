@@ -7,16 +7,12 @@
     var costCenters = ViewData["CostCenters"] as CostCenter[];
     var pagination = ViewData["pagination"] as Pagination;
 }
-<div class="row">
-    <div class="panel panel-default">
-        <div class="panel-body">
-            <ol class="breadcrumb">
-                <li><a href="@Url.Action("Index", "Home")">主页 / Home</a></li>
-                <li class="active">成员表 / Member List</li>
-            </ol>
-        </div>
-    </div>
-</div>
+@section BreadCrumb{
+    <ol class="breadcrumb">
+        <li><a href="@Url.Action("Index", "Home")">主页 / Home</a></li>
+        <li class="active">成员表 / Member List</li>
+    </ol>
+}
 <div class="row">
     <div class="panel panel-default">
         <div class="panel-heading">

@@ -4,17 +4,14 @@
     var sectors = ViewData["Sectors"] as Sector[];
     var businessFunlocs = ViewData["BusinessFunlocs"] as BusinessFunloc[];
     var costCenters = ViewData["CostCenters"] as CostCenter[];
+    var email = ViewData["email"] as string;
 }
-<div class="row">
-    <div class="panel panel-default">
-        <div class="panel-body">
-            <ol class="breadcrumb">
-                <li><a href="@Url.Action("Index", "Home")">主页 / Home</a></li>
-                <li class="active">会员注册 / Membership Registration</li>
-            </ol>
-        </div>
-    </div>
-</div>
+@section BreadCrumb{
+    <ol class="breadcrumb">
+        <li><a href="@Url.Action("Index", "Home")">主页 / Home</a></li>
+        <li class="active">会员注册 / Membership Registration</li>
+    </ol>
+}
 <div class="row">
     <div class="panel panel-default">
         <div class="panel-heading">
@@ -42,12 +39,12 @@
                     <div class="col-sm-9">
                         <div class="radio">
                             <label>
-                                <input type="radio" name="gender" checked="checked"> 男 / Male
+                                <input type="radio" value="true" name="gender" checked="checked"> 男 / Male
                             </label>
                         </div>
                         <div class="radio">
                             <label>
-                                <input type="radio" name="gender"> 女 / Female
+                                <input type="radio" value="false" name="gender"> 女 / Female
                             </label>
                         </div>
                     </div>
@@ -74,8 +71,7 @@
                 <div class="form-group">
                     <label for="email" class="col-sm-3 control-label">电子邮箱 / Email:</label>
                     <div class="col-sm-3">
-                        <input type="email" name="email" required class="form-control" id="email" placeholder="必选 / Mandatory">
-                        <p class="help-block"></p>
+                        <input type="email" name="email" required class="form-control" id="email" value="@email" readonly="readonly">
                     </div>
                 </div>
                 <div class="form-group">
@@ -220,13 +216,13 @@
     $("#LastName").focus(function() {
         $("#apply").removeAttr("disabled");
     });
-    $("#ChineseName").keypress(function () {
+    $("#ChineseName").keypress(function() {
         $("#apply").removeAttr("disabled");
     });
-    $("#FirstName").keypress(function () {
+    $("#FirstName").keypress(function() {
         $("#apply").removeAttr("disabled");
     });
-    $("#LastName").keypress(function () {
+    $("#LastName").keypress(function() {
         $("#apply").removeAttr("disabled");
     });
 </script>

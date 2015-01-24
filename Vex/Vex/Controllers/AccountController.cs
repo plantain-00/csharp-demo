@@ -28,6 +28,7 @@ namespace Vex.Controllers
                 ViewData["Sectors"] = Base.Account.Sectors;
                 ViewData["BusinessFunlocs"] = Base.Account.BusinessFunlocs;
                 ViewData["CostCenters"] = Base.Account.CostCenters;
+                ViewData["email"] = Base.Account.GetEmailByAccountName(HttpContext.User.Identity.Name);
                 return View();
             }
 
