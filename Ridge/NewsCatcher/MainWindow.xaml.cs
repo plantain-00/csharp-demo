@@ -126,13 +126,18 @@ namespace NewsCatcher
             {
                 try
                 {
-                    using (var reader = new StreamReader(NEWSHISTORY_JSON))
+                    if (File.Exists(NEWSHISTORY_JSON))
                     {
-                        History = JsonConvert.DeserializeObject<List<HistoryItem>>(reader.ReadToEnd());
+                        using (var reader = new StreamReader(NEWSHISTORY_JSON))
+                        {
+                            History = JsonConvert.DeserializeObject<List<HistoryItem>>(reader.ReadToEnd());
+                        }
                     }
-                   
-                    //History = NEWSHISTORY_XML.Deserialize<List<HistoryItem>>();
-                    History.RemoveAll(h => h.Time < DateTime.Now.AddDays(-14).ToInt32());
+                    else
+                    {
+                        History = NEWSHISTORY_XML.Deserialize<List<HistoryItem>>();
+                    }
+                    History.RemoveAll(h => h.Time < DateTime.Now.AddDays(-30).ToInt32());
                 }
                 catch (Exception)
                 {
