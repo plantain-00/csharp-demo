@@ -30,29 +30,35 @@ namespace NewsCatcher
                 var html = new XWebClient
                            {
                                Encoding = Encoding.UTF8
-                           }.DownloadString("http://www.v2ex.com/?tab=tech");
+                           }.DownloadString("http://www.v2ex.com/?tab=hot");
                 var doc = new Document(html);
                 var models = new List<Model>();
                 for (var i = 0; i < 40; i++)
                 {
-                    var tmp = doc["#Main"]["div", 1]["div", i + 2]["table"]["tr"];
-                    var name = tmp["td", 2]["span"]["a"][0].As<PlainText>().Text.Unescape();
-                    var url = tmp["td", 2]["span"]["a"].As<Tag>()["href"];
-                    int count;
                     try
                     {
-                        count = Convert.ToInt32(tmp["td", 3]["a"][0].As<PlainText>().Text);
+                        var tmp = doc["#Main"]["div", 1]["div", i + 1]["table"]["tr"];
+                        var name = tmp["td", 2]["span"]["a"][0].As<PlainText>().Text.Unescape();
+                        var url = tmp["td", 2]["span"]["a"].As<Tag>()["href"];
+                        int count;
+                        try
+                        {
+                            count = Convert.ToInt32(tmp["td", 3]["a"][0].As<PlainText>().Text);
+                        }
+                        catch (Exception)
+                        {
+                            count = 0;
+                        }
+                        models.Add(new Model
+                                   {
+                                       Count = count,
+                                       Url = "http://www.v2ex.com" + new string(url.TakeWhile(u => u != '#').ToArray()),
+                                       Name = name
+                                   });
                     }
                     catch (Exception)
                     {
-                        count = 0;
                     }
-                    models.Add(new Model
-                               {
-                                   Count = count,
-                                   Url = "http://www.v2ex.com" + new string(url.TakeWhile(u => u != '#').ToArray()),
-                                   Name = name
-                               });
                 }
                 result.AddRange(models.Where(m => m.Count >= 10).OrderByDescending(m => m.Count).Select(m => new ShowItem
                                                                                                              {
