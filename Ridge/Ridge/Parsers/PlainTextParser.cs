@@ -18,12 +18,6 @@ namespace Ridge.Parsers
 
         internal override void Parse()
         {
-            PlainText = new PlainText();
-            FindEndOfPlainText();
-        }
-
-        private void FindEndOfPlainText()
-        {
             var builder = new StringBuilder(string.Empty);
 
             do
@@ -39,12 +33,11 @@ namespace Ridge.Parsers
 
             if (text.Trim(' ', '\r', '\n', '\t') != string.Empty)
             {
-                PlainText.Text = text;
-                PlainText.Depth = _depth;
-            }
-            else
-            {
-                PlainText = null;
+                PlainText = new PlainText
+                            {
+                                Text = text,
+                                Depth = _depth
+                            };
             }
         }
     }

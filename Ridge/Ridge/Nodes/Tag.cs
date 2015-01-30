@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Ridge.Nodes
@@ -17,7 +18,7 @@ namespace Ridge.Nodes
                 {
                     return null;
                 }
-                var attribute = Attributes.FirstOrDefault(a => a.Name == name);
+                var attribute = Attributes.FirstOrDefault(a => a.Name.Equals(name, StringComparison.CurrentCultureIgnoreCase));
                 return attribute == null ? null : attribute.Value;
             }
         }
@@ -26,7 +27,7 @@ namespace Ridge.Nodes
         {
             if (Attributes != null)
             {
-                var attribute = Attributes.FirstOrDefault(a => a.Name.Equals("id"));
+                var attribute = Attributes.FirstOrDefault(a => a.Name.Equals("id", StringComparison.CurrentCultureIgnoreCase));
                 if (attribute != null
                     && attribute.Value == id)
                 {
