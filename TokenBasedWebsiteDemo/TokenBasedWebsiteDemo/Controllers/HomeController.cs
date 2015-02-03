@@ -1,10 +1,15 @@
-﻿using System.Web.Mvc;
+﻿using System.Threading.Tasks;
+using System.Web.Mvc;
+
+using RetrievePassword;
+
+using TokenBasedWebsiteDemo.Services;
 
 namespace TokenBasedWebsiteDemo.Controllers
 {
     public class HomeController : BaseController
     {
-        [TokenAuthorizeAttribute]
+        [TokenAuthorize]
         public ActionResult Index()
         {
             return View();
@@ -15,9 +20,26 @@ namespace TokenBasedWebsiteDemo.Controllers
             return View();
         }
 
-        public ActionResult Login(string userName, string password)
+        [HttpPost]
+        public async Task<ActionResult> DoLogin(string userName, string password)
         {
-            
+            var user = await Get<AccountService>().GetUserByNameAsync(userName);
+            if (user == null)
+            {
+                return RedirectToAction("Login");
+            }
+            if (user.Password == Get<Md5Service>().Md5(password + user.Salt))
+            {
+                var retriever = new Retriever();
+                string seconds;
+                var result = retriever.Generate(user.Password, out seconds);
+                return RedirectToAction("Index",
+                                        new
+                                        {
+                                            token = result + '|' + seconds + '|' + user.ID.ToString("x")
+                                        });
+            }
+            return RedirectToAction("Login");
         }
     }
 }

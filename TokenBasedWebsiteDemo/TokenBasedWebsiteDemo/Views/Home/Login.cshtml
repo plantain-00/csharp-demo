@@ -1,6 +1,6 @@
 ﻿<h2>Login</h2>
-<form>
-    <input type="text" name="userName" placeholder="user name"/>
-    <input type="password" name="password" placeholder="password"/>
+<form action="@Url.Action("DoLogin")" method="POST">
+    <input type="text" name="userName" placeholder="user name" value="test"/>
+    <input type="password" name="password" placeholder="password" value="1"/>
     <input type="submit" value="Login"/>
 </form>

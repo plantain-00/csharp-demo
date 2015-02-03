@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Linq;
 using System.Web.Mvc;
 
 using RetrievePassword;
 
-using TokenBasedWebsiteDemo.DbModels;
+using TokenBasedWebsiteDemo.Services;
 
 namespace TokenBasedWebsiteDemo
 {
@@ -14,22 +13,30 @@ namespace TokenBasedWebsiteDemo
         {
             base.OnAuthorization(filterContext);
 
-            var result = filterContext.HttpContext.Request["r"];
-            var seconds = filterContext.HttpContext.Request["s"];
-            var userId = filterContext.HttpContext.Request["u"];
+            var token = filterContext.HttpContext.Request["token"];
+            if (string.IsNullOrEmpty(token))
+            {
+                filterContext.Result = RedirectToLoginPage(filterContext);
+                return;
+            }
+
+            var tmp = token.Split('|');
+            var result = tmp[0];
+            var seconds = tmp[1];
+            var userId = tmp[2];
 
             if (string.IsNullOrEmpty(userId))
             {
                 filterContext.Result = RedirectToLoginPage(filterContext);
                 return;
             }
-            var uid = Convert.ToInt32(userId);
+            var uid = Convert.ToInt32(userId, 16);
 
             string password;
 
-            using (var entities = new Entities())
+            using (var accountService = new AccountService())
             {
-                var user = entities.Users.FirstOrDefault(u => u.ID == uid);
+                var user = accountService.GetUserById(uid);
                 if (user != null)
                 {
                     password = user.Password;
@@ -48,6 +55,7 @@ namespace TokenBasedWebsiteDemo
                 filterContext.Result = RedirectToLoginPage(filterContext);
                 return;
             }
+            filterContext.Result = null;
         }
 
         private static RedirectResult RedirectToLoginPage(ControllerContext filterContext)

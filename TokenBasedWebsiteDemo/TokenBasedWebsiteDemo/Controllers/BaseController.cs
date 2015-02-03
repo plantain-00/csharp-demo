@@ -64,7 +64,10 @@ namespace TokenBasedWebsiteDemo.Controllers
                 {
                     foreach (var t in _factory)
                     {
-                        t.Value.Dispose();
+                        if (t.Value is DisposableService)
+                        {
+                            (t.Value as DisposableService).Dispose();
+                        }
                     }
                 }
             }

@@ -2,40 +2,10 @@
 using System.Web;
 using System.Web.Caching;
 
-using TokenBasedWebsiteDemo.DbModels;
-
 namespace TokenBasedWebsiteDemo.Services
 {
-    public class BaseService : IDisposable
+    public class BaseService
     {
-        private bool _disposed;
-        private Entities _entities;
-        public Entities Entities
-        {
-            get
-            {
-                if (_entities == null)
-                {
-                    _entities = new Entities();
-                    _entities.Database.Log = sql => Sql += sql;
-                }
-                return _entities;
-            }
-        }
-
-        public string Sql { get; private set; }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        public void Close()
-        {
-            Dispose();
-        }
-
         public T GetCache<T>(string key)
         {
             return (T) HttpContext.Current.Cache[key];
@@ -121,27 +91,6 @@ namespace TokenBasedWebsiteDemo.Services
         public string GetPath(string filePath)
         {
             return HttpContext.Current.Server.MapPath("~" + filePath);
-        }
-
-        ~BaseService()
-        {
-            Dispose(false);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (_disposed)
-            {
-                return;
-            }
-            if (disposing)
-            {
-                if (_entities != null)
-                {
-                    _entities.Dispose();
-                }
-            }
-            _disposed = true;
         }
     }
 }
