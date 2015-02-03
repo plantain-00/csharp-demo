@@ -2,9 +2,9 @@
 
 namespace TokenBasedWebsiteDemo.Controllers
 {
-    [TokenAuthorizeAttribute]
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
+        [TokenAuthorizeAttribute]
         public ActionResult Index()
         {
             return View();
@@ -13,6 +13,11 @@ namespace TokenBasedWebsiteDemo.Controllers
         public ActionResult Login()
         {
             return View();
+        }
+
+        public ActionResult Login(string userName, string password)
+        {
+            
         }
     }
 }

@@ -2,6 +2,8 @@
 
 using Despise;
 
+using TokenBasedWebsiteDemo.Services;
+
 namespace TokenBasedWebsiteDemo.DbModels
 {
     /// <summary>
@@ -16,13 +18,16 @@ namespace TokenBasedWebsiteDemo.DbModels
             var generator = new Generator();
             for (var i = 0; i < 10; i++)
             {
+                var salt = generator.Get<PasswordGenerator>().Generate();
+                var md5Service = new Md5Service();
                 context.Users.Add(new User
                                   {
                                       Name = generator.Get<EnglishWordGenerator>().Generate(),
-                                      Password = generator.Get<PasswordGenerator>().Generate()
+                                      Salt = salt,
+                                      Password = md5Service.Md5(1 + salt)
                                   });
             }
-            
+
             base.Seed(context);
         }
     }

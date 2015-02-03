@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Data.Entity;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Web.Mvc;
 
 using RetrievePassword;
@@ -14,10 +12,17 @@ namespace TokenBasedWebsiteDemo
     {
         public override void OnAuthorization(AuthorizationContext filterContext)
         {
+            base.OnAuthorization(filterContext);
+
             var result = filterContext.HttpContext.Request["r"];
             var seconds = filterContext.HttpContext.Request["s"];
             var userId = filterContext.HttpContext.Request["u"];
 
+            if (string.IsNullOrEmpty(userId))
+            {
+                filterContext.Result = RedirectToLoginPage(filterContext);
+                return;
+            }
             var uid = Convert.ToInt32(userId);
 
             string password;
@@ -31,18 +36,23 @@ namespace TokenBasedWebsiteDemo
                 }
                 else
                 {
-                    throw new Exception();
+                    filterContext.Result = RedirectToLoginPage(filterContext);
+                    return;
                 }
             }
 
             var retriever = new Retriever();
             var isValid = retriever.IsValid(password, seconds, result, new TimeSpan(0, 20, 0));
-            if (isValid)
+            if (!isValid)
             {
-                
+                filterContext.Result = RedirectToLoginPage(filterContext);
+                return;
             }
+        }
 
-            base.OnAuthorization(filterContext);
+        private static RedirectResult RedirectToLoginPage(ControllerContext filterContext)
+        {
+            return new RedirectResult(new UrlHelper(filterContext.RequestContext).Action("Login", "Home"));
         }
     }
 }
