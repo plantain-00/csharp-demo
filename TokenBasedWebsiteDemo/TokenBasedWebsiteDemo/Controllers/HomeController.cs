@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using System.Web.Mvc;
+﻿using System.Web.Mvc;
 
 using RetrievePassword;
 
@@ -21,9 +20,9 @@ namespace TokenBasedWebsiteDemo.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> DoLogin(string userName, string password)
+        public ActionResult DoLogin(string userName, string password)
         {
-            var user = await Get<AccountService>().GetUserByNameAsync(userName);
+            var user = Get<AccountService>().GetUserByName(userName);
             if (user == null)
             {
                 return RedirectToAction("Login");

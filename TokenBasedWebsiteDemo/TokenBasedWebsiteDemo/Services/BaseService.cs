@@ -38,6 +38,15 @@ namespace TokenBasedWebsiteDemo.Services
             HttpContext.Current.Cache.Remove(key);
         }
 
+        public T GetCacheSafely<T>(string key, TimeSpan timeSpan) where T : new()
+        {
+            if (!HasCache<T>(key))
+            {
+                SetCache(key, new T(), timeSpan);
+            }
+            return GetCache<T>(key);
+        }
+
         public T GetSession<T>(string key)
         {
             return (T) HttpContext.Current.Session[key];
@@ -84,7 +93,7 @@ namespace TokenBasedWebsiteDemo.Services
             {
                 cookie.Expires = expires.Value;
             }
-            
+
             HttpContext.Current.Response.Cookies.Add(cookie);
         }
 
