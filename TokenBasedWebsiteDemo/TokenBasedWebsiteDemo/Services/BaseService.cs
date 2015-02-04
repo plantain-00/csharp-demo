@@ -73,9 +73,24 @@ namespace TokenBasedWebsiteDemo.Services
             return HttpContext.Current.Request.Cookies[key] != null;
         }
 
-        public void SetCookie(string key, string value)
+        public void SetCookie(string key, string value, string domain, DateTime? expires)
         {
-            HttpContext.Current.Request.Cookies.Add(new HttpCookie(key, value));
+            var cookie = new HttpCookie(key, value);
+            if (!string.IsNullOrEmpty(domain))
+            {
+                cookie.Domain = domain;
+            }
+            if (expires != null)
+            {
+                cookie.Expires = expires.Value;
+            }
+            
+            HttpContext.Current.Response.Cookies.Add(cookie);
+        }
+
+        public void RemoveCookie(string key)
+        {
+            HttpContext.Current.Response.Cookies.Remove(key);
         }
 
         public string QueryString(string key)

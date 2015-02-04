@@ -36,7 +36,7 @@ namespace TokenBasedWebsiteDemo.Controllers
                 return RedirectToAction("Index",
                                         new
                                         {
-                                            token = result + '|' + seconds + '|' + user.ID.ToString("x")
+                                            token = result + 'G' + seconds + 'G' + user.ID.ToString("x")
                                         });
             }
             return RedirectToAction("Login");

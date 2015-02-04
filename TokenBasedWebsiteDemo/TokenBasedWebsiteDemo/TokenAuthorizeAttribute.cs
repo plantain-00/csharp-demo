@@ -20,7 +20,7 @@ namespace TokenBasedWebsiteDemo
                 return;
             }
 
-            var tmp = token.Split('|');
+            var tmp = token.Split('G');
             var result = tmp[0];
             var seconds = tmp[1];
             var userId = tmp[2];
