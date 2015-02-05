@@ -122,7 +122,6 @@
   <ItemGroup>
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="DataSourceType.cs" />
     <Compile Include="DbModels\Entities.cs" />
     <Compile Include="DbModels\Initializer.cs" />
     <Compile Include="DbModels\User.cs" />

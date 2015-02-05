@@ -38,15 +38,6 @@ namespace TokenBasedWebsiteDemo.Services
             HttpContext.Current.Cache.Remove(key);
         }
 
-        public T GetCacheSafely<T>(string key, TimeSpan timeSpan) where T : new()
-        {
-            if (!HasCache<T>(key))
-            {
-                SetCache(key, new T(), timeSpan);
-            }
-            return GetCache<T>(key);
-        }
-
         public T GetSession<T>(string key)
         {
             return (T) HttpContext.Current.Session[key];
@@ -116,5 +107,28 @@ namespace TokenBasedWebsiteDemo.Services
         {
             return HttpContext.Current.Server.MapPath("~" + filePath);
         }
+
+        public TResult Query<TResult>(string cacheName, DataSourceType dataSourceType, TimeSpan timeSpan, Func<TResult> query)
+        {
+            if (dataSourceType == DataSourceType.AspNetCache)
+            {
+                if (HasCache<TResult>(cacheName))
+                {
+                    return GetCache<TResult>(cacheName);
+                }
+                var result = query();
+                SetCache(cacheName, result, timeSpan);
+                return result;
+            }
+            return query();
+        }
+    }
+
+    public enum DataSourceType
+    {
+        Database,
+        AspNetCache,
+        Redis,
+        FileSystem
     }
 }

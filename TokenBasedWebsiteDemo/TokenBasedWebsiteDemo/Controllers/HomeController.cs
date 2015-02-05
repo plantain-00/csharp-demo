@@ -10,7 +10,7 @@ namespace TokenBasedWebsiteDemo.Controllers
         public ActionResult Index(string token)
         {
             var userId = Get<TokenService>().GetUserId(token);
-            var currentUser = Get<AccountService>().GetCurrentUser(userId);
+            var currentUser = Get<AccountService>().GetUserById(userId);
             ViewData["newToken"] = Get<TokenService>().Generate(currentUser.Password, userId);
             return View();
         }
