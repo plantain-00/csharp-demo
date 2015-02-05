@@ -1,7 +1,5 @@
 ﻿using System.Web.Mvc;
 
-using RetrievePassword;
-
 using TokenBasedWebsiteDemo.Services;
 
 namespace TokenBasedWebsiteDemo.Controllers
@@ -9,8 +7,11 @@ namespace TokenBasedWebsiteDemo.Controllers
     public class HomeController : BaseController
     {
         [TokenAuthorize]
-        public ActionResult Index()
+        public ActionResult Index(string token)
         {
+            var userId = Get<TokenService>().GetUserId(token);
+            var currentUser = Get<AccountService>().GetCurrentUser(userId);
+            ViewData["newToken"] = Get<TokenService>().Generate(currentUser.Password, userId);
             return View();
         }
 
@@ -29,13 +30,10 @@ namespace TokenBasedWebsiteDemo.Controllers
             }
             if (user.Password == Get<Md5Service>().Md5(password + user.Salt))
             {
-                var retriever = new Retriever();
-                string seconds;
-                var result = retriever.Generate(user.Password, out seconds);
                 return RedirectToAction("Index",
                                         new
                                         {
-                                            token = result + 'G' + seconds + 'G' + user.ID.ToString("x")
+                                            token = Get<TokenService>().Generate(user.Password, user.ID)
                                         });
             }
             return RedirectToAction("Login");

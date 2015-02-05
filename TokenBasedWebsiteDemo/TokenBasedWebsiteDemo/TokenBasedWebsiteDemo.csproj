@@ -134,6 +134,7 @@
     <Compile Include="Services\BaseService.cs" />
     <Compile Include="Services\DisposableService.cs" />
     <Compile Include="Services\Md5Service.cs" />
+    <Compile Include="Services\TokenService.cs" />
     <Compile Include="TokenAuthorizeAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
