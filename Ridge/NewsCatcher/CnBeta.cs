@@ -81,7 +81,7 @@ namespace NewsCatcher
             return Task.Factory.StartNew(() => Do());
         }
 
-        private class Model
+        private sealed class Model
         {
             public string Title { get; set; }
             public string Summary { get; set; }

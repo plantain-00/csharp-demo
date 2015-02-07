@@ -60,6 +60,7 @@
     </ApplicationDefinition>
     <Compile Include="CnBeta.cs" />
     <Compile Include="Cnblogs.cs" />
+    <Compile Include="CzechMassage.cs" />
     <Compile Include="DateTimeHelper.cs" />
     <Compile Include="Models\CookieModel.cs" />
     <Compile Include="Models\HistoryItem.cs" />
@@ -68,7 +69,6 @@
     <Compile Include="TV.cs" />
     <Compile Include="V2ex.cs" />
     <Compile Include="XArt.cs" />
-    <Compile Include="XmlSerializerHelper.cs" />
     <Compile Include="XWebClient.cs">
       <SubType>Component</SubType>
     </Compile>

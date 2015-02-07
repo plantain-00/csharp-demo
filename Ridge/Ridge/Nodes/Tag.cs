@@ -22,6 +22,30 @@ namespace Ridge.Nodes
                 return attribute == null ? null : attribute.Value;
             }
         }
+        public string Text
+        {
+            get
+            {
+                if (Children == null
+                    || Children.Count == 0)
+                {
+                    return string.Empty;
+                }
+                var children = string.Empty;
+                foreach (var child in Children)
+                {
+                    if (child is PlainText)
+                    {
+                        children += (child as PlainText).Text;
+                    }
+                    else if (child is Tag)
+                    {
+                        children += (child as Tag).Text;
+                    }
+                }
+                return children;
+            }
+        }
 
         internal override Node GetElementById(string id)
         {

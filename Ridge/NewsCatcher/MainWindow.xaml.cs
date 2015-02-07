@@ -20,7 +20,6 @@ namespace NewsCatcher
 {
     public partial class MainWindow
     {
-        private const string NEWSHISTORY_XML = "NewsHistory.xml";
         private const string NEWSHISTORY_JSON = "NewsHistory.json";
         internal static List<HistoryItem> History;
         private readonly List<ShowItem> _itemsSource;
@@ -86,6 +85,10 @@ namespace NewsCatcher
                     _itemsSource.RemoveAll(i => i.Url == TV.FAILS_MESSAGE);
                     await TVTask();
                     break;
+                case CzechMassage.FAILS_MESSAGE:
+                    _itemsSource.RemoveAll(i => i.Url == CzechMassage.FAILS_MESSAGE);
+                    await CzechMassageTask();
+                    break;
                 default:
                 {
                     var uri = e.Uri.AbsoluteUri;
@@ -123,27 +126,20 @@ namespace NewsCatcher
         private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
             _deserialization = new Task(delegate
-            {
-                try
-                {
-                    if (File.Exists(NEWSHISTORY_JSON))
-                    {
-                        using (var reader = new StreamReader(NEWSHISTORY_JSON))
-                        {
-                            History = JsonConvert.DeserializeObject<List<HistoryItem>>(reader.ReadToEnd());
-                        }
-                    }
-                    else
-                    {
-                        History = NEWSHISTORY_XML.Deserialize<List<HistoryItem>>();
-                    }
-                    History.RemoveAll(h => h.Time < DateTime.Now.AddDays(-30).ToInt32());
-                }
-                catch (Exception)
-                {
-                    History = new List<HistoryItem>();
-                }
-            });
+                                        {
+                                            try
+                                            {
+                                                using (var reader = new StreamReader(NEWSHISTORY_JSON))
+                                                {
+                                                    History = JsonConvert.DeserializeObject<List<HistoryItem>>(reader.ReadToEnd());
+                                                }
+                                                History.RemoveAll(h => h.Time < DateTime.Now.AddDays(-30).ToInt32());
+                                            }
+                                            catch (Exception)
+                                            {
+                                                History = new List<HistoryItem>();
+                                            }
+                                        });
             _deserialization.Start();
             CnblogsTask();
             CnBetaTask();
@@ -151,6 +147,7 @@ namespace NewsCatcher
             PM25NowTask();
             V2exTask();
             TVTask();
+            CzechMassageTask();
         }
 
         private void Refactor()
@@ -216,6 +213,15 @@ namespace NewsCatcher
         private async Task TVTask()
         {
             var result = await TV.DoAsync();
+            await _deserialization;
+            _itemsSource.AddRange(result.Where(i => History.All(h => h.Url != i.Url)));
+            Refactor();
+            listView.Items.Refresh();
+        }
+
+        private async Task CzechMassageTask()
+        {
+            var result = await CzechMassage.DoAsync();
             await _deserialization;
             _itemsSource.AddRange(result.Where(i => History.All(h => h.Url != i.Url)));
             Refactor();
