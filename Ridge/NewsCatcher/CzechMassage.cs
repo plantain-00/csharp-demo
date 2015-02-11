@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +15,7 @@ namespace NewsCatcher
     public class CzechMassage
     {
         public const string FAILS_MESSAGE = "Czech Massage Fails";
+        private static readonly string seedWebsite = ConfigurationManager.AppSettings["seed_website"];
 
         public static IEnumerable<ShowItem> Do()
         {
@@ -30,7 +32,7 @@ namespace NewsCatcher
                 var html = new XWebClient
                            {
                                Encoding = Encoding.UTF8
-                           }.DownloadString("https://kickass.so/usearch/Czech%20Massage/?field=time_add&sorder=desc");
+                           }.DownloadString(seedWebsite + "usearch/Czech%20Massage/?field=time_add&sorder=desc");
                 var doc = new Document(html);
                 var tvs = new List<Model>();
                 var root = doc["#mainSearchTable"][0][0]["div", 3]["table"];
@@ -44,7 +46,7 @@ namespace NewsCatcher
                                 {
                                     Title = a.As<Tag>().Text.Unescape(),
                                     Size = tmp["td", 1].As<Tag>().Text,
-                                    Url = "https://kickass.so/" + a.As<Tag>()["href"].Trim('/'),
+                                    Url = seedWebsite + a.As<Tag>()["href"].Trim('/'),
                                     Files = Convert.ToInt32(tmp["td", 2].As<Tag>().Text),
                                     Age = tmp["td", 3].As<Tag>().Text.Unescape(),
                                     Seed = Convert.ToInt32(tmp["td", 4].As<Tag>().Text),

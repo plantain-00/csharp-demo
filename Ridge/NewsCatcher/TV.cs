@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +15,7 @@ namespace NewsCatcher
     public class TV
     {
         public const string FAILS_MESSAGE = "TV Fails";
+        private static readonly string seedWebsite = ConfigurationManager.AppSettings["seed_website"];
 
         public static IEnumerable<ShowItem> Do()
         {
@@ -30,7 +32,7 @@ namespace NewsCatcher
                 var html = new XWebClient
                            {
                                Encoding = Encoding.UTF8
-                           }.DownloadString("https://kickass.so/");
+                           }.DownloadString(seedWebsite);
                 var doc = new Document(html);
                 var tvs = new List<Model>();
                 for (var i = 0; i < 10; i++)
@@ -42,7 +44,7 @@ namespace NewsCatcher
                                 {
                                     Title = tmp["td"]["div", 1]["a"][0].As<PlainText>().Text.Unescape(),
                                     Size = tmp["td", 1][0].As<PlainText>().Text + " " + tmp["td", 1]["span"][0].As<PlainText>().Text,
-                                    Url = "https://kickass.so/" + tmp["td"]["div", 1]["a"].As<Tag>()["href"].Trim('/'),
+                                    Url = seedWebsite + tmp["td"]["div", 1]["a"].As<Tag>()["href"].Trim('/'),
                                     Age = tmp["td", 3][0].As<PlainText>().Text.Unescape()
                                 });
                     }
@@ -59,7 +61,7 @@ namespace NewsCatcher
                                 {
                                     Title = tmp["td"]["div", 1]["a"][0].As<PlainText>().Text.Unescape(),
                                     Size = tmp["td", 1][0].As<PlainText>().Text + " " + tmp["td", 1]["span"][0].As<PlainText>().Text,
-                                    Url = "https://kickass.so/" + tmp["td"]["div", 1]["a"].As<Tag>()["href"].Trim('/'),
+                                    Url = seedWebsite + tmp["td"]["div", 1]["a"].As<Tag>()["href"].Trim('/'),
                                     Age = tmp["td", 3][0].As<PlainText>().Text.Unescape()
                                 });
                     }
