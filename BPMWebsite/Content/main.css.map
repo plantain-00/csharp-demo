@@ -1,9 +1,0 @@
-{
-  "version": 3,
-  "file": "main.css",
-  "sources": [
-    "main.less"
-  ],
-  "names": [],
-  "mappings": "AAAA;EACI,cAAA;EACA,UAAA;;AAGJ;EACI,YAAA;;AAGJ;EACI,gDAAA;EACA,YAAA;EACA,mBAAA;EACA,iBAAA;;AAJJ,KAKI;EACI,YAAA;;AANR,KAKI,IAEI;EACI,eAAA;;AAKZ;AAAiB;EACb,WAAA;EACA,cAAA;EACA,aAAA;EACA,YAAA;EACA,kBAAA;EACA,uBAAA"
-}
