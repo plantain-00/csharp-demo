@@ -49,7 +49,7 @@ namespace NewsCatcher
                                       {
                                           Title = node["h3"]["a"].As<Tag>().Text.Unescape(),
                                           Url = "https://github.com/" + node["h3"]["a"].As<Tag>()["href"].Trim('/'),
-                                          Summary = node["p"].As<Tag>().Text.Unescape().Trim() + " - " + text[0].Trim() + " - " + text[1].Trim()
+                                          Summary = node["p"].As<Tag>().Text.Unescape().Trim() + " - " + text[0].Trim() + ((text.Length == 2) ? "" : " - " + text[1].Trim())
                                       });
                     }
                     catch (Exception)
