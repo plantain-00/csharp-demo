@@ -89,6 +89,10 @@ namespace NewsCatcher
                     _itemsSource.RemoveAll(i => i.Url == CzechMassage.FAILS_MESSAGE);
                     await CzechMassageTask();
                     break;
+                case GithubTrending.FAILS_MESSAGE:
+                    _itemsSource.RemoveAll(i => i.Url == GithubTrending.FAILS_MESSAGE);
+                    await GithubTrendingTask();
+                    break;
                 default:
                 {
                     var uri = e.Uri.AbsoluteUri;
@@ -148,6 +152,7 @@ namespace NewsCatcher
             V2exTask();
             TVTask();
             CzechMassageTask();
+            GithubTrendingTask();
         }
 
         private void Refactor()
@@ -163,6 +168,15 @@ namespace NewsCatcher
                 }
                 isEmpty = string.IsNullOrEmpty(_itemsSource[i].Text);
             }
+        }
+
+        private async Task GithubTrendingTask()
+        {
+            var result = await GithubTrending.DoAsync();
+            await _deserialization;
+            _itemsSource.AddRange(result);
+            Refactor();
+            listView.Items.Refresh();
         }
 
         private async Task V2exTask()

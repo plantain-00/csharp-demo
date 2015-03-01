@@ -59,6 +59,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="GithubTrending.cs" />
     <Compile Include="CnBeta.cs" />
     <Compile Include="Cnblogs.cs" />
     <Compile Include="CzechMassage.cs" />
