@@ -23,6 +23,8 @@ namespace Vex.Services
             }
         }
 
+        public Lazy<AccountService> Account = new Lazy<AccountService>();
+
         public string Sql { get; private set; }
 
         public void Dispose()
@@ -139,6 +141,10 @@ namespace Vex.Services
                 if (_entities != null)
                 {
                     _entities.Dispose();
+                }
+                if (Account.IsValueCreated)
+                {
+                    Account.Value.Dispose();
                 }
             }
             _disposed = true;

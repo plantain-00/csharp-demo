@@ -21,14 +21,14 @@ namespace Vex.Controllers
         [Authentication(Constants.REGISTER)]
         public ActionResult Register()
         {
-            var currentUser = Base.Account.GetCurrentUser();
+            var currentUser = Base.Value.Account.Value.GetCurrentUser();
             if (currentUser == null)
             {
-                ViewData["WorkingLocations"] = Base.Account.WorkingLocations;
-                ViewData["Sectors"] = Base.Account.Sectors;
-                ViewData["BusinessFunlocs"] = Base.Account.BusinessFunlocs;
-                ViewData["CostCenters"] = Base.Account.CostCenters;
-                ViewData["email"] = Base.Account.GetEmailByAccountName(HttpContext.User.Identity.Name);
+                ViewData["WorkingLocations"] = Account.Value.WorkingLocations;
+                ViewData["Sectors"] = Account.Value.Sectors;
+                ViewData["BusinessFunlocs"] = Account.Value.BusinessFunlocs;
+                ViewData["CostCenters"] = Account.Value.CostCenters;
+                ViewData["email"] = Account.Value.GetEmailByAccountName(HttpContext.User.Identity.Name);
                 return View();
             }
 
@@ -58,9 +58,9 @@ namespace Vex.Controllers
                 return Content(string.Format("<script>alert(\"{0}\"); window.history.back();</script>", message));
             }
 
-            await Base.Account.Register(user);
+            await Account.Value.Register(user);
 
-            await Mail.NeedApproval();
+            await Mail.Value.NeedApproval();
 
             return RedirectToAction("Index", "Home");
         }
@@ -69,27 +69,27 @@ namespace Vex.Controllers
         [Authentication(Constants.MODIFY_PROFILE)]
         public ActionResult ModifyProfile(int id)
         {
-            ViewData["WorkingLocations"] = Base.Account.WorkingLocations;
-            ViewData["Sectors"] = Base.Account.Sectors;
-            ViewData["BusinessFunlocs"] = Base.Account.BusinessFunlocs;
-            ViewData["CostCenters"] = Base.Account.CostCenters;
+            ViewData["WorkingLocations"] = Account.Value.WorkingLocations;
+            ViewData["Sectors"] = Account.Value.Sectors;
+            ViewData["BusinessFunlocs"] = Account.Value.BusinessFunlocs;
+            ViewData["CostCenters"] = Account.Value.CostCenters;
 
-            var user = Base.Account.GetUser(id);
+            var user = Account.Value.GetUser(id);
             ViewData["user"] = user;
-            ViewData["currentUser"] = Base.Account.CurrentUser;
+            ViewData["currentUser"] = Account.Value.CurrentUser;
 
             return View();
         }
 
         public ActionResult ModifyMyProfile()
         {
-            ViewData["WorkingLocations"] = Base.Account.WorkingLocations;
-            ViewData["Sectors"] = Base.Account.Sectors;
-            ViewData["BusinessFunlocs"] = Base.Account.BusinessFunlocs;
-            ViewData["CostCenters"] = Base.Account.CostCenters;
+            ViewData["WorkingLocations"] = Account.Value.WorkingLocations;
+            ViewData["Sectors"] = Account.Value.Sectors;
+            ViewData["BusinessFunlocs"] = Account.Value.BusinessFunlocs;
+            ViewData["CostCenters"] = Account.Value.CostCenters;
 
-            ViewData["user"] = Base.Account.CurrentUser;
-            ViewData["currentUser"] = Base.Account.CurrentUser;
+            ViewData["user"] = Account.Value.CurrentUser;
+            ViewData["currentUser"] = Account.Value.CurrentUser;
 
             return View("ModifyProfile");
         }
@@ -110,9 +110,9 @@ namespace Vex.Controllers
                 return Content(string.Format("<script>alert(\"{0}\"); window.history.back();</script>", message));
             }
 
-            await Base.Account.ModifyProfile(user);
+            await Account.Value.ModifyProfile(user);
 
-            if (Base.Account.CurrentUser.Id != user.Id)
+            if (Account.Value.CurrentUser.Id != user.Id)
             {
                 return Content(string.Format("<script>alert(\"success.\"); location.href='{0}';</script>",
                                              Url.Action("ModifyProfile",
@@ -131,26 +131,26 @@ namespace Vex.Controllers
         {
             try
             {
-                var result = await Base.Account.ModifyStatus(id, status);
+                var result = await Account.Value.ModifyStatus(id, status);
 
                 if (result.Item1 == UserStatus.Applied)
                 {
                     switch (result.Item2.Status)
                     {
                         case UserStatus.Active:
-                            await Mail.Approved(result.Item2);
+                            await Mail.Value.Approved(result.Item2);
                             break;
                         case UserStatus.Inactive:
-                            await Mail.Rejected(result.Item2);
+                            await Mail.Value.Rejected(result.Item2);
                             break;
                         default:
-                            await Mail.InformStatusChanged(result.Item2);
+                            await Mail.Value.InformStatusChanged(result.Item2);
                             break;
                     }
                 }
                 else
                 {
-                    await Mail.InformStatusChanged(result.Item2);
+                    await Mail.Value.InformStatusChanged(result.Item2);
                 }
 
                 return Json(new
@@ -238,11 +238,11 @@ namespace Vex.Controllers
 
                     try
                     {
-                        var users = await Base.Account.Unregister(emails);
+                        var users = await Account.Value.Unregister(emails);
 
                         foreach (var user in users)
                         {
-                            await Mail.InformStatusChanged(user);
+                            await Mail.Value.InformStatusChanged(user);
                         }
 
                         ViewData["users"] = users;
@@ -273,14 +273,14 @@ namespace Vex.Controllers
         {
             int count;
             var skipped = Pagination.GetSkipped(1);
-            var users = Base.Account.GetEmployees(skipped, 10, out count);
+            var users = Account.Value.GetEmployees(skipped, 10, out count);
             ViewData["pagination"] = new Pagination(count, 1);
             ViewData["users"] = users;
 
-            ViewData["WorkingLocations"] = Base.Account.WorkingLocations;
-            ViewData["Sectors"] = Base.Account.Sectors;
-            ViewData["BusinessFunlocs"] = Base.Account.BusinessFunlocs;
-            ViewData["CostCenters"] = Base.Account.CostCenters;
+            ViewData["WorkingLocations"] = Account.Value.WorkingLocations;
+            ViewData["Sectors"] = Account.Value.Sectors;
+            ViewData["BusinessFunlocs"] = Account.Value.BusinessFunlocs;
+            ViewData["CostCenters"] = Account.Value.CostCenters;
 
             return View();
         }
@@ -298,9 +298,9 @@ namespace Vex.Controllers
             var theFunloc = string.IsNullOrEmpty(funloc) ? null as int? : Convert.ToInt32(funloc);
             var theCostCenter = string.IsNullOrEmpty(costCenter) ? null as int? : Convert.ToInt32(costCenter);
             var theStatus = string.IsNullOrEmpty(status) ? null as UserStatus? : (UserStatus) Convert.ToInt32(status);
-            var members = Base.Account.GetEmployees(0, int.MaxValue, out count, name, theGender, theYear, theMonth, theDay, employeeId, email, mobilePhone, theLocation, theSector, theFunloc, theCostCenter, theStatus, isDesc, column);
+            var members = Account.Value.GetEmployees(0, int.MaxValue, out count, name, theGender, theYear, theMonth, theDay, employeeId, email, mobilePhone, theLocation, theSector, theFunloc, theCostCenter, theStatus, isDesc, column);
 
-            var excel = new ExcelEditor(Base.Base.GetPath("/Templates/Export Members.xlsx"));
+            var excel = new ExcelEditor(Base.Value.GetPath("/Templates/Export Members.xlsx"));
             excel.Set("m",
                       members.Select(m => new
                                           {
@@ -348,7 +348,7 @@ namespace Vex.Controllers
             var theFunloc = string.IsNullOrEmpty(funloc) ? null as int? : Convert.ToInt32(funloc);
             var theCostCenter = string.IsNullOrEmpty(costCenter) ? null as int? : Convert.ToInt32(costCenter);
             var theStatus = string.IsNullOrEmpty(status) ? null as UserStatus? : (UserStatus) Convert.ToInt32(status);
-            var users = Base.Account.GetEmployees(skipped, 10, out count, name, theGender, theYear, theMonth, theDay, employeeId, email, mobilePhone, theLocation, theSector, theFunloc, theCostCenter, theStatus, isDesc, column);
+            var users = Account.Value.GetEmployees(skipped, 10, out count, name, theGender, theYear, theMonth, theDay, employeeId, email, mobilePhone, theLocation, theSector, theFunloc, theCostCenter, theStatus, isDesc, column);
 
             ViewData["pagination"] = new Pagination(count, page);
             ViewData["users"] = users;

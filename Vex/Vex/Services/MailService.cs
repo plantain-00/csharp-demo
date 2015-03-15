@@ -3,15 +3,15 @@ using System.Configuration;
 using System.Linq;
 using System.Threading.Tasks;
 
+using MailKit.Net.Smtp;
+
 using MimeKit;
 
 using Vex.DbModels;
 
-using SmtpClient = MailKit.Net.Smtp.SmtpClient;
-
-namespace Vex.Businesses
+namespace Vex.Services
 {
-    public class MailBusiness : BaseBusiness
+    public class MailService : BaseService
     {
         private static readonly string smtpServerAddress = ConfigurationManager.AppSettings["smtp_server_address"];
         private static readonly string email = ConfigurationManager.AppSettings["email"];
@@ -23,9 +23,9 @@ namespace Vex.Businesses
             var message = new MimeMessage();
             message.From.Add(new MailboxAddress(emailName, email));
             message.To.AddRange(GetHrs().Select(GetMailboxAddress));
-            message.Cc.Add(GetMailboxAddress(Account.CurrentUser.Email));
+            message.Cc.Add(GetMailboxAddress(Account.Value.CurrentUser.Email));
             message.Cc.AddRange(GetAdmins().Select(GetMailboxAddress));
-            message.Subject = string.Format("-	EmailTitle: [PCI Union Intranet]User: {0}'s membership need your approval", Account.CurrentUser.GetName());
+            message.Subject = string.Format("-	EmailTitle: [PCI Union Intranet]User: {0}'s membership need your approval", Account.Value.CurrentUser.GetName());
             message.Body = new TextPart("plain")
                            {
                                Text = message.Subject
@@ -60,13 +60,13 @@ namespace Vex.Businesses
 
         private IEnumerable<string> GetHrs()
         {
-            var hrs = Account.GetHrs();
+            var hrs = Account.Value.GetHrs();
             return hrs.Select(h => h.Email).ToList();
         }
 
         private IEnumerable<string> GetAdmins()
         {
-            var admins = Account.GetAdmins();
+            var admins = Account.Value.GetAdmins();
             return admins.Select(a => a.Email).ToList();
         }
 

@@ -1,29 +1,16 @@
 ﻿using System;
 using System.Web.Mvc;
 
-using Vex.Businesses;
+using Vex.Services;
 
 namespace Vex.Controllers
 {
     public class BaseController : Controller
     {
-        private BaseBusiness _baseBusiness;
         private bool _disposed;
-        private MailBusiness _mailBusiness;
-        public MailBusiness Mail
-        {
-            get
-            {
-                return _mailBusiness ?? (_mailBusiness = new MailBusiness());
-            }
-        }
-        public virtual BaseBusiness Base
-        {
-            get
-            {
-                return _baseBusiness ?? (_baseBusiness = new BaseBusiness());
-            }
-        }
+        public Lazy<MailService> Mail = new Lazy<MailService>();
+        public Lazy<BaseService> Base = new Lazy<BaseService>();
+        public Lazy<AccountService> Account = new Lazy<AccountService>();
 
         public new void Dispose()
         {
@@ -50,13 +37,17 @@ namespace Vex.Controllers
             }
             if (disposing)
             {
-                if (_baseBusiness != null)
+                if (Base.IsValueCreated)
                 {
-                    _baseBusiness.Dispose();
+                    Base.Value.Dispose();
                 }
-                if (_mailBusiness != null)
+                if (Mail.IsValueCreated)
                 {
-                    _mailBusiness.Dispose();
+                    Mail.Value.Dispose();
+                }
+                if (Account.IsValueCreated)
+                {
+                    Account.Value.Dispose();
                 }
             }
             _disposed = true;

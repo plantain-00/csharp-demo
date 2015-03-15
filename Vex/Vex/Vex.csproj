@@ -151,7 +151,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AuthenticationAttribute.cs" />
-    <Compile Include="Businesses\BaseBusiness.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BaseController.cs" />
@@ -173,7 +172,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\AccountService.cs" />
     <Compile Include="Services\BaseService.cs" />
-    <Compile Include="Businesses\MailBusiness.cs" />
+    <Compile Include="Services\MailService.cs" />
     <Compile Include="UserValidator.cs" />
   </ItemGroup>
   <ItemGroup>

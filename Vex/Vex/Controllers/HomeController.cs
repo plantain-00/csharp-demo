@@ -6,7 +6,7 @@ namespace Vex.Controllers
     {
         public ActionResult Index()
         {
-            var currentUser = Base.Account.GetCurrentUser();
+            var currentUser = Account.Value.GetCurrentUser();
             if (currentUser == null)
             {
                 return RedirectToAction("Register", "Account");
@@ -26,7 +26,7 @@ namespace Vex.Controllers
 
         public ActionResult ClearSession()
         {
-            Base.Account.ClearAllSession();
+            Account.Value.ClearAllSession();
             return new ContentResult();
         }
     }
