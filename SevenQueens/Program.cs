@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 
 namespace SevenQueens
 {
@@ -13,21 +12,21 @@ namespace SevenQueens
             var queen1Y = queens[queen1X];
             for (var i = 0; i < queen1X; i++)
             {
-                var queen2X = i;
-                var queen2Y = queens[i];
-                if (queen1X == queen2X)
+                if (queen1X == i)
                 {
                     return false;
                 }
-                if (queen1Y == queen2Y)
+                if (queen1Y == queens[i])
                 {
                     return false;
                 }
-                if (queen1X - queen2X == queen1Y - queen2Y)
+                var x = queen1X - i;
+                var y = queen1Y - queens[i];
+                if (x == y)
                 {
                     return false;
                 }
-                if (queen1X - queen2X + queen1Y - queen2Y == 0)
+                if (x + y == 0)
                 {
                     return false;
                 }
@@ -35,7 +34,7 @@ namespace SevenQueens
             return true;
         }
 
-        private static void Xxx(ICollection<int[]> result, int maxDepth, int depth, params int[] queens)
+        private static void Xxx(ref List<int[]> result, int maxDepth, int depth, IList<int> queens = null)
         {
             if (maxDepth == 1)
             {
@@ -47,13 +46,26 @@ namespace SevenQueens
             }
             for (var i = 0; i < maxDepth; i++)
             {
-                var newArray = queens.Concat(new[]
-                                             {
-                                                 i
-                                             }).ToArray();
+                int[] newArray;
+                if (queens == null)
+                {
+                    newArray = new[]
+                               {
+                                   i
+                               };
+                }
+                else
+                {
+                    newArray = new int[queens.Count + 1];
+                    for (var j = 0; j < queens.Count; j++)
+                    {
+                        newArray[j] = queens[j];
+                    }
+                    newArray[queens.Count] = i;
+                }
                 if (depth == 1)
                 {
-                    Xxx(result, maxDepth, depth + 1, newArray);
+                    Xxx(ref result, maxDepth, depth + 1, newArray);
                     continue;
                 }
                 if (!IsValid(newArray))
@@ -66,7 +78,7 @@ namespace SevenQueens
                 }
                 else
                 {
-                    Xxx(result, maxDepth, depth + 1, newArray);
+                    Xxx(ref result, maxDepth, depth + 1, newArray);
                 }
             }
         }
@@ -79,7 +91,7 @@ namespace SevenQueens
             for (var i = 0; i < 12; i++)
             {
                 var result = new List<int[]>();
-                Xxx(result, i + 1, 1);
+                Xxx(ref result, i + 1, 1);
                 counts.Add(result.Count);
             }
             watch.Stop();
@@ -87,7 +99,7 @@ namespace SevenQueens
             {
                 Console.WriteLine(count);
             }
-            Console.WriteLine(watch.ElapsedMilliseconds);//12.3-12.7
+            Console.WriteLine(watch.ElapsedMilliseconds);//3.9-4.1
             Console.Read();
         }
     }
