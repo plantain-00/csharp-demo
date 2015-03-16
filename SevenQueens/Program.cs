@@ -6,27 +6,40 @@ namespace SevenQueens
 {
     internal class Program
     {
+        /// <summary>
+        ///     if queens is {2, 0, 3, 1},
+        ///     then it means {(0,2), (1,0), (2,3), (3,1)}.
+        ///     of course it is a valid result.
+        /// </summary>
+        /// <param name="queens"></param>
+        /// <returns></returns>
         public static bool IsValid(int[] queens)
         {
-            var queen1X = queens.Length - 1;
-            var queen1Y = queens[queen1X];
-            for (var i = 0; i < queen1X; i++)
+            // the last point
+            var px = queens.Length - 1;
+            var py = queens[px];
+
+            for (var i = 0; i < px; i++)
             {
-                if (queen1X == i)
+                // |
+                if (px == i)
                 {
                     return false;
                 }
-                if (queen1Y == queens[i])
+                // -
+                if (py == queens[i])
                 {
                     return false;
                 }
-                var x = queen1X - i;
-                var y = queen1Y - queens[i];
-                if (x == y)
+                var deltaX = px - i;
+                var deltaY = py - queens[i];
+                // \
+                if (deltaX == deltaY)
                 {
                     return false;
                 }
-                if (x + y == 0)
+                // /
+                if (deltaX + deltaY == 0)
                 {
                     return false;
                 }
@@ -99,7 +112,7 @@ namespace SevenQueens
             {
                 Console.WriteLine(count);
             }
-            Console.WriteLine(watch.ElapsedMilliseconds);//3.9-4.1
+            Console.WriteLine(watch.ElapsedMilliseconds); //3.9-4.1
             Console.Read();
         }
     }
