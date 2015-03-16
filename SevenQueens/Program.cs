@@ -112,7 +112,7 @@ namespace SevenQueens
             {
                 Console.WriteLine(count);
             }
-            Console.WriteLine(watch.ElapsedMilliseconds); //3.9-4.1
+            Console.WriteLine(watch.ElapsedMilliseconds); //release:3.1-3.2 debug:3.9-4.1
             Console.Read();
         }
     }
