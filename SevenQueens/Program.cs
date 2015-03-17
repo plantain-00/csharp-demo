@@ -12,11 +12,12 @@ namespace SevenQueens
         ///     of course it is a valid result.
         /// </summary>
         /// <param name="queens"></param>
+        /// <param name="queensLength"></param>
         /// <returns></returns>
-        public static bool IsValid(int[] queens)
+        public static bool IsValid(int[] queens, int queensLength)
         {
             // the last point
-            var px = queens.Length - 1;
+            var px = queensLength - 1;
             var py = queens[px];
 
             for (var i = 0; i < px; i++)
@@ -47,7 +48,7 @@ namespace SevenQueens
             return true;
         }
 
-        private static void Xxx(ref List<int[]> result, int maxDepth, int depth, IList<int> queens = null)
+        private static void Xxx(ref List<int[]> result, int maxDepth, int depth, int[] queens, int queensLength)
         {
             if (maxDepth == 1)
             {
@@ -59,39 +60,23 @@ namespace SevenQueens
             }
             for (var i = 0; i < maxDepth; i++)
             {
-                int[] newArray;
-                if (queens == null)
-                {
-                    newArray = new[]
-                               {
-                                   i
-                               };
-                }
-                else
-                {
-                    newArray = new int[queens.Count + 1];
-                    for (var j = 0; j < queens.Count; j++)
-                    {
-                        newArray[j] = queens[j];
-                    }
-                    newArray[queens.Count] = i;
-                }
+                queens[queensLength] = i;
                 if (depth == 1)
                 {
-                    Xxx(ref result, maxDepth, depth + 1, newArray);
+                    Xxx(ref result, maxDepth, depth + 1, queens, queensLength + 1);
                     continue;
                 }
-                if (!IsValid(newArray))
+                if (!IsValid(queens, queensLength + 1))
                 {
                     continue;
                 }
                 if (depth == maxDepth)
                 {
-                    result.Add(newArray);
+                    result.Add(queens);
                 }
                 else
                 {
-                    Xxx(ref result, maxDepth, depth + 1, newArray);
+                    Xxx(ref result, maxDepth, depth + 1, queens, queensLength + 1);
                 }
             }
         }
@@ -104,7 +89,7 @@ namespace SevenQueens
             for (var i = 0; i < 12; i++)
             {
                 var result = new List<int[]>();
-                Xxx(ref result, i + 1, 1);
+                Xxx(ref result, i + 1, 1, new int[i + 1], 0);
                 counts.Add(result.Count);
             }
             watch.Stop();
@@ -112,7 +97,7 @@ namespace SevenQueens
             {
                 Console.WriteLine(count);
             }
-            Console.WriteLine(watch.ElapsedMilliseconds); //release:3.1-3.2 debug:3.9-4.1
+            Console.WriteLine(watch.ElapsedMilliseconds); //release:0.97-0.99
             Console.Read();
         }
     }
