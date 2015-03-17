@@ -48,22 +48,18 @@ namespace SevenQueens
             return true;
         }
 
-        private static void Xxx(ref List<int[]> result, int maxDepth, int depth, int[] queens, int queensLength)
+        private static int Xxx(int result, int maxDepth, int depth, int[] queens, int queensLength)
         {
             if (maxDepth == 1)
             {
-                result.Add(new[]
-                           {
-                               0
-                           });
-                return;
+                return result + 1;
             }
             for (var i = 0; i < maxDepth; i++)
             {
                 queens[queensLength] = i;
                 if (depth == 1)
                 {
-                    Xxx(ref result, maxDepth, depth + 1, queens, queensLength + 1);
+                    result = Xxx(result, maxDepth, depth + 1, queens, queensLength + 1);
                     continue;
                 }
                 if (!IsValid(queens, queensLength + 1))
@@ -72,13 +68,14 @@ namespace SevenQueens
                 }
                 if (depth == maxDepth)
                 {
-                    result.Add(queens);
+                    result++;
                 }
                 else
                 {
-                    Xxx(ref result, maxDepth, depth + 1, queens, queensLength + 1);
+                    result = Xxx(result, maxDepth, depth + 1, queens, queensLength + 1);
                 }
             }
+            return result;
         }
 
         private static void Main(string[] args)
@@ -88,16 +85,15 @@ namespace SevenQueens
             watch.Start();
             for (var i = 0; i < 12; i++)
             {
-                var result = new List<int[]>();
-                Xxx(ref result, i + 1, 1, new int[i + 1], 0);
-                counts.Add(result.Count);
+                var result = Xxx(0, i + 1, 1, new int[i + 1], 0);
+                counts.Add(result);
             }
             watch.Stop();
             foreach (var count in counts)
             {
                 Console.WriteLine(count);
             }
-            Console.WriteLine(watch.ElapsedMilliseconds); //release:0.97-0.99
+            Console.WriteLine(watch.ElapsedMilliseconds); //release:1.01-1.15
             Console.Read();
         }
     }
