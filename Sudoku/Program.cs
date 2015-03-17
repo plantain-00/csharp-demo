@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Sudoku
 {
@@ -30,7 +31,12 @@ namespace Sudoku
 
             Print(board.Positions);
 
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
+
             var result = board.GetResult();
+
+            stopwatch.Stop();
 
             foreach (var positions in result)
             {
@@ -38,6 +44,7 @@ namespace Sudoku
                 Print(positions);
             }
 
+            Console.WriteLine(stopwatch.ElapsedMilliseconds);//0.28-0.32
             Console.Read();
         }
 
