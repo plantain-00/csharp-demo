@@ -32,7 +32,7 @@ namespace NewsCatcher
                 var html = new XWebClient
                            {
                                Encoding = Encoding.UTF8
-                           }.DownloadString(v2exUrl);
+                           }.DownloadString(v2exUrl + "?tab=hot");
                 var doc = new Document(html);
                 var models = new List<Model>();
                 for (var i = 0; i < 40; i++)
@@ -54,7 +54,7 @@ namespace NewsCatcher
                         models.Add(new Model
                                    {
                                        Count = count,
-                                       Url = "http://www.v2ex.com" + new string(url.TakeWhile(u => u != '#').ToArray()),
+                                       Url = v2exUrl.Trim('/') + new string(url.TakeWhile(u => u != '#').ToArray()),
                                        Name = name
                                    });
                     }
