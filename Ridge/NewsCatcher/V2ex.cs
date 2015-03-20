@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,6 +14,7 @@ namespace NewsCatcher
 {
     internal static class V2ex
     {
+        private static readonly string v2exUrl = ConfigurationManager.AppSettings["v2ex_url"];
         public const string FAILS_MESSAGE = "V2ex Fails";
 
         public static IEnumerable<ShowItem> Do()
@@ -30,7 +32,7 @@ namespace NewsCatcher
                 var html = new XWebClient
                            {
                                Encoding = Encoding.UTF8
-                           }.DownloadString("http://www.v2ex.com/?tab=hot");
+                           }.DownloadString(v2exUrl);
                 var doc = new Document(html);
                 var models = new List<Model>();
                 for (var i = 0; i < 40; i++)
