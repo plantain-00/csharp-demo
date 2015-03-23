@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 
 namespace ReadableUrl
 {
@@ -26,11 +27,11 @@ namespace ReadableUrl
                 {
                     i++;
                 }
-                if (!Is(html[i + 1], 't')
-                    || !Is(html[i + 2], 'i')
-                    || !Is(html[i + 3], 't')
-                    || !Is(html[i + 4], 'l')
-                    || !Is(html[i + 5], 'e'))
+                if (IsNot(html[i + 1], 't')
+                    || IsNot(html[i + 2], 'i')
+                    || IsNot(html[i + 3], 't')
+                    || IsNot(html[i + 4], 'l')
+                    || IsNot(html[i + 5], 'e'))
                 {
                     continue;
                 }
@@ -70,11 +71,11 @@ namespace ReadableUrl
                 {
                     i++;
                 }
-                if (!Is(html[i + 2], 't')
-                    || !Is(html[i + 3], 'i')
-                    || !Is(html[i + 4], 't')
-                    || !Is(html[i + 5], 'l')
-                    || !Is(html[i + 6], 'e'))
+                if (IsNot(html[i + 2], 't')
+                    || IsNot(html[i + 3], 'i')
+                    || IsNot(html[i + 4], 't')
+                    || IsNot(html[i + 5], 'l')
+                    || IsNot(html[i + 6], 'e'))
                 {
                     continue;
                 }
@@ -97,7 +98,6 @@ namespace ReadableUrl
         }
 
         public string Title { get; private set; }
-        public string Link { get; set; }
 
         private static bool Is(char c1, char c2)
         {
@@ -110,6 +110,11 @@ namespace ReadableUrl
                 return c1 == c2 || c1 == char.ToUpper(c2);
             }
             return c1 == c2;
+        }
+
+        private static bool IsNot(char c1, char c2)
+        {
+            return !Is(c1, c2);
         }
     }
 }
