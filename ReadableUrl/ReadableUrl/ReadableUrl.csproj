@@ -41,6 +41,7 @@
   <ItemGroup>
     <Compile Include="Client.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Source.cs" />
     <Compile Include="XWebClient.cs">
       <SubType>Component</SubType>
     </Compile>

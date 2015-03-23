@@ -1,5 +1,4 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 
 namespace ReadableUrl
 {
@@ -15,106 +14,74 @@ namespace ReadableUrl
                        {
                            Encoding = encoding
                        }.DownloadString(url);
-            const int FLAG = -1;
-            var startIndex = FLAG;
-            for (var i = 0; i + 7 < html.Length; i++)
+
+            var source = new Source(html);
+
+            int startIndex;
+
+            while (true)
             {
-                if (html[i] != '<')
+                source.MoveUntil(c => c == '<');
+                source.MoveForward();
+
+                source.MoveUntil(c => c != ' ');
+
+                if (source.IsNot("title", 0, true))
                 {
                     continue;
                 }
-                while (html[i + 1] == ' ')
-                {
-                    i++;
-                }
-                if (IsNot(html[i + 1], 't')
-                    || IsNot(html[i + 2], 'i')
-                    || IsNot(html[i + 3], 't')
-                    || IsNot(html[i + 4], 'l')
-                    || IsNot(html[i + 5], 'e'))
+                source.MoveForward("title".Length);
+
+                source.MoveUntil(c => c != ' ');
+
+                if (source.IsNot('>'))
                 {
                     continue;
                 }
-                while (html[i + 6] == ' ')
-                {
-                    i++;
-                }
-                if (html[i + 6] == '>')
-                {
-                    startIndex = i + 7;
-                }
+
+                source.MoveForward();
+                startIndex = source.Index;
+                break;
             }
 
-            if (startIndex == FLAG)
-            {
-                Title = string.Empty;
-                return;
-            }
+            int length;
 
-            var length = 0;
-            for (var i = startIndex; i + 7 < html.Length; i++)
+            while (true)
             {
-                length++;
-                if (html[i] != '<')
-                {
-                    continue;
-                }
-                while (html[i + 1] == ' ')
-                {
-                    i++;
-                }
-                if (html[i + 1] != '/')
-                {
-                    continue;
-                }
-                while (html[i + 2] == ' ')
-                {
-                    i++;
-                }
-                if (IsNot(html[i + 2], 't')
-                    || IsNot(html[i + 3], 'i')
-                    || IsNot(html[i + 4], 't')
-                    || IsNot(html[i + 5], 'l')
-                    || IsNot(html[i + 6], 'e'))
-                {
-                    continue;
-                }
-                while (html[i + 7] == ' ')
-                {
-                    i++;
-                }
-                if (html[i + 7] == '>')
-                {
-                    break;
-                }
-            }
+                source.MoveUntil(c => c == '<');
+                var endIndex = source.Index;
+                source.MoveForward();
 
-            if (length > 0)
-            {
-                length--;
+                source.MoveUntil(c => c != ' ');
+
+                if (source.IsNot('/'))
+                {
+                    continue;
+                }
+                source.MoveForward();
+
+                source.MoveUntil(c => c != ' ');
+                if (source.IsNot("title", 0, true))
+                {
+                    continue;
+                }
+                source.MoveForward("title".Length);
+
+                source.MoveUntil(c => c != ' ');
+
+                if (source.IsNot('>'))
+                {
+                    continue;
+                }
+
+                source.MoveForward();
+                length = endIndex - startIndex;
+                break;
             }
 
             Title = html.Substring(startIndex, length);
         }
 
         public string Title { get; private set; }
-
-        private static bool Is(char c1, char c2)
-        {
-            if (char.IsUpper(c2))
-            {
-                return c1 == c2 || c1 == char.ToLower(c2);
-            }
-            if (char.IsLower(c2))
-            {
-                return c1 == c2 || c1 == char.ToUpper(c2);
-            }
-            return c1 == c2;
-        }
-
-        private static bool IsNot(char c1, char c2)
-        {
-            return !Is(c1, c2);
-        }
     }
 }
