@@ -12,23 +12,21 @@ namespace JsonConverter.Nodes
         internal JClass(Source source, int depth)
         {
             Depth = depth;
+            Properties = new List<JProperty>();
 
             if (source.IsNot('{'))
             {
                 throw new ParseException(source);
             }
             source.MoveForward();
-
             source.SkipWhiteSpace();
-
-            Properties = new List<JProperty>();
 
             if (source.Is('}'))
             {
                 source.MoveForward();
                 return;
             }
-
+            
             Properties.Add(new JProperty(source, depth));
             source.SkipWhiteSpace();
 
@@ -61,11 +59,10 @@ namespace JsonConverter.Nodes
             {
                 var builder = new StringBuilder("{");
 
-                var count = Properties.Count;
                 for (var i = 0; i < Properties.Count; i++)
                 {
                     builder.Append(Properties[i].ToString(formatting));
-                    if (i != count - 1)
+                    if (i != Properties.Count - 1)
                     {
                         builder.Append(",");
                     }
@@ -83,11 +80,10 @@ namespace JsonConverter.Nodes
                 var builder = new StringBuilder("{\n");
                 builder.Append(propertiesSpace);
 
-                var count = Properties.Count;
                 for (var i = 0; i < Properties.Count; i++)
                 {
                     builder.Append(Properties[i].ToString(formatting));
-                    if (i != count - 1)
+                    if (i != Properties.Count - 1)
                     {
                         builder.Append(",\n");
                         builder.Append(propertiesSpace);
