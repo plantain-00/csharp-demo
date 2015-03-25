@@ -21,5 +21,10 @@ namespace JsonConverter.Nodes
         }
 
         public string RawNumber { get; set; }
+
+        public override string ToString()
+        {
+            return RawNumber;
+        }
     }
 }

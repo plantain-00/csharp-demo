@@ -2,21 +2,24 @@
 {
     public class JBool : JToken
     {
+        private const string TRUE_STRING = "true";
+        private const string FALSE_STRING = "false";
+
         public JBool()
         {
         }
 
         internal JBool(Source source, int depth) : base(depth)
         {
-            if (source.Is("true"))
+            if (source.Is(TRUE_STRING))
             {
-                source.MoveForward("true".Length);
+                source.MoveForward(TRUE_STRING.Length);
 
                 Value = true;
             }
-            else if (source.Is("false"))
+            else if (source.Is(FALSE_STRING))
             {
-                source.MoveForward("false".Length);
+                source.MoveForward(FALSE_STRING.Length);
 
                 Value = false;
             }
@@ -27,5 +30,10 @@
         }
 
         public bool Value { get; set; }
+
+        public override string ToString()
+        {
+            return Value ? TRUE_STRING : FALSE_STRING;
+        }
     }
 }

@@ -48,5 +48,10 @@
 
         public JKey Key { get; set; }
         public JToken Value { get; set; }
+
+        public override string ToString()
+        {
+            return string.Format("{0}:{1}", Key, Value);
+        }
     }
 }

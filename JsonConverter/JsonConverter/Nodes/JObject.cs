@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Text;
 
 namespace JsonConverter.Nodes
 {
@@ -25,9 +26,8 @@ namespace JsonConverter.Nodes
                 source.MoveForward();
                 return;
             }
-            var property = new JProperty(source, Depth + 1);
 
-            Properties.Add(property);
+            Properties.Add(new JProperty(source, Depth + 1));
             source.SkipWhiteSpace();
 
             while (source.Is(','))
@@ -39,8 +39,7 @@ namespace JsonConverter.Nodes
                     throw new ParseException(source);
                 }
 
-                var newProperty = new JProperty(source, Depth + 1);
-                Properties.Add(newProperty);
+                Properties.Add(new JProperty(source, Depth + 1));
                 source.SkipWhiteSpace();
             }
 
@@ -52,5 +51,24 @@ namespace JsonConverter.Nodes
         }
 
         public IList<JProperty> Properties { get; set; }
+
+        public override string ToString()
+        {
+            var builder = new StringBuilder("{");
+
+            var count = Properties.Count;
+            for (var i = 0; i < Properties.Count; i++)
+            {
+                builder.Append(Properties[i]);
+                if (i != count - 1)
+                {
+                    builder.Append(",");
+                }
+            }
+
+            builder.Append("}");
+
+            return builder.ToString();
+        }
     }
 }
