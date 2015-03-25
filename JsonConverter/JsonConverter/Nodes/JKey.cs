@@ -1,6 +1,6 @@
 ﻿namespace JsonConverter.Nodes
 {
-    public class JKey : JObject
+    public class JKey : JToken
     {
         public JKey()
         {
