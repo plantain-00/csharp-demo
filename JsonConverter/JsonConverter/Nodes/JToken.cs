@@ -8,5 +8,10 @@
         {
             return ToString(Formatting.None);
         }
+
+        public T As<T>() where T : JToken
+        {
+            return this as T;
+        }
     }
 }

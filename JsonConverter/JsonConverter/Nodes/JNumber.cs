@@ -22,6 +22,22 @@ namespace JsonConverter.Nodes
 
         public string RawNumber { get; set; }
 
+        public int IntNumber
+        {
+            get
+            {
+                return System.Convert.ToInt32(RawNumber);
+            }
+        }
+
+        public double DoubleNumber
+        {
+            get
+            {
+                return System.Convert.ToDouble(RawNumber);
+            }
+        }
+
         public override string ToString(Formatting formatting, int spaceNumber = 4)
         {
             return RawNumber;

@@ -12,7 +12,7 @@ namespace JsonConverter.Nodes
         internal JArray(Source source, int depth)
         {
             Depth = depth;
-            Items = new List<JToken>();
+            Items = new List<JObject>();
 
             if (source.IsNot('['))
             {
@@ -39,8 +39,20 @@ namespace JsonConverter.Nodes
             source.MoveForward();
         }
 
-        public IList<JToken> Items { get; set; }
+        public IList<JObject> Items { get; set; }
         public int Depth { get; set; }
+
+        public JObject this[int index]
+        {
+            get
+            {
+                return Items[index];
+            }
+            set
+            {
+                Items[index] = value;
+            }
+        }
 
         public override string ToString(Formatting formatting, int spaceNumber = 4)
         {

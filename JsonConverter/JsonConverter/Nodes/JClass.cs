@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace JsonConverter.Nodes
@@ -26,7 +27,7 @@ namespace JsonConverter.Nodes
                 source.MoveForward();
                 return;
             }
-            
+
             Properties.Add(new JProperty(source, depth));
             source.SkipWhiteSpace();
 
@@ -52,6 +53,30 @@ namespace JsonConverter.Nodes
 
         public IList<JProperty> Properties { get; set; }
         public int Depth { get; set; }
+
+        public JObject this[int index]
+        {
+            get
+            {
+                return Properties[index].Value;
+            }
+            set
+            {
+                Properties[index].Value = value;
+            }
+        }
+
+        public JObject this[string key]
+        {
+            get
+            {
+                return Properties.Single(p => p.Key.Key == key).Value;
+            }
+            set
+            {
+                Properties.Single(p => p.Key.Key == key).Value = value;
+            }
+        }
 
         public override string ToString(Formatting formatting, int spaceNumber = 4)
         {

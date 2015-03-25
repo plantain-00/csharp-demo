@@ -23,7 +23,7 @@
         }
 
         public JKey Key { get; set; }
-        public JToken Value { get; set; }
+        public JObject Value { get; set; }
         public int Depth { get; set; }
 
         public override string ToString(Formatting formatting, int spaceNumber = 4)

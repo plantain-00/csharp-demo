@@ -2,6 +2,11 @@
 {
     public abstract class JObject : JToken
     {
+        public new T As<T>() where T : JObject
+        {
+            return this as T;
+        }
+
         internal static JObject Convert(Source source, int depth)
         {
             if (source.Is('['))
