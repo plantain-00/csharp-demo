@@ -2,5 +2,6 @@
 {
     public class JToken
     {
+        public int Depth { get; set; }
     }
 }

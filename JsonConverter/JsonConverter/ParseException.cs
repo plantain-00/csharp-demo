@@ -8,9 +8,7 @@ namespace JsonConverter
         {
             Index = source.Index;
 
-            var startIndex = Math.Max(0, source.Index - 5);
-            var endIndex = Math.Min(source.Length - 1, source.Index + 5);
-            Context = source.Substring(startIndex, endIndex - startIndex + 1);
+            Context = source.Context;
         }
 
         public int Index { get; private set; }

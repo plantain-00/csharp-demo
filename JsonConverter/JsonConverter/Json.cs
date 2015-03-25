@@ -13,9 +13,7 @@ namespace JsonConverter
             source.SkipWhiteSpace();
             if (source.Is('{'))
             {
-                source.MoveForward();
-
-                var parser = new JObjectParser(source);
+                var parser = new JObjectParser(source, 0);
                 parser.Parse();
 
                 _token = parser.Result;

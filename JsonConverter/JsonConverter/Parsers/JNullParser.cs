@@ -1,8 +1,10 @@
-﻿namespace JsonConverter.Parsers
+﻿using JsonConverter.Nodes;
+
+namespace JsonConverter.Parsers
 {
     internal class JNullParser : ParserBase
     {
-        internal JNullParser(Source source) : base(source)
+        internal JNullParser(Source source, int depth) : base(source, depth)
         {
         }
 
@@ -13,6 +15,10 @@
                 throw new ParseException(Source);
             }
             Source.MoveForward("null".Length);
+            Result = new JNull
+                     {
+                         Depth = Depth
+                     };
         }
     }
 }

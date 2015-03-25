@@ -6,7 +6,7 @@ namespace JsonConverter.Parsers
 {
     internal class JNumberParser : ParserBase
     {
-        internal JNumberParser(Source source) : base(source)
+        internal JNumberParser(Source source, int depth) : base(source, depth)
         {
         }
 
@@ -21,7 +21,8 @@ namespace JsonConverter.Parsers
             Source.MoveUntil(c => "\",}]".Any(a => a == c));
             Result = new JNumber
                      {
-                         RawNumber = Source.Substring(startIndex, Source.Index - startIndex)
+                         RawNumber = Source.Substring(startIndex, Source.Index - startIndex),
+                         Depth = Depth
                      };
         }
     }

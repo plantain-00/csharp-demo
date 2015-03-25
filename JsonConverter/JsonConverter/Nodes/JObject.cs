@@ -4,6 +4,6 @@ namespace JsonConverter.Nodes
 {
     public class JObject : JToken
     {
-        public IDictionary<string, JToken> Properties { get; set; }
+        public IList<JProperty> Properties { get; set; }
     }
 }

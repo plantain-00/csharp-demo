@@ -4,7 +4,7 @@ namespace JsonConverter.Parsers
 {
     internal class JPropertyParser : ParserBase
     {
-        public JPropertyParser(Source source) : base(source)
+        public JPropertyParser(Source source, int depth) : base(source, depth)
         {
         }
 
@@ -15,78 +15,62 @@ namespace JsonConverter.Parsers
                 throw new ParseException(Source);
             }
 
-            var keyParser = new JKeyParser(Source);
+            var keyParser = new JKeyParser(Source, Depth + 1);
             keyParser.Parse();
             Source.SkipWhiteSpace();
             Source.Is(':');
             Source.MoveForward();
             Source.SkipWhiteSpace();
-            if (Source.Is('['))
-            {
-                var arrayParser = new JArrayParser(Source);
-                arrayParser.Parse();
 
-                Result = new JProperty
+            var result = new JProperty
                          {
                              Key = keyParser.Result as JKey,
-                             Value = arrayParser.Result
+                             Depth = Depth
                          };
+            Result = result;
+
+            if (Source.Is('['))
+            {
+                var arrayParser = new JArrayParser(Source, Depth + 1);
+                arrayParser.Parse();
+
+                result.Value = arrayParser.Result;
             }
             else if (Source.Is('{'))
             {
-                var objectParser = new JObjectParser(Source);
+                var objectParser = new JObjectParser(Source, Depth + 1);
                 objectParser.Parse();
 
-                Result = new JProperty
-                         {
-                             Key = keyParser.Result as JKey,
-                             Value = objectParser.Result
-                         };
+                result.Value = objectParser.Result;
             }
             else if (Source.Is("true")
                      || Source.Is("false"))
             {
-                var boolParser = new JBoolParser(Source);
+                var boolParser = new JBoolParser(Source, Depth + 1);
                 boolParser.Parse();
 
-                Result = new JProperty
-                         {
-                             Key = keyParser.Result as JKey,
-                             Value = boolParser.Result
-                         };
+                result.Value = boolParser.Result;
             }
             else if (Source.Is("null"))
             {
-                var nullParser = new JNullParser(Source);
+                var nullParser = new JNullParser(Source, Depth + 1);
                 nullParser.Parse();
 
-                Result = new JProperty
-                         {
-                             Key = keyParser.Result as JKey,
-                             Value = nullParser.Result
-                         };
+                result.Value = nullParser.Result;
             }
             else if (Source.Is('"'))
             {
-                var stringParser = new JStringParser(Source);
+                var stringParser = new JStringParser(Source, Depth + 1);
                 stringParser.Parse();
 
-                Result = new JProperty
-                         {
-                             Key = keyParser.Result as JKey,
-                             Value = stringParser.Result
-                         };
+                result.Value = stringParser.Result;
             }
             else
             {
-                var numberParser = new JNumberParser(Source);
+                var numberParser = new JNumberParser(Source, Depth + 1);
                 numberParser.Parse();
 
-                Result = new JProperty
-                         {
-                             Key = keyParser.Result as JKey,
-                             Value = numberParser.Result
-                         };
+                result.Value = numberParser.Result;
             }
         }
     }

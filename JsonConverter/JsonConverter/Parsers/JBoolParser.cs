@@ -4,7 +4,7 @@ namespace JsonConverter.Parsers
 {
     internal class JBoolParser : ParserBase
     {
-        internal JBoolParser(Source source) : base(source)
+        internal JBoolParser(Source source, int depth) : base(source, depth)
         {
         }
 
@@ -16,7 +16,8 @@ namespace JsonConverter.Parsers
 
                 Result = new JBool
                          {
-                             Value = true
+                             Value = true,
+                             Depth = Depth
                          };
             }
             else if (Source.Is("false"))
@@ -25,7 +26,8 @@ namespace JsonConverter.Parsers
 
                 Result = new JBool
                          {
-                             Value = false
+                             Value = false,
+                             Depth = Depth
                          };
             }
             else

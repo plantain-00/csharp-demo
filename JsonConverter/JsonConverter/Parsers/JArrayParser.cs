@@ -2,7 +2,7 @@
 {
     internal class JArrayParser : ParserBase
     {
-        internal JArrayParser(Source source) : base(source)
+        internal JArrayParser(Source source, int depth) : base(source, depth)
         {
         }
 
@@ -12,6 +12,7 @@
             {
                 throw new ParseException(Source);
             }
+            Source.MoveForward();
         }
     }
 }

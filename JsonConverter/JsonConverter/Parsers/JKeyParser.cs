@@ -4,7 +4,7 @@ namespace JsonConverter.Parsers
 {
     internal class JKeyParser : ParserBase
     {
-        public JKeyParser(Source source) : base(source)
+        public JKeyParser(Source source, int depth) : base(source, depth)
         {
         }
 
@@ -20,7 +20,8 @@ namespace JsonConverter.Parsers
             Source.MoveUntil(c => c == '"');
             Result = new JKey
                      {
-                         Key = Source.Substring(startIndex, Source.Index - startIndex)
+                         Key = Source.Substring(startIndex, Source.Index - startIndex),
+                         Depth = Depth
                      };
 
             Source.MoveForward();

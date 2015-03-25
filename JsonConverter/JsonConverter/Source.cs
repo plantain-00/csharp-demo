@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 
 namespace JsonConverter
 {
@@ -31,6 +30,16 @@ namespace JsonConverter
             }
         }
 
+        public string Context
+        {
+            get
+            {
+                var startIndex = Math.Max(0, Index - 5);
+                var endIndex = Math.Min(Length - 1, Index + 5);
+                return Substring(startIndex, endIndex - startIndex + 1);
+            }
+        }
+
         private char Next(int i = 0)
         {
             return _s[Index + i];
@@ -55,11 +64,10 @@ namespace JsonConverter
 
         public void MoveForward(int step = 1)
         {
-            if (Index + step >= _s.Length)
+            if (Index + step < _s.Length)
             {
-                throw new Exception();
+                Index += step;
             }
-            Index += step;
         }
 
         public bool Is(char c, int i = 0, bool ignoreCase = false)

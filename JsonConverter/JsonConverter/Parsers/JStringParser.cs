@@ -4,7 +4,7 @@ namespace JsonConverter.Parsers
 {
     internal class JStringParser : ParserBase
     {
-        internal JStringParser(Source source) : base(source)
+        internal JStringParser(Source source, int depth) : base(source, depth)
         {
         }
 
@@ -20,7 +20,8 @@ namespace JsonConverter.Parsers
             Source.MoveUntil(c => c == '"');
             Result = new JString
                      {
-                         Value = Source.Substring(startIndex, Source.Index - startIndex)
+                         Value = Source.Substring(startIndex, Source.Index - startIndex),
+                         Depth = Depth
                      };
 
             Source.MoveForward();

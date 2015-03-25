@@ -6,7 +6,7 @@ namespace JsonConverter.Console
     {
         private static void Main(string[] args)
         {
-            const string JSON = "{\"name\":\"aaa\",\"age\":123,\"is_boy\":true,\"anything_else\":null,\"children\":[\"amy\",\"bill\"]}";
+            const string JSON = "{\"name\":\"aaa\",\"age\":123,\"is_boy\":true,\"anything_else\":null}";
             var o = new Json(JSON);
             var s = o.ToString();
         }
