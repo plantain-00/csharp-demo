@@ -8,7 +8,7 @@ namespace JsonConverter.Nodes
         {
         }
 
-        internal JNumber(Source source, int depth) : base(depth)
+        internal JNumber(Source source)
         {
             if ("\":[{".Any(c => source.Is(c)))
             {
@@ -22,7 +22,7 @@ namespace JsonConverter.Nodes
 
         public string RawNumber { get; set; }
 
-        public override string ToString()
+        public override string ToString(Formatting formatting, int spaceNumber = 4)
         {
             return RawNumber;
         }

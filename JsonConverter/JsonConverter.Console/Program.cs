@@ -8,9 +8,9 @@ namespace JsonConverter.Console
     {
         private static void Main(string[] args)
         {
-            const string JSON = "{\"name\":\"aaa\",\"age\":123,\"is_boy\":true,\"anything_else\":null}";
+            const string JSON = "{\"name\":\"aaa\",\"age\":123,\"is_boy\":true,\"anything_else\":null,\"bbb\":{\"jjj\":\"ddd\",\"ere\":false,\"eee\":{\"fff\":\"sde\",\"ger\":null}}}a";
             var o = JToken.Convert(JSON);
-            var s = o.ToString();
+            var s = o.ToString(Formatting.Indented);
         }
     }
 

@@ -6,7 +6,7 @@
         {
         }
 
-        internal JKey(Source source, int depth) : base(depth)
+        internal JKey(Source source)
         {
             if (source.IsNot('"'))
             {
@@ -23,7 +23,7 @@
 
         public string Key { get; set; }
 
-        public override string ToString()
+        public override string ToString(Formatting formatting, int spaceNumber = 4)
         {
             return string.Format("\"{0}\"", Key);
         }

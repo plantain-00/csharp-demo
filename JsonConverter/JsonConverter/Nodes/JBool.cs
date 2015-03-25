@@ -9,7 +9,7 @@
         {
         }
 
-        internal JBool(Source source, int depth) : base(depth)
+        internal JBool(Source source)
         {
             if (source.Is(TRUE_STRING))
             {
@@ -31,7 +31,7 @@
 
         public bool Value { get; set; }
 
-        public override string ToString()
+        public override string ToString(Formatting formatting, int spaceNumber = 4)
         {
             return Value ? TRUE_STRING : FALSE_STRING;
         }

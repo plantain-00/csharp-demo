@@ -8,7 +8,7 @@
         {
         }
 
-        internal JNull(Source source, int depth) : base(depth)
+        internal JNull(Source source)
         {
             if (source.IsNot(NULL_STRING))
             {
@@ -17,7 +17,7 @@
             source.MoveForward(NULL_STRING.Length);
         }
 
-        public override string ToString()
+        public override string ToString(Formatting formatting, int spaceNumber = 4)
         {
             return NULL_STRING;
         }

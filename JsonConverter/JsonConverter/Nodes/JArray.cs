@@ -8,7 +8,7 @@ namespace JsonConverter.Nodes
         {
         }
 
-        internal JArray(Source source, int depth) : base(depth)
+        internal JArray(Source source, int depth)
         {
             if (source.IsNot('['))
             {
@@ -18,5 +18,9 @@ namespace JsonConverter.Nodes
         }
 
         public IList<JToken> Items { get; set; }
+        public override string ToString(Formatting formatting, int spaceNumber = 4)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

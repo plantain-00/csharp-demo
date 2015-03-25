@@ -1,17 +1,13 @@
 ﻿namespace JsonConverter.Nodes
 {
-    public class JToken
+    public abstract class JToken
     {
-        public JToken()
-        {
-        }
+        public abstract string ToString(Formatting formatting, int spaceNumber = 4);
 
-        protected internal JToken(int depth)
+        public override string ToString()
         {
-            Depth = depth;
+            return ToString(Formatting.None);
         }
-
-        public int Depth { get; set; }
 
         public static JToken Convert(string s)
         {

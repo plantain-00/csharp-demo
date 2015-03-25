@@ -9,8 +9,10 @@ namespace JsonConverter.Nodes
         {
         }
 
-        internal JObject(Source source, int depth) : base(depth)
+        internal JObject(Source source, int depth)
         {
+            Depth = depth;
+
             if (source.IsNot('{'))
             {
                 throw new ParseException(source);
@@ -27,7 +29,7 @@ namespace JsonConverter.Nodes
                 return;
             }
 
-            Properties.Add(new JProperty(source, Depth + 1));
+            Properties.Add(new JProperty(source, depth));
             source.SkipWhiteSpace();
 
             while (source.Is(','))
@@ -39,7 +41,7 @@ namespace JsonConverter.Nodes
                     throw new ParseException(source);
                 }
 
-                Properties.Add(new JProperty(source, Depth + 1));
+                Properties.Add(new JProperty(source, depth));
                 source.SkipWhiteSpace();
             }
 
@@ -51,24 +53,53 @@ namespace JsonConverter.Nodes
         }
 
         public IList<JProperty> Properties { get; set; }
+        public int Depth { get; set; }
 
-        public override string ToString()
+        public override string ToString(Formatting formatting, int spaceNumber = 4)
         {
-            var builder = new StringBuilder("{");
-
-            var count = Properties.Count;
-            for (var i = 0; i < Properties.Count; i++)
+            if (formatting == Formatting.None)
             {
-                builder.Append(Properties[i]);
-                if (i != count - 1)
+                var builder = new StringBuilder("{");
+
+                var count = Properties.Count;
+                for (var i = 0; i < Properties.Count; i++)
                 {
-                    builder.Append(",");
+                    builder.Append(Properties[i].ToString(formatting));
+                    if (i != count - 1)
+                    {
+                        builder.Append(",");
+                    }
                 }
+
+                builder.Append("}");
+
+                return builder.ToString();
             }
+            else
+            {
+                var space = new string(' ', spaceNumber * Depth);
+                var propertiesSpace = new string(' ', spaceNumber * (Depth + 1));
 
-            builder.Append("}");
+                var builder = new StringBuilder("{\n");
+                builder.Append(propertiesSpace);
 
-            return builder.ToString();
+                var count = Properties.Count;
+                for (var i = 0; i < Properties.Count; i++)
+                {
+                    builder.Append(Properties[i].ToString(formatting));
+                    if (i != count - 1)
+                    {
+                        builder.Append(",\n");
+                        builder.Append(propertiesSpace);
+                    }
+                }
+
+                builder.Append('\n');
+                builder.Append(space);
+                builder.Append("}");
+
+                return builder.ToString();
+            }
         }
     }
 }
