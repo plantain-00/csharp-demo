@@ -17,30 +17,15 @@ namespace JsonConverter.Nodes
 
             var startIndex = source.Index;
             source.MoveUntil(c => "\",}]".Any(a => a == c));
-            RawNumber = source.Substring(startIndex, source.Index - startIndex);
+            var rawNumber = source.Substring(startIndex, source.Index - startIndex);
+            Number = System.Convert.ToDouble(rawNumber);
         }
 
-        public string RawNumber { get; set; }
-
-        public int IntNumber
-        {
-            get
-            {
-                return System.Convert.ToInt32(RawNumber);
-            }
-        }
-
-        public double DoubleNumber
-        {
-            get
-            {
-                return System.Convert.ToDouble(RawNumber);
-            }
-        }
+        public double Number { get; set; }
 
         public override string ToString(Formatting formatting, int spaceNumber = 4)
         {
-            return RawNumber;
+            return Number.ToString();
         }
     }
 }

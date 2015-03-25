@@ -12,8 +12,14 @@
             {
                 throw new ParseException(source);
             }
+            source.MoveForward();
 
-            Key = new JKey(source);
+            var startIndex = source.Index;
+            source.MoveUntil(c => c == '"');
+            Key = source.Substring(startIndex, source.Index - startIndex);
+
+            source.MoveForward();
+
             source.SkipWhiteSpace();
             source.Is(':');
             source.MoveForward();
@@ -22,7 +28,7 @@
             Value = JObject.Convert(source, depth);
         }
 
-        public JKey Key { get; set; }
+        public string Key { get; set; }
         public JObject Value { get; set; }
         public int Depth { get; set; }
 
@@ -30,9 +36,9 @@
         {
             if (formatting == Formatting.None)
             {
-                return string.Format("{0}:{1}", Key.ToString(formatting), Value.ToString(formatting));
+                return string.Format("\"{0}\":{1}", Key, Value.ToString(formatting));
             }
-            return string.Format("{0} : {1}", Key.ToString(formatting), Value.ToString(formatting));
+            return string.Format("\"{0}\" : {1}", Key, Value.ToString(formatting));
         }
     }
 }

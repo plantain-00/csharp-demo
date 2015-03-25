@@ -21,6 +21,13 @@ namespace JsonConverter.Nodes
             source.MoveForward();
             source.SkipWhiteSpace();
 
+            if (source.Is(']'))
+            {
+                source.MoveForward();
+                source.SkipWhiteSpace();
+                return;
+            }
+
             Items.Add(Convert(source, depth));
             source.SkipWhiteSpace();
 

@@ -41,7 +41,6 @@
   <ItemGroup>
     <Compile Include="Formatting.cs" />
     <Compile Include="Nodes\JArray.cs" />
-    <Compile Include="Nodes\JKey.cs" />
     <Compile Include="Nodes\JNull.cs" />
     <Compile Include="Nodes\JNumber.cs" />
     <Compile Include="Nodes\JClass.cs" />

@@ -70,11 +70,11 @@ namespace JsonConverter.Nodes
         {
             get
             {
-                return Properties.Single(p => p.Key.Key == key).Value;
+                return Properties.Single(p => p.Key == key).Value;
             }
             set
             {
-                Properties.Single(p => p.Key.Key == key).Value = value;
+                Properties.Single(p => p.Key == key).Value = value;
             }
         }
 
