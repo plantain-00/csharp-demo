@@ -2,7 +2,7 @@
 
 namespace JsonConverter.Nodes
 {
-    public class JArray : JToken
+    public class JArray : JObject
     {
         public JArray()
         {

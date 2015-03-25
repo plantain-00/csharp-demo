@@ -1,105 +1,40 @@
-using System.Collections.Generic;
-using System.Text;
-
-namespace JsonConverter.Nodes
+﻿namespace JsonConverter.Nodes
 {
-    public class JObject : JToken
+    public abstract class JObject : JToken
     {
-        public JObject()
+        internal static JObject Convert(Source source, int depth)
         {
+            if (source.Is('['))
+            {
+                return new JArray(source, depth + 1);
+            }
+            if (source.Is('{'))
+            {
+                return new JClass(source, depth + 1);
+            }
+            if (source.Is("true")
+                || source.Is("false"))
+            {
+                return new JBool(source);
+            }
+            if (source.Is("null"))
+            {
+                return new JNull(source);
+            }
+            if (source.Is('"'))
+            {
+                return new JString(source);
+            }
+            return new JNumber(source);
         }
 
-        internal JObject(Source source, int depth)
+        public static JObject Convert(string s)
         {
-            Depth = depth;
-
-            if (source.IsNot('{'))
-            {
-                throw new ParseException(source);
-            }
-            source.MoveForward();
+            var source = new Source(s);
 
             source.SkipWhiteSpace();
 
-            Properties = new List<JProperty>();
-
-            if (source.Is('}'))
-            {
-                source.MoveForward();
-                return;
-            }
-
-            Properties.Add(new JProperty(source, depth));
-            source.SkipWhiteSpace();
-
-            while (source.Is(','))
-            {
-                source.MoveForward();
-                source.SkipWhiteSpace();
-                if (source.IsNot('"'))
-                {
-                    throw new ParseException(source);
-                }
-
-                Properties.Add(new JProperty(source, depth));
-                source.SkipWhiteSpace();
-            }
-
-            if (source.IsNot('}'))
-            {
-                throw new ParseException(source);
-            }
-            source.MoveForward();
-        }
-
-        public IList<JProperty> Properties { get; set; }
-        public int Depth { get; set; }
-
-        public override string ToString(Formatting formatting, int spaceNumber = 4)
-        {
-            if (formatting == Formatting.None)
-            {
-                var builder = new StringBuilder("{");
-
-                var count = Properties.Count;
-                for (var i = 0; i < Properties.Count; i++)
-                {
-                    builder.Append(Properties[i].ToString(formatting));
-                    if (i != count - 1)
-                    {
-                        builder.Append(",");
-                    }
-                }
-
-                builder.Append("}");
-
-                return builder.ToString();
-            }
-            else
-            {
-                var space = new string(' ', spaceNumber * Depth);
-                var propertiesSpace = new string(' ', spaceNumber * (Depth + 1));
-
-                var builder = new StringBuilder("{\n");
-                builder.Append(propertiesSpace);
-
-                var count = Properties.Count;
-                for (var i = 0; i < Properties.Count; i++)
-                {
-                    builder.Append(Properties[i].ToString(formatting));
-                    if (i != count - 1)
-                    {
-                        builder.Append(",\n");
-                        builder.Append(propertiesSpace);
-                    }
-                }
-
-                builder.Append('\n');
-                builder.Append(space);
-                builder.Append("}");
-
-                return builder.ToString();
-            }
+            return Convert(source, 0);
         }
     }
 }

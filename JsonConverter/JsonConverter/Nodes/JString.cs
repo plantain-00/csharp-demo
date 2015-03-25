@@ -1,6 +1,6 @@
 ﻿namespace JsonConverter.Nodes
 {
-    public class JString : JToken
+    public class JString : JObject
     {
         public JString()
         {

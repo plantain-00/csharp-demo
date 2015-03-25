@@ -1,6 +1,6 @@
 ﻿namespace JsonConverter.Nodes
 {
-    public class JNull : JToken
+    public class JNull : JObject
     {
         private const string NULL_STRING = "null";
 

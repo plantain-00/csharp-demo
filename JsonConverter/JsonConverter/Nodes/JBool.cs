@@ -1,6 +1,6 @@
 ﻿namespace JsonConverter.Nodes
 {
-    public class JBool : JToken
+    public class JBool : JObject
     {
         private const string TRUE_STRING = "true";
         private const string FALSE_STRING = "false";

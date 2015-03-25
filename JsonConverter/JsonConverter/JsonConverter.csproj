@@ -44,8 +44,9 @@
     <Compile Include="Nodes\JKey.cs" />
     <Compile Include="Nodes\JNull.cs" />
     <Compile Include="Nodes\JNumber.cs" />
-    <Compile Include="Nodes\JObject.cs" />
+    <Compile Include="Nodes\JClass.cs" />
     <Compile Include="Nodes\JBool.cs" />
+    <Compile Include="Nodes\JObject.cs" />
     <Compile Include="Nodes\JProperty.cs" />
     <Compile Include="Nodes\JString.cs" />
     <Compile Include="Nodes\JToken.cs" />

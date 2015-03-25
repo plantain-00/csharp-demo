@@ -2,7 +2,7 @@
 
 namespace JsonConverter.Nodes
 {
-    public class JNumber : JToken
+    public class JNumber : JObject
     {
         public JNumber()
         {
