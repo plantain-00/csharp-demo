@@ -1,5 +1,7 @@
 ﻿using System;
 
+using JsonConverter.Nodes;
+
 namespace JsonConverter.Console
 {
     internal class Program
@@ -7,7 +9,7 @@ namespace JsonConverter.Console
         private static void Main(string[] args)
         {
             const string JSON = "{\"name\":\"aaa\",\"age\":123,\"is_boy\":true,\"anything_else\":null}";
-            var o = new Json(JSON);
+            var o = JToken.Convert(JSON);
             var s = o.ToString();
         }
     }
