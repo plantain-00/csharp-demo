@@ -14,13 +14,7 @@ namespace JsonConverter
 
         public int Index { get; private set; }
 
-        public bool IsTail
-        {
-            get
-            {
-                return Index == _s.Length - 1;
-            }
-        }
+        public bool IsTail { get; private set; }
 
         public int Length
         {
@@ -67,6 +61,10 @@ namespace JsonConverter
             if (Index + step < _s.Length)
             {
                 Index += step;
+            }
+            else
+            {
+                IsTail = true;
             }
         }
 

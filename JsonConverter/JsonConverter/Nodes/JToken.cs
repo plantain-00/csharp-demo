@@ -16,7 +16,12 @@
             source.SkipWhiteSpace();
             if (source.Is('{'))
             {
-                return new JObject(source, 0);
+                var result = new JObject(source, 0);
+                if (!source.IsTail)
+                {
+                    throw new ParseException(source);
+                }
+                return result;
             }
             throw new ParseException(source);
         }
