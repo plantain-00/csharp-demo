@@ -4,7 +4,7 @@ namespace JsonConverter
 {
     public class ParseException : Exception
     {
-        public ParseException(Source source)
+        public ParseException(Source source, Exception innerException = null) : base(null, innerException)
         {
             Index = source.Index;
 

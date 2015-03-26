@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 namespace JsonConverter.Nodes
 {
@@ -18,7 +19,14 @@ namespace JsonConverter.Nodes
             var startIndex = source.Index;
             source.MoveUntil(c => "\",}]".Any(a => a == c));
             var rawNumber = source.Substring(startIndex, source.Index - startIndex);
-            Number = System.Convert.ToDouble(rawNumber);
+            try
+            {
+                Number = System.Convert.ToDouble(rawNumber);
+            }
+            catch (Exception exception)
+            {
+                throw new ParseException(source, exception);
+            }
         }
 
         public double Number { get; set; }
