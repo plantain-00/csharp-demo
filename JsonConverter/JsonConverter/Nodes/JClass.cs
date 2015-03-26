@@ -4,53 +4,8 @@ using System.Text;
 
 namespace JsonConverter.Nodes
 {
-    public class JClass : JObject
+    public sealed class JClass : JObject
     {
-        public JClass()
-        {
-        }
-
-        internal JClass(Source source, int depth)
-        {
-            Depth = depth;
-            Properties = new List<JProperty>();
-
-            if (source.IsNot('{'))
-            {
-                throw new ParseException(source);
-            }
-            source.MoveForward();
-            source.SkipWhiteSpace();
-
-            if (source.Is('}'))
-            {
-                source.MoveForward();
-                return;
-            }
-
-            Properties.Add(new JProperty(source, depth));
-            source.SkipWhiteSpace();
-
-            while (source.Is(','))
-            {
-                source.MoveForward();
-                source.SkipWhiteSpace();
-                if (source.IsNot('"'))
-                {
-                    throw new ParseException(source);
-                }
-
-                Properties.Add(new JProperty(source, depth));
-                source.SkipWhiteSpace();
-            }
-
-            if (source.IsNot('}'))
-            {
-                throw new ParseException(source);
-            }
-            source.MoveForward();
-        }
-
         public IList<JProperty> Properties { get; set; }
         public int Depth { get; set; }
 
@@ -76,6 +31,52 @@ namespace JsonConverter.Nodes
             {
                 Properties.Single(p => p.Key == key).Value = value;
             }
+        }
+
+        internal static JClass Create(Source source, int depth)
+        {
+            var result = new JClass
+                         {
+                             Depth = depth,
+                             Properties = new List<JProperty>()
+                         };
+
+            if (source.IsNot('{'))
+            {
+                throw new ParseException(source);
+            }
+            source.MoveForward();
+            source.SkipWhiteSpace();
+
+            if (source.Is('}'))
+            {
+                source.MoveForward();
+                return result;
+            }
+
+            result.Properties.Add(JProperty.Create(source, depth));
+            source.SkipWhiteSpace();
+
+            while (source.Is(','))
+            {
+                source.MoveForward();
+                source.SkipWhiteSpace();
+                if (source.IsNot('"'))
+                {
+                    throw new ParseException(source);
+                }
+
+                result.Properties.Add(JProperty.Create(source, depth));
+                source.SkipWhiteSpace();
+            }
+
+            if (source.IsNot('}'))
+            {
+                throw new ParseException(source);
+            }
+            source.MoveForward();
+
+            return result;
         }
 
         public override string ToString(Formatting formatting, int spaceNumber = 4)

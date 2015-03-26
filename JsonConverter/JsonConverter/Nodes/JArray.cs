@@ -3,49 +3,8 @@ using System.Text;
 
 namespace JsonConverter.Nodes
 {
-    public class JArray : JObject
+    public sealed class JArray : JObject
     {
-        public JArray()
-        {
-        }
-
-        internal JArray(Source source, int depth)
-        {
-            Depth = depth;
-            Items = new List<JObject>();
-
-            if (source.IsNot('['))
-            {
-                throw new ParseException(source);
-            }
-            source.MoveForward();
-            source.SkipWhiteSpace();
-
-            if (source.Is(']'))
-            {
-                source.MoveForward();
-                source.SkipWhiteSpace();
-                return;
-            }
-
-            Items.Add(Convert(source, depth));
-            source.SkipWhiteSpace();
-
-            while (source.Is(','))
-            {
-                source.MoveForward();
-                source.SkipWhiteSpace();
-                Items.Add(Convert(source, depth));
-                source.SkipWhiteSpace();
-            }
-
-            if (source.IsNot(']'))
-            {
-                throw new ParseException(source);
-            }
-            source.MoveForward();
-        }
-
         public IList<JObject> Items { get; set; }
         public int Depth { get; set; }
 
@@ -59,6 +18,48 @@ namespace JsonConverter.Nodes
             {
                 Items[index] = value;
             }
+        }
+
+        internal static JArray Create(Source source, int depth)
+        {
+            var result = new JArray
+                         {
+                             Depth = depth,
+                             Items = new List<JObject>()
+                         };
+
+            if (source.IsNot('['))
+            {
+                throw new ParseException(source);
+            }
+            source.MoveForward();
+            source.SkipWhiteSpace();
+
+            if (source.Is(']'))
+            {
+                source.MoveForward();
+                source.SkipWhiteSpace();
+                return result;
+            }
+
+            result.Items.Add(CreateObject(source, depth));
+            source.SkipWhiteSpace();
+
+            while (source.Is(','))
+            {
+                source.MoveForward();
+                source.SkipWhiteSpace();
+                result.Items.Add(CreateObject(source, depth));
+                source.SkipWhiteSpace();
+            }
+
+            if (source.IsNot(']'))
+            {
+                throw new ParseException(source);
+            }
+            source.MoveForward();
+
+            return result;
         }
 
         public override string ToString(Formatting formatting, int spaceNumber = 4)

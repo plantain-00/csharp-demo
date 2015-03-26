@@ -1,12 +1,12 @@
 ﻿namespace JsonConverter.Nodes
 {
-    public class JProperty
+    public sealed class JProperty
     {
-        public JProperty()
-        {
-        }
+        public string Key { get; set; }
+        public JObject Value { get; set; }
+        public int Depth { get; set; }
 
-        internal JProperty(Source source, int depth)
+        internal static JProperty Create(Source source, int depth)
         {
             if (source.IsNot('"'))
             {
@@ -16,7 +16,10 @@
 
             var startIndex = source.Index;
             source.MoveUntil(c => c == '"');
-            Key = source.Substring(startIndex, source.Index - startIndex);
+            var result = new JProperty
+                         {
+                             Key = source.Substring(startIndex, source.Index - startIndex)
+                         };
 
             source.MoveForward();
 
@@ -25,12 +28,10 @@
             source.MoveForward();
             source.SkipWhiteSpace();
 
-            Value = JObject.Convert(source, depth);
-        }
+            result.Value = JObject.CreateObject(source, depth);
 
-        public string Key { get; set; }
-        public JObject Value { get; set; }
-        public int Depth { get; set; }
+            return result;
+        }
 
         public string ToString(Formatting formatting, int spaceNumber = 4)
         {

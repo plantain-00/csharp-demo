@@ -1,12 +1,10 @@
 ﻿namespace JsonConverter.Nodes
 {
-    public class JString : JObject
+    public sealed class JString : JObject
     {
-        public JString()
-        {
-        }
+        public string Value { get; set; }
 
-        internal JString(Source source)
+        internal static JString Create(Source source)
         {
             if (source.IsNot('"'))
             {
@@ -16,12 +14,15 @@
 
             var startIndex = source.Index;
             source.MoveUntil(c => c == '"');
-            Value = source.Substring(startIndex, source.Index - startIndex);
+            var result = new JString
+                         {
+                             Value = source.Substring(startIndex, source.Index - startIndex)
+                         };
 
             source.MoveForward();
-        }
 
-        public string Value { get; set; }
+            return result;
+        }
 
         public override string ToString(Formatting formatting, int spaceNumber = 4)
         {

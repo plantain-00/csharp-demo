@@ -2,44 +2,39 @@
 {
     public abstract class JObject
     {
-        public T As<T>() where T : JObject
-        {
-            return this as T;
-        }
-
-        internal static JObject Convert(Source source, int depth)
+        internal static JObject CreateObject(Source source, int depth)
         {
             if (source.Is('['))
             {
-                return new JArray(source, depth + 1);
+                return JArray.Create(source, depth + 1);
             }
             if (source.Is('{'))
             {
-                return new JClass(source, depth + 1);
+                return JClass.Create(source, depth + 1);
             }
             if (source.Is("true")
                 || source.Is("false"))
             {
-                return new JBool(source);
+                return JBool.Create(source);
             }
             if (source.Is("null"))
             {
-                return new JNull(source);
+                return JNull.Create(source);
             }
             if (source.Is('"'))
             {
-                return new JString(source);
+                return JString.Create(source);
             }
-            return new JNumber(source);
+            return JNumber.Create(source);
         }
 
-        public static JObject Convert(string s)
+        public static JObject Create(string s)
         {
             var source = new Source(s);
 
             source.SkipWhiteSpace();
 
-            return Convert(source, 0);
+            return CreateObject(source, 0);
         }
 
         public abstract string ToString(Formatting formatting, int spaceNumber = 4);

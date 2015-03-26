@@ -1,20 +1,23 @@
 ﻿namespace JsonConverter.Nodes
 {
-    public class JNull : JObject
+    public sealed class JNull : JObject
     {
         private const string NULL_STRING = "null";
 
-        public JNull()
+        public static readonly JNull Null = new JNull();
+
+        private JNull()
         {
         }
 
-        internal JNull(Source source)
+        internal static JNull Create(Source source)
         {
             if (source.IsNot(NULL_STRING))
             {
                 throw new ParseException(source);
             }
             source.MoveForward(NULL_STRING.Length);
+            return Null;
         }
 
         public override string ToString(Formatting formatting, int spaceNumber = 4)

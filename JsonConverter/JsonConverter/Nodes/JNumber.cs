@@ -3,13 +3,9 @@ using System.Linq;
 
 namespace JsonConverter.Nodes
 {
-    public class JNumber : JObject
+    public sealed class JNumber : JObject
     {
-        public JNumber()
-        {
-        }
-
-        internal JNumber(Source source)
+        internal static JNumber Create(Source source)
         {
             if ("\":[{".Any(c => source.Is(c)))
             {
@@ -21,7 +17,11 @@ namespace JsonConverter.Nodes
             var rawNumber = source.Substring(startIndex, source.Index - startIndex);
             try
             {
-                Number = System.Convert.ToDouble(rawNumber);
+                var result = new JNumber
+                             {
+                                 Number = Convert.ToDouble(rawNumber)
+                             };
+                return result;
             }
             catch (Exception exception)
             {

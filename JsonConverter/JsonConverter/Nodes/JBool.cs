@@ -1,35 +1,41 @@
 ﻿namespace JsonConverter.Nodes
 {
-    public class JBool : JObject
+    public sealed class JBool : JObject
     {
         private const string TRUE_STRING = "true";
         private const string FALSE_STRING = "false";
 
-        public JBool()
+        public static readonly JBool True = new JBool
+                                            {
+                                                Value = true
+                                            };
+        public static readonly JBool False = new JBool
+                                             {
+                                                 Value = false
+                                             };
+
+        private JBool()
         {
         }
 
-        internal JBool(Source source)
+        public bool Value { get; private set; }
+
+        internal static JBool Create(Source source)
         {
             if (source.Is(TRUE_STRING))
             {
                 source.MoveForward(TRUE_STRING.Length);
 
-                Value = true;
+                return True;
             }
-            else if (source.Is(FALSE_STRING))
+            if (source.Is(FALSE_STRING))
             {
                 source.MoveForward(FALSE_STRING.Length);
 
-                Value = false;
+                return False;
             }
-            else
-            {
-                throw new ParseException(source);
-            }
+            throw new ParseException(source);
         }
-
-        public bool Value { get; set; }
 
         public override string ToString(Formatting formatting, int spaceNumber = 4)
         {
