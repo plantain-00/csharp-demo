@@ -13,7 +13,15 @@
 
             source.SkipWhiteSpace();
 
-            return Attribute.Create(source);
+            var result = Attribute.Create(source);
+
+            source.SkipWhiteSpace();
+            if (!source.IsTail)
+            {
+                throw new ParseException(source);
+            }
+
+            return result;
         }
     }
 }

@@ -40,6 +40,7 @@ namespace XmlConverter.Nodes
                 startIndex = source.Index;
                 source.MoveUntil(c => c == '\'');
                 result.Value = source.Substring(startIndex, source.Index - startIndex);
+                source.MoveForward();
             }
             else if (source.Is('"'))
             {
@@ -47,6 +48,7 @@ namespace XmlConverter.Nodes
                 startIndex = source.Index;
                 source.MoveUntil(c => c == '"');
                 result.Value = source.Substring(startIndex, source.Index - startIndex);
+                source.MoveForward();
             }
             else
             {

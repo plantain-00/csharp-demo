@@ -34,7 +34,15 @@
 
             source.SkipWhiteSpace();
 
-            return CreateObject(source, 0);
+            var result = CreateObject(source, 0);
+
+            source.SkipWhiteSpace();
+            if (!source.IsTail)
+            {
+                throw new ParseException(source);
+            }
+
+            return result;
         }
 
         public abstract string ToString(Formatting formatting, int spaceNumber = 4);

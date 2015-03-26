@@ -53,7 +53,7 @@ namespace XmlConverter
                     return;
                 }
             }
-            throw new Exception();
+            IsTail = true;
         }
 
         public void MoveForward(int step = 1)
