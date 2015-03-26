@@ -1,6 +1,6 @@
 ﻿namespace JsonConverter.Nodes
 {
-    public class JProperty : JToken
+    public class JProperty
     {
         public JProperty()
         {
@@ -32,13 +32,18 @@
         public JObject Value { get; set; }
         public int Depth { get; set; }
 
-        public override string ToString(Formatting formatting, int spaceNumber = 4)
+        public string ToString(Formatting formatting, int spaceNumber = 4)
         {
             if (formatting == Formatting.None)
             {
                 return string.Format("\"{0}\":{1}", Key, Value.ToString(formatting));
             }
             return string.Format("\"{0}\" : {1}", Key, Value.ToString(formatting));
+        }
+
+        public override string ToString()
+        {
+            return ToString(Formatting.None);
         }
     }
 }

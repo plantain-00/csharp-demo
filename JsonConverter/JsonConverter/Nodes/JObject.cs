@@ -1,8 +1,8 @@
 ﻿namespace JsonConverter.Nodes
 {
-    public abstract class JObject : JToken
+    public abstract class JObject
     {
-        public new T As<T>() where T : JObject
+        public T As<T>() where T : JObject
         {
             return this as T;
         }
@@ -40,6 +40,13 @@
             source.SkipWhiteSpace();
 
             return Convert(source, 0);
+        }
+
+        public abstract string ToString(Formatting formatting, int spaceNumber = 4);
+
+        public override string ToString()
+        {
+            return ToString(Formatting.None);
         }
     }
 }
