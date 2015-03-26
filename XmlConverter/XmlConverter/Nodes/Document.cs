@@ -13,7 +13,8 @@
 
             source.SkipWhiteSpace();
 
-            var result = Attribute.Create(source);
+            //var result = Attribute.Create(source);
+            var result = Comment.Create(source);
 
             source.SkipWhiteSpace();
             if (!source.IsTail)

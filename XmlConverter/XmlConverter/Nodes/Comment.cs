@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace XmlConverter.Nodes
+﻿namespace XmlConverter.Nodes
 {
     public class Comment : XmlBase
     {
@@ -11,7 +9,7 @@ namespace XmlConverter.Nodes
 
         public override string ToString(Formatting formatting, int spaceNumber = 4)
         {
-            throw new NotImplementedException();
+            return string.Format("{0}{1}{2}", COMMENT_START, Value, COMMENT_END);
         }
 
         internal static Comment Create(Source source)
@@ -28,8 +26,9 @@ namespace XmlConverter.Nodes
             source.MoveUntil(c => source.Is(COMMENT_END));
             var result = new Comment
                          {
-                             Value = source.Substring(startIndex, source.Index - startIndex)
+                             Value = source.Substring(startIndex, source.Index - startIndex).Trim()
                          };
+            source.MoveForward(COMMENT_END.Length);
 
             return result;
         }
