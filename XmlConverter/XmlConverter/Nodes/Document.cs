@@ -2,21 +2,26 @@
 {
     public class Document : XmlBase
     {
+        public Declaration Declaration { get; set; }
+        public Element Body { get; set; }
+
         public override string ToString(Formatting formatting, int spaceNumber = 4)
         {
-            throw new System.NotImplementedException();
+            return string.Format("{0}{1}", Declaration, Body);
         }
 
-        public static XmlBase Create(string xml)
+        public static Document Create(string xml)
         {
             var source = new Source(xml);
 
             source.SkipWhiteSpace();
 
-            //var result = Attribute.Create(source);
-            //var result = Comment.Create(source);
-            //var result = Declaration.Create(source);
-            var result = Element.Create(source);
+            var result = new Document
+                         {
+                             Declaration = Declaration.Create(source)
+                         };
+            source.SkipWhiteSpace();
+            result.Body = Element.Create(source);
 
             source.SkipWhiteSpace();
             if (!source.IsTail)
