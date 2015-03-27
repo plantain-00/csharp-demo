@@ -24,11 +24,9 @@
 
             source.SkipWhiteSpace();
 
-            var startIndex = source.Index;
-            source.MoveUntil(c => source.Is(COMMENT_END));
             var result = new Comment
                          {
-                             Value = source.Substring(startIndex, source.Index - startIndex).Trim(),
+                             Value = source.TakeUntil(c => source.Is(COMMENT_END)).Trim(),
                              Depth = depth
                          };
             source.MoveForward(COMMENT_END.Length);

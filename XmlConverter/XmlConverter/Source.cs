@@ -56,6 +56,20 @@ namespace XmlConverter
             IsTail = true;
         }
 
+        public string TakeUntil(Func<char, bool> condition)
+        {
+            var startIndex = Index;
+            for (; Index < _s.Length; Index++)
+            {
+                if (condition(_s[Index]))
+                {
+                    return Substring(startIndex, Index - startIndex);
+                }
+            }
+            IsTail = true;
+            return Substring(startIndex, Index - startIndex);
+        }
+
         public void MoveForward(int step = 1)
         {
             if (Index + step < _s.Length)

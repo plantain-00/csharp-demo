@@ -62,11 +62,9 @@ namespace XmlConverter.Nodes
             source.MoveForward();
 
             source.SkipWhiteSpace();
-            var startIndex = source.Index;
-            source.MoveUntil(c => " >/".Any(a => a == c));
             var result = new Element
                          {
-                             Name = source.Substring(startIndex, source.Index - startIndex),
+                             Name = source.TakeUntil(c => " >/".Any(a => a == c)),
                              Depth = depth
                          };
 

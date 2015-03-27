@@ -18,11 +18,9 @@
         {
             source.ExpectNot('<');
 
-            var startIndex = source.Index;
-            source.MoveUntil(c => c == '<');
             var result = new PlainText
                          {
-                             Text = source.Substring(startIndex, source.Index - startIndex),
+                             Text = source.TakeUntil(c => c == '<'),
                              Depth = depth
                          };
             return result;

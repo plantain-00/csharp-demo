@@ -19,12 +19,9 @@ namespace XmlConverter.Nodes
                 throw new ParseException(source);
             }
 
-            var startIndex = source.Index;
-            source.MoveUntil(c => " =".Any(a => a == c));
-
             var result = new Attribute
                          {
-                             Key = source.Substring(startIndex, source.Index - startIndex)
+                             Key = source.TakeUntil(c => " =".Any(a => a == c))
                          };
             source.MoveForward();
 
@@ -33,17 +30,13 @@ namespace XmlConverter.Nodes
             if (source.Is('\''))
             {
                 source.MoveForward();
-                startIndex = source.Index;
-                source.MoveUntil(c => c == '\'');
-                result.Value = source.Substring(startIndex, source.Index - startIndex);
+                result.Value = source.TakeUntil(c => c == '\'');
                 source.MoveForward();
             }
             else if (source.Is('"'))
             {
                 source.MoveForward();
-                startIndex = source.Index;
-                source.MoveUntil(c => c == '"');
-                result.Value = source.Substring(startIndex, source.Index - startIndex);
+                result.Value = source.TakeUntil(c => c == '"');
                 source.MoveForward();
             }
             else
