@@ -45,8 +45,8 @@
     <Compile Include="Nodes\Declaration.cs" />
     <Compile Include="Nodes\Document.cs" />
     <Compile Include="Nodes\Element.cs" />
-    <Compile Include="Nodes\EndTag.cs" />
-    <Compile Include="Nodes\StartTag.cs" />
+    <Compile Include="Nodes\Node.cs" />
+    <Compile Include="Nodes\PlainText.cs" />
     <Compile Include="Nodes\XmlBase.cs" />
     <Compile Include="ParseException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

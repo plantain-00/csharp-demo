@@ -42,14 +42,16 @@ namespace XmlConverter.Nodes
             }
             source.MoveForward("xml".Length);
 
-            var result = new Declaration
-                         {
-                             Attributes = new List<Attribute>()
-                         };
+            var result = new Declaration();
             source.SkipWhiteSpace();
             while ("/>=?".All(c => source.IsNot(c)))
             {
+                if (result.Attributes == null)
+                {
+                    result.Attributes = new List<Attribute>();
+                }
                 result.Attributes.Add(Attribute.Create(source));
+                source.SkipWhiteSpace();
             }
 
             source.SkipWhiteSpace();

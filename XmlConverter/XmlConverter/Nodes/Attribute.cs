@@ -9,11 +9,7 @@ namespace XmlConverter.Nodes
 
         public override string ToString(Formatting formatting, int spaceNumber = 4)
         {
-            if (formatting == Formatting.None)
-            {
-                return string.Format("{0}:\"{1}\"", Key, Value);
-            }
-            return string.Format("{0} : \"{1}\"", Key, Value);
+            return string.Format("{0}:\"{1}\"", Key, Value);
         }
 
         internal static Attribute Create(Source source)
@@ -24,11 +20,11 @@ namespace XmlConverter.Nodes
             }
 
             var startIndex = source.Index;
-            source.MoveUntil(c => c == '=');
+            source.MoveUntil(c => " =".Any(a => a == c));
 
             var result = new Attribute
                          {
-                             Key = source.Substring(startIndex, source.Index - startIndex).Trim()
+                             Key = source.Substring(startIndex, source.Index - startIndex)
                          };
             source.MoveForward();
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace XmlConverter
 {
@@ -12,7 +13,7 @@ namespace XmlConverter
             Index = index;
         }
 
-        public int Index { get; private set; }
+        public int Index { get; set; }
 
         public bool IsTail { get; private set; }
 
