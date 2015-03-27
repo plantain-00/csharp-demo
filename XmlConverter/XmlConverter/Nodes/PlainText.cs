@@ -6,10 +6,15 @@
 
         public override string ToString(Formatting formatting, int spaceNumber = 4)
         {
-            return Text;
+            if (formatting == Formatting.None)
+            {
+                return Text;
+            }
+            var spaces = new string(' ', Depth * spaceNumber);
+            return spaces + Text + "\n";
         }
 
-        internal static PlainText Create(Source source)
+        internal static PlainText Create(Source source, int depth)
         {
             if (source.Is('<'))
             {
@@ -20,7 +25,8 @@
             source.MoveUntil(c => c == '<');
             var result = new PlainText
                          {
-                             Text = source.Substring(startIndex, source.Index - startIndex)
+                             Text = source.Substring(startIndex, source.Index - startIndex),
+                             Depth = depth
                          };
             return result;
         }

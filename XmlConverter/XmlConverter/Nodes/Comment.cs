@@ -9,10 +9,15 @@
 
         public override string ToString(Formatting formatting, int spaceNumber = 4)
         {
-            return string.Format("{0}{1}{2}", COMMENT_START, Value, COMMENT_END);
+            if (formatting == Formatting.None)
+            {
+                return string.Format("{0}{1}{2}", COMMENT_START, Value, COMMENT_END);
+            }
+            var spaces = new string(' ', Depth * spaceNumber);
+            return string.Format("{3}{0}{1}{2}\n", COMMENT_START, Value, COMMENT_END, spaces);
         }
 
-        internal static Comment Create(Source source)
+        internal static Comment Create(Source source, int depth)
         {
             if (source.IsNot(COMMENT_START))
             {
@@ -26,7 +31,8 @@
             source.MoveUntil(c => source.Is(COMMENT_END));
             var result = new Comment
                          {
-                             Value = source.Substring(startIndex, source.Index - startIndex).Trim()
+                             Value = source.Substring(startIndex, source.Index - startIndex).Trim(),
+                             Depth = depth
                          };
             source.MoveForward(COMMENT_END.Length);
 

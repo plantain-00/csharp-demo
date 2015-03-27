@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
@@ -23,6 +22,24 @@ namespace XmlConverter.Nodes
                 }
             }
             var children = new StringBuilder();
+
+            if (formatting == Formatting.None)
+            {
+                if (ChildElements != null)
+                {
+                    foreach (var childElement in ChildElements)
+                    {
+                        children.Append(childElement.ToString(formatting));
+                    }
+                }
+                if (ChildElements == null)
+                {
+                    return string.Format("<{0}{1} />", Name, attributes);
+                }
+                return string.Format("<{0}{1} >{2}</{0}>", Name, attributes, children);
+            }
+
+            var spaces = new string(' ', Depth * spaceNumber);
             if (ChildElements != null)
             {
                 foreach (var childElement in ChildElements)
@@ -30,23 +47,14 @@ namespace XmlConverter.Nodes
                     children.Append(childElement.ToString(formatting));
                 }
             }
-
-            if (formatting == Formatting.None)
-            {
-                if (ChildElements == null)
-                {
-                    return string.Format("<{0}{1} />", Name, attributes);
-                }
-                return string.Format("<{0}{1} >{2}</{0}>", Name, attributes, children);
-            }
             if (ChildElements == null)
             {
-                return string.Format("<{0}{1} />", Name, attributes);
+                return string.Format("{2}<{0}{1} />\n", Name, attributes, spaces);
             }
-            return string.Format("<{0}{1} >{2}</{0}>", Name, attributes, children);
+            return string.Format("{2}<{0}{1} >\n{3}{2}</{0}>\n", Name, attributes, spaces, children);
         }
 
-        internal static Element Create(Source source)
+        internal static Element Create(Source source, int depth)
         {
             if (source.IsNot('<'))
             {
@@ -59,7 +67,8 @@ namespace XmlConverter.Nodes
             source.MoveUntil(c => " >/".Any(a => a == c));
             var result = new Element
                          {
-                             Name = source.Substring(startIndex, source.Index - startIndex)
+                             Name = source.Substring(startIndex, source.Index - startIndex),
+                             Depth = depth
                          };
 
             source.SkipWhiteSpace();
@@ -75,7 +84,7 @@ namespace XmlConverter.Nodes
             if (source.Is('/'))
             {
                 source.MoveForward();
-                
+
                 source.SkipWhiteSpace();
                 if (source.IsNot('>'))
                 {
@@ -99,15 +108,15 @@ namespace XmlConverter.Nodes
                     }
                     if (source.Is(Comment.COMMENT_START))
                     {
-                        result.ChildElements.Add(Comment.Create(source));
+                        result.ChildElements.Add(Comment.Create(source, depth + 1));
                     }
                     else if (source.Is('<'))
                     {
-                        result.ChildElements.Add(Create(source));
+                        result.ChildElements.Add(Create(source, depth + 1));
                     }
                     else
                     {
-                        result.ChildElements.Add(PlainText.Create(source));
+                        result.ChildElements.Add(PlainText.Create(source, depth + 1));
                     }
 
                     source.SkipWhiteSpace();

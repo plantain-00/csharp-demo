@@ -7,7 +7,11 @@
 
         public override string ToString(Formatting formatting, int spaceNumber = 4)
         {
-            return string.Format("{0}{1}", Declaration, Body);
+            if (formatting == Formatting.None)
+            {
+                return Declaration.ToString(formatting) + Body.ToString(formatting);
+            }
+            return Declaration.ToString(formatting) + "\n" + Body.ToString(formatting);
         }
 
         public static Document Create(string xml)
@@ -21,7 +25,7 @@
                              Declaration = Declaration.Create(source)
                          };
             source.SkipWhiteSpace();
-            result.Body = Element.Create(source);
+            result.Body = Element.Create(source, 0);
 
             source.SkipWhiteSpace();
             if (!source.IsTail)
