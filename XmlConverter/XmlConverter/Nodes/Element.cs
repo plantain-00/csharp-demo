@@ -97,7 +97,11 @@ namespace XmlConverter.Nodes
                     {
                         result.ChildElements = new List<Node>();
                     }
-                    if (source.Is('<'))
+                    if (source.Is(Comment.COMMENT_START))
+                    {
+                        result.ChildElements.Add(Comment.Create(source));
+                    }
+                    else if (source.Is('<'))
                     {
                         result.ChildElements.Add(Create(source));
                     }

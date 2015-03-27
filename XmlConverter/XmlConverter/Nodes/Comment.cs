@@ -1,8 +1,8 @@
 ﻿namespace XmlConverter.Nodes
 {
-    public class Comment : XmlBase
+    public class Comment : Node
     {
-        private const string COMMENT_START = "<!--";
+        public const string COMMENT_START = "<!--";
         private const string COMMENT_END = "-->";
 
         public string Value { get; set; }

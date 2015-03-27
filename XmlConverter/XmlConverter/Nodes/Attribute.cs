@@ -9,7 +9,7 @@ namespace XmlConverter.Nodes
 
         public override string ToString(Formatting formatting, int spaceNumber = 4)
         {
-            return string.Format("{0}:\"{1}\"", Key, Value);
+            return string.Format("{0}=\"{1}\"", Key, Value);
         }
 
         internal static Attribute Create(Source source)
