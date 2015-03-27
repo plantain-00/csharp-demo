@@ -16,10 +16,7 @@
 
         internal static PlainText Create(Source source, int depth)
         {
-            if (source.Is('<'))
-            {
-                throw new ParseException(source);
-            }
+            source.ExpectNot('<');
 
             var startIndex = source.Index;
             source.MoveUntil(c => c == '<');

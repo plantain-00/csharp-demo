@@ -58,10 +58,7 @@ namespace XmlConverter.Nodes
 
         internal static Element Create(Source source, int depth)
         {
-            if (source.IsNot('<'))
-            {
-                throw new ParseException(source);
-            }
+            source.Expect('<');
             source.MoveForward();
 
             source.SkipWhiteSpace();
@@ -88,10 +85,7 @@ namespace XmlConverter.Nodes
                 source.MoveForward();
 
                 source.SkipWhiteSpace();
-                if (source.IsNot('>'))
-                {
-                    throw new ParseException(source);
-                }
+                source.Expect('>');
                 source.MoveForward();
             }
             else if (source.Is('>'))
@@ -99,11 +93,8 @@ namespace XmlConverter.Nodes
                 source.MoveForward();
 
                 source.SkipWhiteSpace();
-                startIndex = source.Index;
                 while (!IsEndTag(source, result.Name))
                 {
-                    source.Index = startIndex;
-
                     if (result.ChildElements == null)
                     {
                         result.ChildElements = new List<Node>();
@@ -122,7 +113,6 @@ namespace XmlConverter.Nodes
                     }
 
                     source.SkipWhiteSpace();
-                    startIndex = source.Index;
                 }
             }
             else
@@ -135,6 +125,8 @@ namespace XmlConverter.Nodes
 
         private static bool IsEndTag(Source source, string tagName)
         {
+            var startIndex = source.Index;
+
             if (source.IsNot('<'))
             {
                 return false;
@@ -144,13 +136,15 @@ namespace XmlConverter.Nodes
             source.SkipWhiteSpace();
             if (source.IsNot('/'))
             {
+                source.Index = startIndex;
                 return false;
             }
             source.MoveForward();
 
             source.SkipWhiteSpace();
-            if (source.IsNot(tagName, 0, true))
+            if (source.IsNot(tagName, true))
             {
+                source.Index = startIndex;
                 return false;
             }
             source.MoveForward(tagName.Length);
@@ -158,6 +152,7 @@ namespace XmlConverter.Nodes
             source.SkipWhiteSpace();
             if (source.IsNot('>'))
             {
+                source.Index = startIndex;
                 return false;
             }
             source.MoveForward();

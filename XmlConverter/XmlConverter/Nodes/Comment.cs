@@ -19,10 +19,7 @@
 
         internal static Comment Create(Source source, int depth)
         {
-            if (source.IsNot(COMMENT_START))
-            {
-                throw new ParseException(source);
-            }
+            source.Expect(COMMENT_START);
             source.MoveForward(COMMENT_START.Length);
 
             source.SkipWhiteSpace();

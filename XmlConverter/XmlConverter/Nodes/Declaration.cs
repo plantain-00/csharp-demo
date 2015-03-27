@@ -22,24 +22,15 @@ namespace XmlConverter.Nodes
         internal static Declaration Create(Source source)
         {
             source.SkipWhiteSpace();
-            if (source.IsNot('<'))
-            {
-                throw new ParseException(source);
-            }
+            source.Expect('<');
             source.MoveForward();
 
             source.SkipWhiteSpace();
-            if (source.IsNot('?'))
-            {
-                throw new ParseException(source);
-            }
+            source.Expect('?');
             source.MoveForward();
 
             source.SkipWhiteSpace();
-            if (source.IsNot("xml", 0, true))
-            {
-                throw new ParseException(source);
-            }
+            source.Expect("xml", true);
             source.MoveForward("xml".Length);
 
             var result = new Declaration();
@@ -55,17 +46,11 @@ namespace XmlConverter.Nodes
             }
 
             source.SkipWhiteSpace();
-            if (source.IsNot('?'))
-            {
-                throw new ParseException(source);
-            }
+            source.Expect('?');
             source.MoveForward();
 
             source.SkipWhiteSpace();
-            if (source.IsNot('>'))
-            {
-                throw new ParseException(source);
-            }
+            source.Expect('>');
             source.MoveForward();
 
             return result;

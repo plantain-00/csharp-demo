@@ -68,9 +68,9 @@ namespace XmlConverter
             }
         }
 
-        public bool Is(char c, int i = 0, bool ignoreCase = false)
+        public bool Is(char c, bool ignoreCase = false)
         {
-            var next = Next(i);
+            var next = Next();
             if (!ignoreCase)
             {
                 return c == next;
@@ -86,28 +86,67 @@ namespace XmlConverter
             return c == next;
         }
 
-        public bool IsNot(char c, int i = 0, bool ignoreCase = false)
+        public bool IsNot(char c, bool ignoreCase = false)
         {
-            return !Is(c, i, ignoreCase);
+            return !Is(c, ignoreCase);
         }
 
-        public bool Is(string s, int i = 0, bool ignoreCase = false)
+        public bool Is(string s, bool ignoreCase = false)
         {
             if (ignoreCase)
             {
-                return String.Equals(_s.Substring(Index + i, s.Length), s, StringComparison.CurrentCultureIgnoreCase);
+                return String.Equals(_s.Substring(Index, s.Length), s, StringComparison.CurrentCultureIgnoreCase);
             }
-            return _s.Substring(Index + i, s.Length) == s;
+            return _s.Substring(Index, s.Length) == s;
         }
 
-        public bool IsNot(string s, int i = 0, bool ignoreCase = false)
+        public bool IsNot(string s, bool ignoreCase = false)
         {
-            return !Is(s, i, ignoreCase);
+            return !Is(s, ignoreCase);
         }
 
         public void SkipWhiteSpace()
         {
             MoveUntil(c => !char.IsWhiteSpace(c));
+        }
+
+        public void Expect(char c, bool ignoreCase = false)
+        {
+            if (IsNot(c))
+            {
+                throw new ParseException(this);
+            }
+        }
+
+        public void Expect(string s, bool ignoreCase = false)
+        {
+            if (IsNot(s))
+            {
+                throw new ParseException(this);
+            }
+        }
+        public void ExpectNot(char c, bool ignoreCase = false)
+        {
+            if (Is(c))
+            {
+                throw new ParseException(this);
+            }
+        }
+
+        public void ExpectNot(string s, bool ignoreCase = false)
+        {
+            if (Is(s))
+            {
+                throw new ParseException(this);
+            }
+        }
+
+        public void ExpectEnd()
+        {
+            if (!IsTail)
+            {
+                throw new ParseException(this);
+            }
         }
     }
 }
