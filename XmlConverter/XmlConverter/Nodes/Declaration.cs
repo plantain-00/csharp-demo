@@ -1,10 +1,72 @@
-﻿namespace XmlConverter.Nodes
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace XmlConverter.Nodes
 {
     public class Declaration : XmlBase
     {
+        public IList<Attribute> Attributes { get; set; }
+
         public override string ToString(Formatting formatting, int spaceNumber = 4)
         {
-            throw new System.NotImplementedException();
+            var builder = new StringBuilder("<?xml");
+            foreach (var attribute in Attributes)
+            {
+                builder.AppendFormat(" {0}", attribute);
+            }
+            builder.Append(" ?>");
+            return builder.ToString();
+        }
+
+        internal static Declaration Create(Source source)
+        {
+            source.SkipWhiteSpace();
+            if (source.IsNot('<'))
+            {
+                throw new ParseException(source);
+            }
+            source.MoveForward();
+
+            source.SkipWhiteSpace();
+            if (source.IsNot('?'))
+            {
+                throw new ParseException(source);
+            }
+            source.MoveForward();
+
+            source.SkipWhiteSpace();
+            if (source.IsNot("xml", 0, true))
+            {
+                throw new ParseException(source);
+            }
+            source.MoveForward("xml".Length);
+
+            var result = new Declaration
+                         {
+                             Attributes = new List<Attribute>()
+                         };
+            source.SkipWhiteSpace();
+            while ("/>=?".All(c => source.IsNot(c)))
+            {
+                result.Attributes.Add(Attribute.Create(source));
+            }
+
+            source.SkipWhiteSpace();
+            if (source.IsNot('?'))
+            {
+                throw new ParseException(source);
+            }
+            source.MoveForward();
+
+            source.SkipWhiteSpace();
+            if (source.IsNot('>'))
+            {
+                throw new ParseException(source);
+            }
+            source.MoveForward();
+
+            return result;
         }
     }
 }

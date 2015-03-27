@@ -18,7 +18,7 @@ namespace XmlConverter.Nodes
 
         internal static Attribute Create(Source source)
         {
-            if ("/>=".Any(c => source.Is(c)))
+            if ("/>=?".Any(c => source.Is(c)))
             {
                 throw new ParseException(source);
             }
