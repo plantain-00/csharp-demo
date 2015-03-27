@@ -34,9 +34,9 @@ namespace XmlConverter.Nodes
                 }
                 if (ChildElements == null)
                 {
-                    return string.Format("<{0}{1} />", Name, attributes);
+                    return string.Format("<{0}{1}/>", Name, attributes);
                 }
-                return string.Format("<{0}{1} >{2}</{0}>", Name, attributes, children);
+                return string.Format("<{0}{1}>{2}</{0}>", Name, attributes, children);
             }
 
             var spaces = new string(' ', Depth * spaceNumber);
@@ -49,9 +49,11 @@ namespace XmlConverter.Nodes
             }
             if (ChildElements == null)
             {
-                return string.Format("{2}<{0}{1} />\n", Name, attributes, spaces);
+                return string.Format("{2}<{0}{1}/>\n", Name, attributes, spaces);
             }
-            return string.Format("{2}<{0}{1} >\n{3}{2}</{0}>\n", Name, attributes, spaces, children);
+            var startLine = string.Format("{2}<{0}{1}>\n", Name, attributes, spaces);
+            var endLine = string.Format("{1}</{0}>\n", Name, spaces);
+            return startLine + children + endLine;
         }
 
         internal static Element Create(Source source, int depth)
