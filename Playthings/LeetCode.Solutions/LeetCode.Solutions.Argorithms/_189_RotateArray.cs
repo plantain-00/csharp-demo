@@ -4,6 +4,11 @@
     {
         public void Rotate(int[] nums, int k)
         {
+            if (nums == null
+                || nums.Length == 0)
+            {
+                return;
+            }
             if (k >= nums.Length)
             {
                 k %= nums.Length;
@@ -12,64 +17,26 @@
             {
                 return;
             }
-            var common = GetGreatestCommonDivisor(nums.Length, k);
 
-            var loop = nums.Length / common;
-            for (var i = 0; i < common; i++)
+            var nowIndex = 0;
+            var tmp = nums[0];
+            var loopIndex = 0;
+            for (var i = 0; i < nums.Length; i++)
             {
-                var tmp = nums[i];
-                var index = i;
-                for (var j = 0; j < loop; j++)
+                nowIndex = (k + nowIndex) % nums.Length;
+
+                //swap between tmp and nowIndex
+                var tmp1 = tmp;
+                tmp = nums[nowIndex];
+                nums[nowIndex] = tmp1;
+
+                if (nowIndex == loopIndex)
                 {
-                    if (j == loop - 1)
-                    {
-                        nums[index] = tmp;
-                    }
-                    else
-                    {
-                        var newIndex = GetLastIndex(index, nums.Length, k);
-                        nums[index] = nums[newIndex];
-                        index = newIndex;
-                    }
+                    loopIndex++;
+                    nowIndex = loopIndex;
+                    tmp = nums[nowIndex];
                 }
             }
-        }
-
-        private static int GetLastIndex(int index, int n, int k)
-        {
-            if (index < k)
-            {
-                return index + n - k;
-            }
-            return index - k;
-        }
-
-        private static int GetGreatestCommonDivisor(int a, int b)
-        {
-            int larger;
-            int smaller;
-            if (a == b)
-            {
-                return a;
-            }
-            if (a > b)
-            {
-                larger = a;
-                smaller = b;
-            }
-            else
-            {
-                larger = b;
-                smaller = a;
-            }
-            var divider = b;
-            while (divider != 0)
-            {
-                divider = larger % smaller;
-                larger = smaller;
-                smaller = divider;
-            }
-            return larger;
         }
     }
 }

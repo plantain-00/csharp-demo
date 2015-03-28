@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="_188_BestTimeToBuyAndSellStockIV.cs" />
     <Compile Include="_189_RotateArray.cs" />
     <Compile Include="_190_ReverseBits.cs" />
     <Compile Include="_191_NumberOf1Bits.cs" />
