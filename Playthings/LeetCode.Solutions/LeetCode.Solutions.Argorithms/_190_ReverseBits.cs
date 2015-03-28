@@ -1,12 +1,13 @@
 ﻿namespace LeetCode.Solutions.Argorithms
 {
-    public class _191_NumberOf1Bits
+    public class _190_ReverseBits
     {
-        public int HammingWeight(uint n)
+        public uint ReverseBits(uint n)
         {
-            var result = 0;
-            while (n != 0)
+            uint result = 0;
+            for (var i = 0; i < 32; i++)
             {
+                result <<= 1;
                 if ((n & 1) == 1)
                 {
                     result++;
