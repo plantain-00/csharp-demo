@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="_187_RepeatedDNASequences.cs" />
     <Compile Include="_188_BestTimeToBuyAndSellStockIV.cs" />
     <Compile Include="_189_RotateArray.cs" />
     <Compile Include="_190_ReverseBits.cs" />
@@ -46,6 +47,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="_188_.png" />
     <Content Include="_189_.png" />
     <Content Include="_190_.png" />
     <Content Include="_191_.png" />
