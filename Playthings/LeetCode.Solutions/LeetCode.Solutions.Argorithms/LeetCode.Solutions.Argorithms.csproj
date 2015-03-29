@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="_173_BinarySearchTreeIterator.cs" />
     <Compile Include="_174_DungeonGame.cs" />
     <Compile Include="_179_LargestNumber.cs" />
     <Compile Include="_187_RepeatedDNASequences.cs" />
@@ -49,6 +50,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="_173_.png" />
     <Content Include="_174_.png" />
     <Content Include="_188_.png" />
     <Content Include="_189_.png" />
