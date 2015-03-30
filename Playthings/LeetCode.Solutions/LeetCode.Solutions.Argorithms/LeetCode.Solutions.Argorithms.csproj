@@ -39,6 +39,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="_165_CompareVersionNumbers.cs" />
+    <Compile Include="_168_ExcelSheetColumnTitle.cs" />
+    <Compile Include="_169_MajorityElement.cs" />
+    <Compile Include="_171_ExcelSheetColumnNumber.cs" />
+    <Compile Include="_172_TrailingZeroes.cs" />
     <Compile Include="_173_BinarySearchTreeIterator.cs" />
     <Compile Include="_174_DungeonGame.cs" />
     <Compile Include="_179_LargestNumber.cs" />
