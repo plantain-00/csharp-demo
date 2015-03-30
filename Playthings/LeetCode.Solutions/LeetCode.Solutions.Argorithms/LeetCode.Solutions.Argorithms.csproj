@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="_162_FindPeakElement.cs" />
     <Compile Include="_165_CompareVersionNumbers.cs" />
     <Compile Include="_168_ExcelSheetColumnTitle.cs" />
     <Compile Include="_169_MajorityElement.cs" />
