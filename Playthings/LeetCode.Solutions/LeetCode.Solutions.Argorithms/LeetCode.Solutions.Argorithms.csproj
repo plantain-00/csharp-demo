@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="_155_MinStack.cs" />
     <Compile Include="_160_IntersectionOfTwoLinkedLists.cs" />
     <Compile Include="_162_FindPeakElement.cs" />
     <Compile Include="_165_CompareVersionNumbers.cs" />
