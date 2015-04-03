@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="BSTIteratorTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="_160_IntersectionOfTwoLinkedListsTests.cs" />
     <Compile Include="_162_FindPeakElementTests.cs" />
     <Compile Include="_168_ExcelSheetColumnTitleTests.cs" />
     <Compile Include="_174_DungeonGameTests.cs" />
