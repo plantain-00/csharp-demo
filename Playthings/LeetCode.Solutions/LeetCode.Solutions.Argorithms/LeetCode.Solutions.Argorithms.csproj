@@ -57,6 +57,7 @@
     <Compile Include="_191_NumberOf1Bits.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="_199_BinaryTreeRightSideView.cs" />
+    <Compile Include="_200_NumberOfIslands.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="_173_.png" />

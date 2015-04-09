@@ -62,6 +62,7 @@
     <Compile Include="_189_RotateArrayTests.cs" />
     <Compile Include="_190_ReverseBitsTests.cs" />
     <Compile Include="_191_NumberOf1BitsTests.cs" />
+    <Compile Include="_200_NumberOfIslandsTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LeetCode.Solutions.Argorithms\LeetCode.Solutions.Argorithms.csproj">
