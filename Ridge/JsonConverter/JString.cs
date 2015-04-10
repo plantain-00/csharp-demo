@@ -9,14 +9,14 @@ namespace JsonConverter
         internal static JString Create(Source source)
         {
             source.Expect('"');
-            source.Skip();
+            source.SkipIt();
 
             var result = new JString
                          {
                              Value = source.TakeUntil(c => c == '"')
                          };
 
-            source.Skip();
+            source.SkipIt();
 
             return result;
         }

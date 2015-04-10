@@ -11,18 +11,18 @@ namespace JsonConverter
         internal static JProperty Create(Source source, int depth)
         {
             source.Expect('"');
-            source.Skip();
+            source.SkipIt();
 
             var result = new JProperty
                          {
                              Key = source.TakeUntil(c => c == '"')
                          };
 
-            source.Skip();
+            source.SkipIt();
 
             source.SkipWhiteSpace();
             source.Expect(':');
-            source.Skip();
+            source.SkipIt();
             source.SkipWhiteSpace();
 
             result.Value = JObject.CreateObject(source, depth);

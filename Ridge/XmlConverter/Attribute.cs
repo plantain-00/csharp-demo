@@ -16,7 +16,7 @@ namespace XmlConverter
 
         internal static Attribute Create(Source source)
         {
-            if ("/>=?".Any(c => source.Is(c)))
+            if ("/>=?".Any(source.Is))
             {
                 throw new ParseException(source);
             }
@@ -25,21 +25,21 @@ namespace XmlConverter
                          {
                              Key = source.TakeUntil(c => " =".Any(a => a == c))
                          };
-            source.Skip();
+            source.SkipIt();
 
             source.SkipWhiteSpace();
 
             if (source.Is('\''))
             {
-                source.Skip();
+                source.SkipIt();
                 result.Value = source.TakeUntil(c => c == '\'');
-                source.Skip();
+                source.SkipIt();
             }
             else if (source.Is('"'))
             {
-                source.Skip();
+                source.SkipIt();
                 result.Value = source.TakeUntil(c => c == '"');
-                source.Skip();
+                source.SkipIt();
             }
             else
             {

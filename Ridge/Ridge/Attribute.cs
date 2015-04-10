@@ -20,7 +20,7 @@ namespace Ridge
 
         internal static Attribute Create(Source source)
         {
-            if (" \r\n</>".Any(c => source.Is(c)))
+            if (" \r\n</>".Any(source.Is))
             {
                 throw new ParseException(source);
             }
@@ -33,24 +33,24 @@ namespace Ridge
 
             if (source.Is('='))
             {
-                source.Skip();
+                source.SkipIt();
 
                 source.SkipWhiteSpace();
-                if ("</>".Any(c => source.Is(c)))
+                if ("</>".Any(source.Is))
                 {
                     throw new ParseException(source);
                 }
                 if (source.Is('\"'))
                 {
-                    source.Skip();
+                    source.SkipIt();
                     result.Value = source.TakeUntil(c => c == '\"');
-                    source.Skip();
+                    source.SkipIt();
                 }
                 else if (source.Is('\''))
                 {
-                    source.Skip();
+                    source.SkipIt();
                     result.Value = source.TakeUntil(c => c == '\'');
-                    source.Skip();
+                    source.SkipIt();
                 }
                 else
                 {

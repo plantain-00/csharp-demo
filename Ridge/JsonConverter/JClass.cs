@@ -44,12 +44,12 @@ namespace JsonConverter
                          };
 
             source.Expect('{');
-            source.Skip();
+            source.SkipIt();
             source.SkipWhiteSpace();
 
             if (source.Is('}'))
             {
-                source.Skip();
+                source.SkipIt();
                 return result;
             }
 
@@ -58,7 +58,7 @@ namespace JsonConverter
 
             while (source.Is(','))
             {
-                source.Skip();
+                source.SkipIt();
                 source.SkipWhiteSpace();
                 source.Expect('"');
 
@@ -67,7 +67,7 @@ namespace JsonConverter
             }
 
             source.Expect('}');
-            source.Skip();
+            source.SkipIt();
 
             return result;
         }

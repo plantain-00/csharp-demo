@@ -52,7 +52,12 @@ namespace ParseLibrary
             return _s.Substring(startIndex, Index - startIndex);
         }
 
-        public void Skip(int step = 1)
+        public void SkipIt()
+        {
+            Skip(1);
+        }
+
+        public void Skip(int step)
         {
             if (Index + step < _s.Length)
             {

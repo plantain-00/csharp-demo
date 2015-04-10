@@ -127,7 +127,7 @@ namespace Ridge
         internal static Tag Create(Source source, int depth)
         {
             source.Expect('<');
-            source.Skip();
+            source.SkipIt();
 
             var result = new Tag
                          {
@@ -154,16 +154,16 @@ namespace Ridge
                 }
                 if (source.Is('/'))
                 {
-                    source.Skip();
+                    source.SkipIt();
                     source.SkipWhiteSpace();
 
                     source.Expect('>');
-                    source.Skip();
+                    source.SkipIt();
                 }
                 else
                 {
                     source.Expect('>');
-                    source.Skip();
+                    source.SkipIt();
                 }
             }
             else
@@ -173,7 +173,7 @@ namespace Ridge
                     result.Attributes.Add(Attribute.Create(source));
                     source.SkipWhiteSpace();
                 }
-                source.Skip();
+                source.SkipIt();
                 source.SkipWhiteSpace();
 
                 result.Children = new List<Node>();

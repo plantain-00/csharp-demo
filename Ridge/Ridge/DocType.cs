@@ -35,7 +35,7 @@ namespace Ridge
             {
                 result.Declaration = string.Empty;
             }
-            source.Skip();
+            source.SkipIt();
 
             return result;
         }
