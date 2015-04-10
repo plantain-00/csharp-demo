@@ -10,23 +10,18 @@ namespace JsonConverter
 
         internal static JProperty Create(Source source, int depth)
         {
-            if (source.IsNot('"'))
-            {
-                throw new ParseException(source);
-            }
+            source.Expect('"');
             source.MoveForward();
 
-            var startIndex = source.Index;
-            source.MoveUntil(c => c == '"');
             var result = new JProperty
                          {
-                             Key = source.Substring(startIndex, source.Index - startIndex)
+                             Key = source.TakeUntil(c => c == '"')
                          };
 
             source.MoveForward();
 
             source.SkipWhiteSpace();
-            source.Is(':');
+            source.Expect(':');
             source.MoveForward();
             source.SkipWhiteSpace();
 

@@ -8,17 +8,12 @@ namespace JsonConverter
 
         internal static JString Create(Source source)
         {
-            if (source.IsNot('"'))
-            {
-                throw new ParseException(source);
-            }
+            source.Expect('"');
             source.MoveForward();
 
-            var startIndex = source.Index;
-            source.MoveUntil(c => c == '"');
             var result = new JString
                          {
-                             Value = source.Substring(startIndex, source.Index - startIndex)
+                             Value = source.TakeUntil(c => c == '"')
                          };
 
             source.MoveForward();

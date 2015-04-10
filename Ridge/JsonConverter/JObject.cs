@@ -39,10 +39,7 @@ namespace JsonConverter
             var result = CreateObject(source, 0);
 
             source.SkipWhiteSpace();
-            if (!source.IsTail)
-            {
-                throw new ParseException(source);
-            }
+            source.ExpectEnd();
 
             return result;
         }

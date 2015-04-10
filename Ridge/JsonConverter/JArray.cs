@@ -30,10 +30,7 @@ namespace JsonConverter
                              Items = new List<JObject>()
                          };
 
-            if (source.IsNot('['))
-            {
-                throw new ParseException(source);
-            }
+            source.Expect('[');
             source.MoveForward();
             source.SkipWhiteSpace();
 
@@ -55,10 +52,7 @@ namespace JsonConverter
                 source.SkipWhiteSpace();
             }
 
-            if (source.IsNot(']'))
-            {
-                throw new ParseException(source);
-            }
+            source.Expect(']');
             source.MoveForward();
 
             return result;

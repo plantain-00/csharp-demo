@@ -14,9 +14,7 @@ namespace JsonConverter
                 throw new ParseException(source);
             }
 
-            var startIndex = source.Index;
-            source.MoveUntil(c => "\",}]".Any(a => a == c));
-            var rawNumber = source.Substring(startIndex, source.Index - startIndex);
+            var rawNumber = source.TakeUntil(c => "\",}]".Any(a => a == c));
             try
             {
                 var result = new JNumber

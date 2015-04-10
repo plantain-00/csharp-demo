@@ -14,10 +14,7 @@ namespace JsonConverter
 
         internal static JNull Create(Source source)
         {
-            if (source.IsNot(NULL_STRING))
-            {
-                throw new ParseException(source);
-            }
+            source.Expect(NULL_STRING);
             source.MoveForward(NULL_STRING.Length);
             return Null;
         }

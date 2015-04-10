@@ -43,10 +43,7 @@ namespace JsonConverter
                              Properties = new List<JProperty>()
                          };
 
-            if (source.IsNot('{'))
-            {
-                throw new ParseException(source);
-            }
+            source.Expect('{');
             source.MoveForward();
             source.SkipWhiteSpace();
 
@@ -63,19 +60,13 @@ namespace JsonConverter
             {
                 source.MoveForward();
                 source.SkipWhiteSpace();
-                if (source.IsNot('"'))
-                {
-                    throw new ParseException(source);
-                }
+                source.Expect('"');
 
                 result.Properties.Add(JProperty.Create(source, depth));
                 source.SkipWhiteSpace();
             }
 
-            if (source.IsNot('}'))
-            {
-                throw new ParseException(source);
-            }
+            source.Expect('}');
             source.MoveForward();
 
             return result;

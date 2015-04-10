@@ -16,35 +16,14 @@ namespace ParseLibrary
 
         public bool IsTail { get; private set; }
 
-        public int Length
-        {
-            get
-            {
-                return _s.Length;
-            }
-        }
-
         public string Context
         {
             get
             {
                 var startIndex = Math.Max(0, Index - 5);
-                var endIndex = Math.Min(Length - 1, Index + 5);
-                return Substring(startIndex, endIndex - startIndex + 1);
+                var endIndex = Math.Min(_s.Length - 1, Index + 5);
+                return _s.Substring(startIndex, endIndex - startIndex + 1);
             }
-        }
-
-        public char Char
-        {
-            get
-            {
-                return _s[Index];
-            }
-        }
-
-        public string Substring(int startIndex, int length)
-        {
-            return _s.Substring(startIndex, length);
         }
 
         public void MoveUntil(Func<char, bool> condition)
@@ -66,11 +45,11 @@ namespace ParseLibrary
             {
                 if (condition(_s[Index]))
                 {
-                    return Substring(startIndex, Index - startIndex);
+                    return _s.Substring(startIndex, Index - startIndex);
                 }
             }
             IsTail = true;
-            return Substring(startIndex, Index - startIndex);
+            return _s.Substring(startIndex, Index - startIndex);
         }
 
         public void MoveForward(int step = 1)
@@ -89,17 +68,17 @@ namespace ParseLibrary
         {
             if (!ignoreCase)
             {
-                return c == Char;
+                return c == _s[Index];
             }
-            if (char.IsUpper(Char))
+            if (char.IsUpper(_s[Index]))
             {
-                return c == Char || c == char.ToLower(Char);
+                return c == _s[Index] || c == char.ToLower(_s[Index]);
             }
-            if (char.IsLower(Char))
+            if (char.IsLower(_s[Index]))
             {
-                return c == Char || c == char.ToUpper(Char);
+                return c == _s[Index] || c == char.ToUpper(_s[Index]);
             }
-            return c == Char;
+            return c == _s[Index];
         }
 
         public bool IsNot(char c, bool ignoreCase = false)
