@@ -1,3 +1,5 @@
+using ParseLibrary;
+
 namespace Ridge.Nodes
 {
     public class DocType : Node

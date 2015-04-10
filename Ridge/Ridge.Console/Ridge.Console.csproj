@@ -50,6 +50,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ParseLibrary\ParseLibrary.csproj">
+      <Project>{A82C9250-B6F7-4789-95E5-0D9AFF74CE04}</Project>
+      <Name>ParseLibrary</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Ridge\Ridge.csproj">
       <Project>{4cad31fd-556a-4f52-a83d-1ddcbea7a030}</Project>
       <Name>Ridge</Name>

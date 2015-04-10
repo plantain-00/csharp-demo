@@ -1,5 +1,7 @@
 using System.Linq;
 
+using ParseLibrary;
+
 namespace Ridge.Nodes
 {
     public class Attribute

@@ -1,6 +1,6 @@
 ﻿using ParseLibrary;
 
-namespace Ridge.Nodes
+namespace XmlConverter
 {
     public class PlainText : Node
     {
@@ -10,18 +10,20 @@ namespace Ridge.Nodes
         {
             if (formatting == Formatting.None)
             {
-                return Text.Trim(' ', '\n', '\r', '\t');
+                return Text;
             }
-            return string.Format("{0}{1}\n", new string(' ', Depth * spaceNumber), Text.Trim(' ', '\n', '\r', '\t'));
+            var spaces = new string(' ', Depth * spaceNumber);
+            return spaces + Text + "\n";
         }
 
         internal static PlainText Create(Source source, int depth)
         {
             source.ExpectNot('<');
+
             var result = new PlainText
                          {
-                             Depth = depth,
-                             Text = source.TakeUntil(c => c == '<')
+                             Text = source.TakeUntil(c => c == '<'),
+                             Depth = depth
                          };
             return result;
         }

@@ -3,6 +3,8 @@ using System.IO;
 using System.Net;
 using System.Text;
 
+using ParseLibrary;
+
 namespace Ridge.Console
 {
     internal class Program
@@ -12,7 +14,7 @@ namespace Ridge.Console
             var html = new XWebClient
                        {
                            Encoding = Encoding.UTF8
-                       }.DownloadString("http://www.cnblogs.com/");
+                       }.DownloadString("http://katproxy.com/");
             var document = new Document(html);
             var streamWriter = new StreamWriter("a.txt", false);
             streamWriter.Write(document.ToString(Formatting.Indented));
