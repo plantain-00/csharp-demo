@@ -23,22 +23,22 @@ namespace XmlConverter
 
             var result = new Attribute
                          {
-                             Key = source.TakeUntil(c => " =".Any(a => a == c))
+                             Key = source.TakeUntilAny(" =")
                          };
             source.SkipIt();
 
-            source.SkipWhiteSpace();
+            source.SkipBlankSpaces();
 
             if (source.Is('\''))
             {
                 source.SkipIt();
-                result.Value = source.TakeUntil(c => c == '\'');
+                result.Value = source.TakeUntil('\'');
                 source.SkipIt();
             }
             else if (source.Is('"'))
             {
                 source.SkipIt();
-                result.Value = source.TakeUntil(c => c == '"');
+                result.Value = source.TakeUntil('"');
                 source.SkipIt();
             }
             else

@@ -34,11 +34,11 @@ namespace JsonConverter
         {
             var source = new Source(s);
 
-            source.SkipWhiteSpace();
+            source.SkipBlankSpaces();
 
             var result = CreateObject(source, 0);
 
-            source.SkipWhiteSpace();
+            source.SkipBlankSpaces();
             source.ExpectEnd();
 
             return result;

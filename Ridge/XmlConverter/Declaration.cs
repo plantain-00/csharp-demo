@@ -23,20 +23,20 @@ namespace XmlConverter
 
         internal static Declaration Create(Source source)
         {
-            source.SkipWhiteSpace();
+            source.SkipBlankSpaces();
             source.Expect('<');
             source.SkipIt();
 
-            source.SkipWhiteSpace();
+            source.SkipBlankSpaces();
             source.Expect('?');
             source.SkipIt();
 
-            source.SkipWhiteSpace();
+            source.SkipBlankSpaces();
             source.Expect("xml", true);
             source.Skip("xml");
 
             var result = new Declaration();
-            source.SkipWhiteSpace();
+            source.SkipBlankSpaces();
             while ("/>=?".All(source.IsNot))
             {
                 if (result.Attributes == null)
@@ -44,14 +44,14 @@ namespace XmlConverter
                     result.Attributes = new List<Attribute>();
                 }
                 result.Attributes.Add(Attribute.Create(source));
-                source.SkipWhiteSpace();
+                source.SkipBlankSpaces();
             }
 
-            source.SkipWhiteSpace();
+            source.SkipBlankSpaces();
             source.Expect('?');
             source.SkipIt();
 
-            source.SkipWhiteSpace();
+            source.SkipBlankSpaces();
             source.Expect('>');
             source.SkipIt();
 

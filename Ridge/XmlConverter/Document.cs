@@ -20,16 +20,16 @@ namespace XmlConverter
         {
             var source = new Source(xml);
 
-            source.SkipWhiteSpace();
+            source.SkipBlankSpaces();
 
             var result = new Document
                          {
                              Declaration = Declaration.Create(source)
                          };
-            source.SkipWhiteSpace();
+            source.SkipBlankSpaces();
             result.Body = Element.Create(source, 0);
 
-            source.SkipWhiteSpace();
+            source.SkipBlankSpaces();
             source.ExpectEnd();
 
             return result;

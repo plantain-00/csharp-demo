@@ -45,7 +45,7 @@ namespace JsonConverter
 
             source.Expect('{');
             source.SkipIt();
-            source.SkipWhiteSpace();
+            source.SkipBlankSpaces();
 
             if (source.Is('}'))
             {
@@ -54,16 +54,16 @@ namespace JsonConverter
             }
 
             result.Properties.Add(JProperty.Create(source, depth));
-            source.SkipWhiteSpace();
+            source.SkipBlankSpaces();
 
             while (source.Is(','))
             {
                 source.SkipIt();
-                source.SkipWhiteSpace();
+                source.SkipBlankSpaces();
                 source.Expect('"');
 
                 result.Properties.Add(JProperty.Create(source, depth));
-                source.SkipWhiteSpace();
+                source.SkipBlankSpaces();
             }
 
             source.Expect('}');

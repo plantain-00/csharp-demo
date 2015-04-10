@@ -16,18 +16,18 @@ namespace Ridge
         public Document(string html) : this()
         {
             var source = new Source(html);
-            source.SkipWhiteSpace();
+            source.SkipBlankSpaces();
             if (source.Is(DocType.NAME, true))
             {
                 Nodes.Add(DocType.Create(source, 0));
             }
 
-            source.SkipWhiteSpace();
+            source.SkipBlankSpaces();
             while (!source.IsTail)
             {
                 Nodes.Add(Node.CreateNode(source, 0));
 
-                source.SkipWhiteSpace();
+                source.SkipBlankSpaces();
             }
         }
 

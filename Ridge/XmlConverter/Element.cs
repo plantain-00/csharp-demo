@@ -63,14 +63,14 @@ namespace XmlConverter
             source.Expect('<');
             source.SkipIt();
 
-            source.SkipWhiteSpace();
+            source.SkipBlankSpaces();
             var result = new Element
                          {
-                             Name = source.TakeUntil(c => " >/".Any(a => a == c)),
+                             Name = source.TakeUntilAny(" >/"),
                              Depth = depth
                          };
 
-            source.SkipWhiteSpace();
+            source.SkipBlankSpaces();
             while (">/".All(source.IsNot))
             {
                 if (result.Attributes == null)
@@ -78,13 +78,13 @@ namespace XmlConverter
                     result.Attributes = new List<Attribute>();
                 }
                 result.Attributes.Add(Attribute.Create(source));
-                source.SkipWhiteSpace();
+                source.SkipBlankSpaces();
             }
             if (source.Is('/'))
             {
                 source.SkipIt();
 
-                source.SkipWhiteSpace();
+                source.SkipBlankSpaces();
                 source.Expect('>');
                 source.SkipIt();
             }
@@ -92,7 +92,7 @@ namespace XmlConverter
             {
                 source.SkipIt();
 
-                source.SkipWhiteSpace();
+                source.SkipBlankSpaces();
                 while (!IsEndTag(source, result.Name))
                 {
                     if (result.ChildElements == null)
@@ -112,7 +112,7 @@ namespace XmlConverter
                         result.ChildElements.Add(PlainText.Create(source, depth + 1));
                     }
 
-                    source.SkipWhiteSpace();
+                    source.SkipBlankSpaces();
                 }
             }
             else
@@ -133,7 +133,7 @@ namespace XmlConverter
             }
             source.SkipIt();
 
-            source.SkipWhiteSpace();
+            source.SkipBlankSpaces();
             if (source.IsNot('/'))
             {
                 source.Index = startIndex;
@@ -141,7 +141,7 @@ namespace XmlConverter
             }
             source.SkipIt();
 
-            source.SkipWhiteSpace();
+            source.SkipBlankSpaces();
             if (source.IsNot(tagName, true))
             {
                 source.Index = startIndex;
@@ -149,7 +149,7 @@ namespace XmlConverter
             }
             source.Skip(tagName);
 
-            source.SkipWhiteSpace();
+            source.SkipBlankSpaces();
             if (source.IsNot('>'))
             {
                 source.Index = startIndex;

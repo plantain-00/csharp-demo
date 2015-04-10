@@ -24,11 +24,11 @@ namespace XmlConverter
             source.Expect(COMMENT_START);
             source.Skip(COMMENT_START);
 
-            source.SkipWhiteSpace();
+            source.SkipBlankSpaces();
 
             var result = new Comment
                          {
-                             Value = source.TakeUntil(c => source.Is(COMMENT_END)).Trim(),
+                             Value = source.TakeUntil(COMMENT_END).Trim(),
                              Depth = depth
                          };
             source.Skip(COMMENT_END);

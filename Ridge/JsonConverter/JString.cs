@@ -13,7 +13,7 @@ namespace JsonConverter
 
             var result = new JString
                          {
-                             Value = source.TakeUntil(c => c == '"')
+                             Value = source.TakeUntil('"')
                          };
 
             source.SkipIt();

@@ -26,10 +26,10 @@ namespace Ridge
                              Depth = depth
                          };
 
-            source.SkipWhiteSpace();
+            source.SkipBlankSpaces();
             if (source.IsNot('>'))
             {
-                result.Declaration = source.TakeUntil(c => c == '>');
+                result.Declaration = source.TakeUntil('>');
             }
             else
             {

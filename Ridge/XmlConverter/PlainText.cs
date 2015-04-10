@@ -22,7 +22,7 @@ namespace XmlConverter
 
             var result = new PlainText
                          {
-                             Text = source.TakeUntil(c => c == '<'),
+                             Text = source.TakeUntil('<'),
                              Depth = depth
                          };
             return result;

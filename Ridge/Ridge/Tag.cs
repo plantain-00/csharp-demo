@@ -131,11 +131,11 @@ namespace Ridge
 
             var result = new Tag
                          {
-                             Name = source.TakeUntil(c => " \r\n</>".Contains(c)),
+                             Name = source.TakeUntilAny(" \r\n</>"),
                              Attributes = new List<Attribute>(),
                              Depth = depth
                          };
-            source.SkipWhiteSpace();
+            source.SkipBlankSpaces();
 
             result.Name.ExpectNot(string.Empty, source);
 
@@ -150,12 +150,12 @@ namespace Ridge
                        && source.IsNot('>'))
                 {
                     result.Attributes.Add(Attribute.Create(source));
-                    source.SkipWhiteSpace();
+                    source.SkipBlankSpaces();
                 }
                 if (source.Is('/'))
                 {
                     source.SkipIt();
-                    source.SkipWhiteSpace();
+                    source.SkipBlankSpaces();
 
                     source.Expect('>');
                     source.SkipIt();
@@ -171,19 +171,20 @@ namespace Ridge
                 while (source.IsNot('>'))
                 {
                     result.Attributes.Add(Attribute.Create(source));
-                    source.SkipWhiteSpace();
+                    source.SkipBlankSpaces();
                 }
                 source.SkipIt();
-                source.SkipWhiteSpace();
+                source.SkipBlankSpaces();
 
                 result.Children = new List<Node>();
 
-                while (source.IsNot("</" + result.Name + ">"))
+                var endNode = "</" + result.Name + ">";
+                while (source.IsNot(endNode))
                 {
                     result.Children.Add(CreateNode(source, depth + 1));
-                    source.SkipWhiteSpace();
+                    source.SkipBlankSpaces();
                 }
-                source.Skip(3 + result.Name.Length);
+                source.Skip(endNode);
             }
 
             return result;

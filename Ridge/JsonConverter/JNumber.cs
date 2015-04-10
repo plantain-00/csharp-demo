@@ -9,12 +9,12 @@ namespace JsonConverter
     {
         internal static JNumber Create(Source source)
         {
-            if ("\":[{".Any(c => source.Is(c)))
+            if ("\":[{".Any(source.Is))
             {
                 throw new ParseException(source);
             }
 
-            var rawNumber = source.TakeUntil(c => "\",}]".Any(a => a == c));
+            var rawNumber = source.TakeUntilAny("\",}]");
             try
             {
                 var result = new JNumber

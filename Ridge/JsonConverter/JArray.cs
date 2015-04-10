@@ -32,24 +32,24 @@ namespace JsonConverter
 
             source.Expect('[');
             source.SkipIt();
-            source.SkipWhiteSpace();
+            source.SkipBlankSpaces();
 
             if (source.Is(']'))
             {
                 source.SkipIt();
-                source.SkipWhiteSpace();
+                source.SkipBlankSpaces();
                 return result;
             }
 
             result.Items.Add(CreateObject(source, depth));
-            source.SkipWhiteSpace();
+            source.SkipBlankSpaces();
 
             while (source.Is(','))
             {
                 source.SkipIt();
-                source.SkipWhiteSpace();
+                source.SkipBlankSpaces();
                 result.Items.Add(CreateObject(source, depth));
-                source.SkipWhiteSpace();
+                source.SkipBlankSpaces();
             }
 
             source.Expect(']');

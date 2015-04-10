@@ -27,15 +27,15 @@ namespace Ridge
 
             var result = new Attribute
                          {
-                             Name = source.TakeUntil(c => " =>/".Contains(c))
+                             Name = source.TakeUntilAny(" =>/")
                          };
-            source.SkipWhiteSpace();
+            source.SkipBlankSpaces();
 
             if (source.Is('='))
             {
                 source.SkipIt();
 
-                source.SkipWhiteSpace();
+                source.SkipBlankSpaces();
                 if ("</>".Any(source.Is))
                 {
                     throw new ParseException(source);
@@ -43,18 +43,18 @@ namespace Ridge
                 if (source.Is('\"'))
                 {
                     source.SkipIt();
-                    result.Value = source.TakeUntil(c => c == '\"');
+                    result.Value = source.TakeUntil('\"');
                     source.SkipIt();
                 }
                 else if (source.Is('\''))
                 {
                     source.SkipIt();
-                    result.Value = source.TakeUntil(c => c == '\'');
+                    result.Value = source.TakeUntil('\'');
                     source.SkipIt();
                 }
                 else
                 {
-                    result.Value = source.TakeUntil(c => " \r\n</>".Contains(c));
+                    result.Value = source.TakeUntilAny(" \r\n</>");
                 }
             }
 

@@ -15,15 +15,15 @@ namespace JsonConverter
 
             var result = new JProperty
                          {
-                             Key = source.TakeUntil(c => c == '"')
+                             Key = source.TakeUntil('"')
                          };
 
             source.SkipIt();
 
-            source.SkipWhiteSpace();
+            source.SkipBlankSpaces();
             source.Expect(':');
             source.SkipIt();
-            source.SkipWhiteSpace();
+            source.SkipBlankSpaces();
 
             result.Value = JObject.CreateObject(source, depth);
 

@@ -25,7 +25,7 @@ namespace Ridge
             var result = new Comment
                          {
                              Depth = depth,
-                             Text = source.TakeUntil(c => source.Is(COMMENT_END))
+                             Text = source.TakeUntil(COMMENT_END)
                          };
             source.Skip(COMMENT_END);
 

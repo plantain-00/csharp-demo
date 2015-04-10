@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace ParseLibrary
 {
@@ -38,7 +39,7 @@ namespace ParseLibrary
             IsTail = true;
         }
 
-        public string TakeUntil(Func<char, bool> condition)
+        private string TakeUntil(Func<char, bool> condition)
         {
             var startIndex = Index;
             for (; Index < _s.Length; Index++)
@@ -52,12 +53,27 @@ namespace ParseLibrary
             return _s.Substring(startIndex, Index - startIndex);
         }
 
+        public string TakeUntilAny(string s)
+        {
+            return TakeUntil(s.Contains);
+        }
+
+        public string TakeUntil(char c)
+        {
+            return TakeUntil(a => a == c);
+        }
+
+        public string TakeUntil(string s)
+        {
+            return TakeUntil(a => Is(s));
+        }
+
         public void SkipIt()
         {
             Skip(1);
         }
 
-        public void Skip(int step)
+        private void Skip(int step)
         {
             if (Index + step < _s.Length)
             {
@@ -98,7 +114,7 @@ namespace ParseLibrary
             return !Is(s, ignoreCase);
         }
 
-        public void SkipWhiteSpace()
+        public void SkipBlankSpaces()
         {
             MoveUntil(c => !char.IsWhiteSpace(c));
         }
