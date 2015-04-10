@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ridge", "Ridge\Ridge.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ridge.Console", "Ridge.Console\Ridge.Console.csproj", "{95968064-5CA3-443E-B414-97B8F9981A3F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ridge.Test", "Ridge.Test\Ridge.Test.csproj", "{6F51DD8E-32B2-43B8-AAE7-DEDDD1BE4E7C}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewsCatcher", "NewsCatcher\NewsCatcher.csproj", "{1443F866-B9DD-4AC0-8972-14CFC0D79307}"
 EndProject
 Global
@@ -25,10 +23,6 @@ Global
 		{95968064-5CA3-443E-B414-97B8F9981A3F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{95968064-5CA3-443E-B414-97B8F9981A3F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{95968064-5CA3-443E-B414-97B8F9981A3F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6F51DD8E-32B2-43B8-AAE7-DEDDD1BE4E7C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6F51DD8E-32B2-43B8-AAE7-DEDDD1BE4E7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6F51DD8E-32B2-43B8-AAE7-DEDDD1BE4E7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6F51DD8E-32B2-43B8-AAE7-DEDDD1BE4E7C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1443F866-B9DD-4AC0-8972-14CFC0D79307}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1443F866-B9DD-4AC0-8972-14CFC0D79307}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1443F866-B9DD-4AC0-8972-14CFC0D79307}.Release|Any CPU.ActiveCfg = Release|Any CPU

@@ -12,10 +12,10 @@ namespace Ridge.Console
             var html = new XWebClient
                        {
                            Encoding = Encoding.UTF8
-                       }.DownloadString("https://kickass.so/");
+                       }.DownloadString("http://www.cnblogs.com/");
             var document = new Document(html);
             var streamWriter = new StreamWriter("a.txt", false);
-            streamWriter.Write(document.ToString(Formatting.None));
+            streamWriter.Write(document.ToString(Formatting.Indented));
             streamWriter.Flush();
         }
     }

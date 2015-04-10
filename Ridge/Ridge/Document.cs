@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 
 using Ridge.Nodes;
-using Ridge.Parsers;
 
 namespace Ridge
 {
@@ -17,47 +16,19 @@ namespace Ridge
 
         public Document(string html) : this()
         {
-            var strings = new LexicalAnalysis().Analyse(html);
-
-            var i = SkipSpaces(strings, 0);
-
-            if (strings[i] == STRING.LESS_THAN
-                && strings[i + 1].Equals(STRING.DOCTYPE, StringComparison.CurrentCultureIgnoreCase))
+            var source = new Source(html);
+            source.SkipWhiteSpace();
+            if (source.Is(DocType.NAME, true))
             {
-                var doctypeParser = new DocTypeParser(strings, i, strings.Count);
-                doctypeParser.Parse();
-
-                Nodes.Add(doctypeParser.DocType);
-
-                i = doctypeParser.Index;
+                Nodes.Add(DocType.Create(source, 0));
             }
 
-            while (i < strings.Count)
+            source.SkipWhiteSpace();
+            while (!source.IsTail)
             {
-                i = SkipSpaces(strings, i);
+                Nodes.Add(Node.CreateNode(source, 0));
 
-                if (strings[i] == STRING.LESS_THAN)
-                {
-                    var tagParser = new TagParser(strings, i, 0, strings.Count);
-                    tagParser.Parse();
-
-                    Nodes.Add(tagParser.Tag);
-                    i = tagParser.Index;
-                }
-                else
-                {
-                    var plainTextParser = new PlainTextParser(strings, i, 0, strings.Count);
-                    plainTextParser.Parse();
-
-                    if (plainTextParser.PlainText != null)
-                    {
-                        Nodes.Add(plainTextParser.PlainText);
-                    }
-                    
-                    i = plainTextParser.Index;
-                }
-
-                i = SkipSpaces(strings, i);
+                source.SkipWhiteSpace();
             }
         }
 
@@ -81,7 +52,7 @@ namespace Ridge
         {
             get
             {
-                var nodes = Nodes.Where(c => c is Tag && (c as Tag).Name.Equals(tagName, StringComparison.CurrentCultureIgnoreCase));
+                var nodes = Nodes.Where(c => c is Tag && (c as Tag).Name.Is(tagName, true));
                 return nodes.ElementAt(index);
             }
         }
@@ -92,16 +63,6 @@ namespace Ridge
             {
                 return Nodes[index];
             }
-        }
-
-        private int SkipSpaces(IReadOnlyList<string> strings, int i)
-        {
-            while (i < strings.Count
-                   && (strings[i] == STRING.SPACE || strings[i] == STRING.RETURN || strings[i] == STRING.NEW_LINE))
-            {
-                i++;
-            }
-            return i;
         }
 
         public Node GetElementById(string id)

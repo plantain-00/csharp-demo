@@ -21,7 +21,7 @@ namespace Ridge.Nodes
         {
             get
             {
-                var nodes = Children.Where(c => c is Tag && (c as Tag).Name.Equals(tagName, StringComparison.CurrentCultureIgnoreCase));
+                var nodes = Children.Where(c => c is Tag && (c as Tag).Name.Is(tagName, true));
                 return nodes.ElementAt(index);
             }
         }
@@ -57,5 +57,23 @@ namespace Ridge.Nodes
         }
 
         public abstract string ToString(Formatting formatting, int spaceNumber = 4);
+
+        public override string ToString()
+        {
+            return ToString(Formatting.None);
+        }
+
+        internal static Node CreateNode(Source source, int depth)
+        {
+            if (source.Is('<'))
+            {
+                if (source.Is(Comment.COMMENT_START))
+                {
+                    return Comment.Create(source, depth);
+                }
+                return Tag.Create(source, depth);
+            }
+            return PlainText.Create(source, depth);
+        }
     }
 }

@@ -10,12 +10,18 @@
             {
                 return Text.Trim(' ', '\n', '\r', '\t');
             }
-            return string.Format("{0}{1}\n", new string(CHAR.SPACE, Depth * spaceNumber), Text.Trim(' ', '\n', '\r', '\t'));
+            return string.Format("{0}{1}\n", new string(' ', Depth * spaceNumber), Text.Trim(' ', '\n', '\r', '\t'));
         }
 
-        public override string ToString()
+        internal static PlainText Create(Source source, int depth)
         {
-            return ToString(Formatting.Indented);
+            source.ExpectNot('<');
+            var result = new PlainText
+                         {
+                             Depth = depth,
+                             Text = source.TakeUntil(c => c == '<')
+                         };
+            return result;
         }
     }
 }

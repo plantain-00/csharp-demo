@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 namespace Ridge.Nodes
@@ -18,7 +17,7 @@ namespace Ridge.Nodes
                 {
                     return null;
                 }
-                var attribute = Attributes.FirstOrDefault(a => a.Name.Equals(name, StringComparison.CurrentCultureIgnoreCase));
+                var attribute = Attributes.FirstOrDefault(a => a.Name.Is(name, true));
                 return attribute == null ? null : attribute.Value;
             }
         }
@@ -51,7 +50,7 @@ namespace Ridge.Nodes
         {
             if (Attributes != null)
             {
-                var attribute = Attributes.FirstOrDefault(a => a.Name.Equals("id", StringComparison.CurrentCultureIgnoreCase));
+                var attribute = Attributes.FirstOrDefault(a => a.Name.Is("id", true));
                 if (attribute != null
                     && attribute.Value == id)
                 {
@@ -95,17 +94,17 @@ namespace Ridge.Nodes
             {
                 if (Children == null)
                 {
-                    return string.Format("{2}<{0}{1}{3}>\n", Name, attributes, new string(CHAR.SPACE, Depth * spaceNumber), slash);
+                    return string.Format("{2}<{0}{1}{3}>\n", Name, attributes, new string(' ', Depth * spaceNumber), slash);
                 }
                 if (Children.Count == 0)
                 {
-                    return string.Format("{2}<{0}{1}{3}></{0}>\n", Name, attributes, new string(CHAR.SPACE, Depth * spaceNumber), slash);
+                    return string.Format("{2}<{0}{1}{3}></{0}>\n", Name, attributes, new string(' ', Depth * spaceNumber), slash);
                 }
                 if (Children.Count == 1
                     && Children[0] is PlainText)
                 {
                     var plainText = Children[0] as PlainText;
-                    return string.Format("{3}<{0}{1}{4}>{2}</{0}>\n", Name, attributes, plainText.ToString(Formatting.None), new string(CHAR.SPACE, Depth * spaceNumber), slash);
+                    return string.Format("{3}<{0}{1}{4}>{2}</{0}>\n", Name, attributes, plainText.ToString(Formatting.None), new string(' ', Depth * spaceNumber), slash);
                 }
 
                 var children = string.Empty;
@@ -114,7 +113,7 @@ namespace Ridge.Nodes
                     children += child.ToString(formatting, spaceNumber);
                 }
 
-                return string.Format("{3}<{0}{1}{4}>\n{2}{3}</{0}>\n", Name, attributes, children, new string(CHAR.SPACE, Depth * spaceNumber), slash);
+                return string.Format("{3}<{0}{1}{4}>\n{2}{3}</{0}>\n", Name, attributes, children, new string(' ', Depth * spaceNumber), slash);
             }
         }
 
@@ -123,9 +122,69 @@ namespace Ridge.Nodes
             return HasSlash ? " /" : "";
         }
 
-        public override string ToString()
+        internal static Tag Create(Source source, int depth)
         {
-            return ToString(Formatting.Indented);
+            source.Expect('<');
+            source.MoveForward();
+
+            var result = new Tag
+                         {
+                             Name = source.TakeUntil(c => " \r\n</>".Contains(c)),
+                             Attributes = new List<Attribute>(),
+                             Depth = depth
+                         };
+            source.SkipWhiteSpace();
+
+            result.Name.ExpectNot(string.Empty, source);
+
+            if (result.Name.Is("input", true)
+                || result.Name.Is("meta", true)
+                || result.Name.Is("link", true)
+                || result.Name.Is("br", true)
+                || result.Name.Is("hr", true)
+                || result.Name.Is("img", true))
+            {
+                while (source.IsNot('/')
+                       && source.IsNot('>'))
+                {
+                    result.Attributes.Add(Attribute.Create(source));
+                    source.SkipWhiteSpace();
+                }
+                if (source.Is('/'))
+                {
+                    source.MoveForward();
+                    source.SkipWhiteSpace();
+
+                    source.Expect('>');
+                    source.MoveForward();
+                }
+                else
+                {
+                    source.Expect('>');
+                    source.MoveForward();
+                }
+            }
+            else
+            {
+                while (source.IsNot('>'))
+                {
+                    result.Attributes.Add(Attribute.Create(source));
+                    source.SkipWhiteSpace();
+                }
+                source.MoveForward();
+                source.SkipWhiteSpace();
+
+                result.Children = new List<Node>();
+
+                while (source.IsNot("</" + result.Name + ">"))
+                {
+                    result.Children.Add(CreateNode(source, depth + 1));
+                    source.SkipWhiteSpace();
+                }
+                source.MoveForward(3 + result.Name.Length);
+            }
+
+            return result;
         }
     }
 }
