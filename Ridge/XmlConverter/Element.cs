@@ -61,7 +61,7 @@ namespace XmlConverter
         internal static Element Create(Source source, int depth)
         {
             source.Expect('<');
-            source.MoveForward();
+            source.Skip();
 
             source.SkipWhiteSpace();
             var result = new Element
@@ -82,15 +82,15 @@ namespace XmlConverter
             }
             if (source.Is('/'))
             {
-                source.MoveForward();
+                source.Skip();
 
                 source.SkipWhiteSpace();
                 source.Expect('>');
-                source.MoveForward();
+                source.Skip();
             }
             else if (source.Is('>'))
             {
-                source.MoveForward();
+                source.Skip();
 
                 source.SkipWhiteSpace();
                 while (!IsEndTag(source, result.Name))
@@ -131,7 +131,7 @@ namespace XmlConverter
             {
                 return false;
             }
-            source.MoveForward();
+            source.Skip();
 
             source.SkipWhiteSpace();
             if (source.IsNot('/'))
@@ -139,7 +139,7 @@ namespace XmlConverter
                 source.Index = startIndex;
                 return false;
             }
-            source.MoveForward();
+            source.Skip();
 
             source.SkipWhiteSpace();
             if (source.IsNot(tagName, true))
@@ -147,7 +147,7 @@ namespace XmlConverter
                 source.Index = startIndex;
                 return false;
             }
-            source.MoveForward(tagName.Length);
+            source.Skip(tagName);
 
             source.SkipWhiteSpace();
             if (source.IsNot('>'))
@@ -155,7 +155,7 @@ namespace XmlConverter
                 source.Index = startIndex;
                 return false;
             }
-            source.MoveForward();
+            source.Skip();
             return true;
         }
     }

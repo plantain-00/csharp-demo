@@ -33,7 +33,7 @@ namespace Ridge
 
             if (source.Is('='))
             {
-                source.MoveForward();
+                source.Skip();
 
                 source.SkipWhiteSpace();
                 if ("</>".Any(c => source.Is(c)))
@@ -42,15 +42,15 @@ namespace Ridge
                 }
                 if (source.Is('\"'))
                 {
-                    source.MoveForward();
+                    source.Skip();
                     result.Value = source.TakeUntil(c => c == '\"');
-                    source.MoveForward();
+                    source.Skip();
                 }
                 else if (source.Is('\''))
                 {
-                    source.MoveForward();
+                    source.Skip();
                     result.Value = source.TakeUntil(c => c == '\'');
-                    source.MoveForward();
+                    source.Skip();
                 }
                 else
                 {

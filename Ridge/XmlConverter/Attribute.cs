@@ -25,21 +25,21 @@ namespace XmlConverter
                          {
                              Key = source.TakeUntil(c => " =".Any(a => a == c))
                          };
-            source.MoveForward();
+            source.Skip();
 
             source.SkipWhiteSpace();
 
             if (source.Is('\''))
             {
-                source.MoveForward();
+                source.Skip();
                 result.Value = source.TakeUntil(c => c == '\'');
-                source.MoveForward();
+                source.Skip();
             }
             else if (source.Is('"'))
             {
-                source.MoveForward();
+                source.Skip();
                 result.Value = source.TakeUntil(c => c == '"');
-                source.MoveForward();
+                source.Skip();
             }
             else
             {

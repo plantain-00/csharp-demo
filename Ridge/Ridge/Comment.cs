@@ -20,14 +20,14 @@ namespace Ridge
         internal static Comment Create(Source source, int depth)
         {
             source.Expect(COMMENT_START);
-            source.MoveForward(COMMENT_START.Length);
+            source.Skip(COMMENT_START);
 
             var result = new Comment
                          {
                              Depth = depth,
                              Text = source.TakeUntil(c => source.Is(COMMENT_END))
                          };
-            source.MoveForward(COMMENT_END.Length);
+            source.Skip(COMMENT_END);
 
             return result;
         }

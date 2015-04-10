@@ -19,7 +19,7 @@ namespace Ridge
         internal static DocType Create(Source source, int depth)
         {
             source.Expect(NAME, true);
-            source.MoveForward(NAME.Length);
+            source.Skip(NAME);
 
             var result = new DocType
                          {
@@ -35,7 +35,7 @@ namespace Ridge
             {
                 result.Declaration = string.Empty;
             }
-            source.MoveForward();
+            source.Skip();
 
             return result;
         }

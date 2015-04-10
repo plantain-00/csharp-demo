@@ -31,12 +31,12 @@ namespace JsonConverter
                          };
 
             source.Expect('[');
-            source.MoveForward();
+            source.Skip();
             source.SkipWhiteSpace();
 
             if (source.Is(']'))
             {
-                source.MoveForward();
+                source.Skip();
                 source.SkipWhiteSpace();
                 return result;
             }
@@ -46,14 +46,14 @@ namespace JsonConverter
 
             while (source.Is(','))
             {
-                source.MoveForward();
+                source.Skip();
                 source.SkipWhiteSpace();
                 result.Items.Add(CreateObject(source, depth));
                 source.SkipWhiteSpace();
             }
 
             source.Expect(']');
-            source.MoveForward();
+            source.Skip();
 
             return result;
         }

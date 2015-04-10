@@ -26,7 +26,7 @@ namespace ParseLibrary
             }
         }
 
-        public void MoveUntil(Func<char, bool> condition)
+        private void MoveUntil(Func<char, bool> condition)
         {
             for (; Index < _s.Length; Index++)
             {
@@ -52,7 +52,7 @@ namespace ParseLibrary
             return _s.Substring(startIndex, Index - startIndex);
         }
 
-        public void MoveForward(int step = 1)
+        public void Skip(int step = 1)
         {
             if (Index + step < _s.Length)
             {
@@ -64,26 +64,19 @@ namespace ParseLibrary
             }
         }
 
-        public bool Is(char c, bool ignoreCase = false)
+        public void Skip(string s)
         {
-            if (!ignoreCase)
-            {
-                return c == _s[Index];
-            }
-            if (char.IsUpper(_s[Index]))
-            {
-                return c == _s[Index] || c == char.ToLower(_s[Index]);
-            }
-            if (char.IsLower(_s[Index]))
-            {
-                return c == _s[Index] || c == char.ToUpper(_s[Index]);
-            }
+            Skip(s.Length);
+        }
+
+        public bool Is(char c)
+        {
             return c == _s[Index];
         }
 
-        public bool IsNot(char c, bool ignoreCase = false)
+        public bool IsNot(char c)
         {
-            return !Is(c, ignoreCase);
+            return c != _s[Index];
         }
 
         public bool Is(string s, bool ignoreCase = false)
@@ -105,7 +98,7 @@ namespace ParseLibrary
             MoveUntil(c => !char.IsWhiteSpace(c));
         }
 
-        public void Expect(char c, bool ignoreCase = false)
+        public void Expect(char c)
         {
             if (IsNot(c))
             {
@@ -115,13 +108,13 @@ namespace ParseLibrary
 
         public void Expect(string s, bool ignoreCase = false)
         {
-            if (IsNot(s))
+            if (IsNot(s, ignoreCase))
             {
                 throw new ParseException(this);
             }
         }
 
-        public void ExpectNot(char c, bool ignoreCase = false)
+        public void ExpectNot(char c)
         {
             if (Is(c))
             {
@@ -131,7 +124,7 @@ namespace ParseLibrary
 
         public void ExpectNot(string s, bool ignoreCase = false)
         {
-            if (Is(s))
+            if (Is(s, ignoreCase))
             {
                 throw new ParseException(this);
             }

@@ -22,7 +22,7 @@ namespace XmlConverter
         internal static Comment Create(Source source, int depth)
         {
             source.Expect(COMMENT_START);
-            source.MoveForward(COMMENT_START.Length);
+            source.Skip(COMMENT_START);
 
             source.SkipWhiteSpace();
 
@@ -31,7 +31,7 @@ namespace XmlConverter
                              Value = source.TakeUntil(c => source.Is(COMMENT_END)).Trim(),
                              Depth = depth
                          };
-            source.MoveForward(COMMENT_END.Length);
+            source.Skip(COMMENT_END);
 
             return result;
         }

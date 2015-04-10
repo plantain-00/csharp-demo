@@ -26,13 +26,13 @@ namespace JsonConverter
         {
             if (source.Is(TRUE_STRING))
             {
-                source.MoveForward(TRUE_STRING.Length);
+                source.Skip(TRUE_STRING);
 
                 return True;
             }
             if (source.Is(FALSE_STRING))
             {
-                source.MoveForward(FALSE_STRING.Length);
+                source.Skip(FALSE_STRING);
 
                 return False;
             }

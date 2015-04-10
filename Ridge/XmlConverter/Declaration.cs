@@ -25,15 +25,15 @@ namespace XmlConverter
         {
             source.SkipWhiteSpace();
             source.Expect('<');
-            source.MoveForward();
+            source.Skip();
 
             source.SkipWhiteSpace();
             source.Expect('?');
-            source.MoveForward();
+            source.Skip();
 
             source.SkipWhiteSpace();
             source.Expect("xml", true);
-            source.MoveForward("xml".Length);
+            source.Skip("xml");
 
             var result = new Declaration();
             source.SkipWhiteSpace();
@@ -49,11 +49,11 @@ namespace XmlConverter
 
             source.SkipWhiteSpace();
             source.Expect('?');
-            source.MoveForward();
+            source.Skip();
 
             source.SkipWhiteSpace();
             source.Expect('>');
-            source.MoveForward();
+            source.Skip();
 
             return result;
         }
