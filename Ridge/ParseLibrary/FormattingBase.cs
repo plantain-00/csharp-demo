@@ -1,8 +1,6 @@
-﻿using ParseLibrary;
-
-namespace XmlConverter
+﻿namespace ParseLibrary
 {
-    public abstract class XmlBase
+    public abstract class FormattingBase
     {
         public abstract string ToString(Formatting formatting, int spaceNumber = 4);
 

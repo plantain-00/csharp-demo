@@ -4,11 +4,9 @@ using System.Text;
 
 using ParseLibrary;
 
-using Ridge.Nodes;
-
 namespace Ridge
 {
-    public class Document
+    public class Document : FormattingBase
     {
         public Document()
         {
@@ -79,7 +77,7 @@ namespace Ridge
             return null;
         }
 
-        public string ToString(Formatting formatting, int spaceNumber = 4)
+        public override string ToString(Formatting formatting, int spaceNumber = 4)
         {
             var builder = new StringBuilder();
             foreach (var node in Nodes)
@@ -87,11 +85,6 @@ namespace Ridge
                 builder.Append(node.ToString(formatting, spaceNumber));
             }
             return builder.ToString();
-        }
-
-        public override string ToString()
-        {
-            return ToString(Formatting.Indented);
         }
     }
 }

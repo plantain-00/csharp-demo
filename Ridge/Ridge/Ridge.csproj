@@ -40,13 +40,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Document.cs" />
-    <Compile Include="Nodes\Attribute.cs" />
-    <Compile Include="Nodes\Comment.cs" />
-    <Compile Include="Nodes\DocType.cs" />
-    <Compile Include="Nodes\Node.cs" />
-    <Compile Include="Nodes\PlainText.cs" />
+    <Compile Include="Attribute.cs" />
+    <Compile Include="Comment.cs" />
+    <Compile Include="DocType.cs" />
+    <Compile Include="Node.cs" />
+    <Compile Include="PlainText.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Nodes\Tag.cs" />
+    <Compile Include="Tag.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

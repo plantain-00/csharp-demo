@@ -2,7 +2,7 @@
 
 namespace JsonConverter
 {
-    public abstract class JObject
+    public abstract class JObject : FormattingBase
     {
         internal static JObject CreateObject(Source source, int depth)
         {
@@ -45,13 +45,6 @@ namespace JsonConverter
             }
 
             return result;
-        }
-
-        public abstract string ToString(Formatting formatting, int spaceNumber = 4);
-
-        public override string ToString()
-        {
-            return ToString(Formatting.None);
         }
     }
 }

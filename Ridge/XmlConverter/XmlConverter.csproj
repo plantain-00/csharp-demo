@@ -41,7 +41,6 @@
     <Compile Include="Element.cs" />
     <Compile Include="Node.cs" />
     <Compile Include="PlainText.cs" />
-    <Compile Include="XmlBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

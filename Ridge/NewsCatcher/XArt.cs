@@ -7,7 +7,6 @@ using System.Web;
 using NewsCatcher.Models;
 
 using Ridge;
-using Ridge.Nodes;
 
 namespace NewsCatcher
 {

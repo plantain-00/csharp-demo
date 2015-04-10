@@ -2,7 +2,7 @@ using System.Linq;
 
 using ParseLibrary;
 
-namespace Ridge.Nodes
+namespace Ridge
 {
     public class Attribute
     {

@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using NewsCatcher.Models;
 
 using Ridge;
-using Ridge.Nodes;
 
 namespace NewsCatcher
 {

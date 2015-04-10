@@ -2,7 +2,7 @@
 
 namespace XmlConverter
 {
-    public class Document : XmlBase
+    public class Document : FormattingBase
     {
         public Declaration Declaration { get; set; }
         public Element Body { get; set; }

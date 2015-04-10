@@ -2,7 +2,7 @@
 
 namespace JsonConverter
 {
-    public sealed class JProperty
+    public sealed class JProperty : FormattingBase
     {
         public string Key { get; set; }
         public JObject Value { get; set; }
@@ -35,18 +35,13 @@ namespace JsonConverter
             return result;
         }
 
-        public string ToString(Formatting formatting, int spaceNumber = 4)
+        public override string ToString(Formatting formatting, int spaceNumber = 4)
         {
             if (formatting == Formatting.None)
             {
                 return string.Format("\"{0}\":{1}", Key, Value.ToString(formatting));
             }
             return string.Format("\"{0}\" : {1}", Key, Value.ToString(formatting));
-        }
-
-        public override string ToString()
-        {
-            return ToString(Formatting.None);
         }
     }
 }

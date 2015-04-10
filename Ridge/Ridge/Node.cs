@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 using ParseLibrary;
 
-namespace Ridge.Nodes
+namespace Ridge
 {
-    public abstract class Node
+    public abstract class Node : FormattingBase
     {
         public List<Node> Children { get; set; }
         internal int Depth { get; set; }
@@ -56,13 +55,6 @@ namespace Ridge.Nodes
                 }
             }
             return null;
-        }
-
-        public abstract string ToString(Formatting formatting, int spaceNumber = 4);
-
-        public override string ToString()
-        {
-            return ToString(Formatting.None);
         }
 
         internal static Node CreateNode(Source source, int depth)

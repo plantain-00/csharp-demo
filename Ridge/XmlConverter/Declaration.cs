@@ -6,7 +6,7 @@ using ParseLibrary;
 
 namespace XmlConverter
 {
-    public class Declaration : XmlBase
+    public class Declaration : FormattingBase
     {
         public IList<Attribute> Attributes { get; set; }
 

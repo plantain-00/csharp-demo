@@ -4,7 +4,7 @@ using ParseLibrary;
 
 namespace XmlConverter
 {
-    public class Attribute : XmlBase
+    public class Attribute : FormattingBase
     {
         public string Key { get; set; }
         public string Value { get; set; }
