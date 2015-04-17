@@ -58,6 +58,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="_199_BinaryTreeRightSideView.cs" />
     <Compile Include="_200_NumberOfIslands.cs" />
+    <Compile Include="_201_BitwiseANDofNumbersRange.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="_173_.png" />

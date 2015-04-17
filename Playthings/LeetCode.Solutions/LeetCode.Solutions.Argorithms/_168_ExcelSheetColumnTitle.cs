@@ -8,7 +8,7 @@
             while (n != 0)
             {
                 n--;
-                result = (char)('A' + n % 26) + result;
+                result = (char) ('A' + n % 26) + result;
                 n /= 26;
             }
             return result;
