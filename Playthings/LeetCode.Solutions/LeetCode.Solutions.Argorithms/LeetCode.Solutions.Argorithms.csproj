@@ -39,6 +39,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ListNode.cs" />
+    <Compile Include="TreeNode.cs" />
     <Compile Include="_155_MinStack.cs" />
     <Compile Include="_160_IntersectionOfTwoLinkedLists.cs" />
     <Compile Include="_162_FindPeakElement.cs" />
@@ -57,6 +59,7 @@
     <Compile Include="_191_NumberOf1Bits.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="_199_BinaryTreeRightSideView.cs" />
+    <Compile Include="_1_TwoSum.cs" />
     <Compile Include="_200_NumberOfIslands.cs" />
     <Compile Include="_201_BitwiseANDofNumbersRange.cs" />
   </ItemGroup>
