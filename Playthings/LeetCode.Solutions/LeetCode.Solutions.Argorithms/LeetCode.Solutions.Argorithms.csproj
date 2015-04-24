@@ -63,6 +63,7 @@
     <Compile Include="_200_NumberOfIslands.cs" />
     <Compile Include="_201_BitwiseANDofNumbersRange.cs" />
     <Compile Include="_202_HappyNumber.cs" />
+    <Compile Include="_203_RemoveLinkedListElements.cs" />
     <Compile Include="_2_AddTwoNumbers.cs" />
   </ItemGroup>
   <ItemGroup>
