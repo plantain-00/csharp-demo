@@ -65,6 +65,7 @@
     <Compile Include="_202_HappyNumber.cs" />
     <Compile Include="_203_RemoveLinkedListElements.cs" />
     <Compile Include="_2_AddTwoNumbers.cs" />
+    <Compile Include="_3_LongestSubstringWithoutRepeatingCharacters.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="_173_.png" />

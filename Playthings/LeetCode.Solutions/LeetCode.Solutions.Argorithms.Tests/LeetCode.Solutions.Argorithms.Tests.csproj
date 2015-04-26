@@ -66,6 +66,7 @@
     <Compile Include="_202_HappyNumberTests.cs" />
     <Compile Include="_203_RemoveLinkedListElementsTests.cs" />
     <Compile Include="_2_AddTwoNumbersTests.cs" />
+    <Compile Include="_3_LongestSubstringWithoutRepeatingCharactersTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LeetCode.Solutions.Argorithms\LeetCode.Solutions.Argorithms.csproj">
