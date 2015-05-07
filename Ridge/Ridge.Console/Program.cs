@@ -14,7 +14,7 @@ namespace Ridge.Console
             var html = new XWebClient
                        {
                            Encoding = Encoding.UTF8
-                       }.DownloadString("http://katproxy.com/");
+                       }.DownloadString("http://www.cnbeta.com/");
             var document = new Document(html);
             var streamWriter = new StreamWriter("a.txt", false);
             streamWriter.Write(document.ToString(Formatting.Indented));

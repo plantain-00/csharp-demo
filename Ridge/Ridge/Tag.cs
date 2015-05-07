@@ -129,6 +129,10 @@ namespace Ridge
             source.Expect('<');
             source.SkipIt();
 
+            source.SkipBlankSpaces();
+            source.ExpectNot('/');
+
+            source.SkipBlankSpaces();
             var result = new Tag
                          {
                              Name = source.TakeUntilAny(" \r\n</>"),
@@ -179,7 +183,8 @@ namespace Ridge
                 result.Children = new List<Node>();
 
                 var endNode = "</" + result.Name + ">";
-                while (source.IsNot(endNode))
+                while (!source.IsTail
+                       && source.IsNot(endNode))
                 {
                     result.Children.Add(CreateNode(source, depth + 1));
                     source.SkipBlankSpaces();

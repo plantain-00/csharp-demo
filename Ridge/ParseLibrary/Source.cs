@@ -21,9 +21,17 @@ namespace ParseLibrary
         {
             get
             {
-                var startIndex = Math.Max(0, Index - 5);
-                var endIndex = Math.Min(_s.Length - 1, Index + 5);
+                var startIndex = Math.Max(0, Index - 10);
+                var endIndex = Math.Min(_s.Length - 1, Index + 10);
                 return _s.Substring(startIndex, endIndex - startIndex + 1);
+            }
+        }
+
+        public char Current
+        {
+            get
+            {
+                return _s[Index];
             }
         }
 
@@ -37,6 +45,21 @@ namespace ParseLibrary
                 }
             }
             IsTail = true;
+        }
+
+        public void MoveUntilAny(string s)
+        {
+            MoveUntil(s.Contains);
+        }
+
+        public void MoveUntil(char c)
+        {
+            MoveUntil(a => a == c);
+        }
+
+        public void MoveUntil(string s)
+        {
+            MoveUntil(a => Is(s));
         }
 
         private string TakeUntil(Func<char, bool> condition)
@@ -92,6 +115,11 @@ namespace ParseLibrary
 
         public bool Is(char c)
         {
+            if (Index >= _s.Length)
+            {
+                IsTail = true;
+                return false;
+            }
             return c == _s[Index];
         }
 
@@ -102,6 +130,10 @@ namespace ParseLibrary
 
         public bool Is(string s, bool ignoreCase = false)
         {
+            if (s.Length + Index > _s.Length)
+            {
+                return false;
+            }
             if (ignoreCase)
             {
                 return _s.Substring(Index, s.Length).Is(s, true);

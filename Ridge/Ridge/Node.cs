@@ -59,12 +59,23 @@ namespace Ridge
 
         internal static Node CreateNode(Source source, int depth)
         {
+            if (source.IsTail)
+            {
+                return null;
+            }
             if (source.Is('<'))
             {
                 if (source.Is(Comment.COMMENT_START))
                 {
                     return Comment.Create(source, depth);
                 }
+
+                if (source.Is("</"))
+                {
+                    source.MoveUntil('>');
+                    return CreateNode(source, depth);
+                }
+
                 return Tag.Create(source, depth);
             }
             return PlainText.Create(source, depth);

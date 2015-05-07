@@ -10,12 +10,4 @@ A state machine library.
 
 ### Ridge
 
-A html parser.
-
-### JsonConverter
-
-A json parser.
-
-### XmlConverter
-
-A xml parser.
+A json,xml and html parser.
