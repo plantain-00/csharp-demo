@@ -21,7 +21,7 @@ namespace Ridge
             var result = new PlainText
                          {
                              Depth = depth,
-                             Text = source.TakeUntil('<')
+                             Text = source.TakeUntil('<').TrimEnd()
                          };
             return result;
         }

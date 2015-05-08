@@ -35,7 +35,7 @@ namespace ParseLibrary
             }
         }
 
-        private void MoveUntil(Func<char, bool> condition)
+        public void MoveUntil(Func<char, bool> condition)
         {
             for (; Index < _s.Length; Index++)
             {
@@ -62,7 +62,7 @@ namespace ParseLibrary
             MoveUntil(a => Is(s));
         }
 
-        private string TakeUntil(Func<char, bool> condition)
+        public string TakeUntil(Func<char, bool> condition)
         {
             var startIndex = Index;
             for (; Index < _s.Length; Index++)
