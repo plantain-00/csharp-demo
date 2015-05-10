@@ -9,6 +9,7 @@ namespace Ridge
     {
         public List<Node> Children { get; set; }
         internal int Depth { get; set; }
+        public Node Parent { get; set; }
 
         public Node this[int index]
         {
@@ -57,7 +58,7 @@ namespace Ridge
             return null;
         }
 
-        internal static Node CreateNode(Source source, int depth)
+        internal static Node CreateNode(Source source, Node parent, int depth)
         {
             if (source.IsTail)
             {
@@ -67,18 +68,18 @@ namespace Ridge
             {
                 if (source.Is(Comment.COMMENT_START))
                 {
-                    return Comment.Create(source, depth);
+                    return Comment.Create(source, parent, depth);
                 }
 
                 if (source.Is("</"))
                 {
                     source.MoveUntil('>');
-                    return CreateNode(source, depth);
+                    return CreateNode(source, parent, depth);
                 }
 
-                return Tag.Create(source, depth);
+                return Tag.Create(source, parent, depth);
             }
-            return PlainText.Create(source, depth);
+            return PlainText.Create(source, parent, depth);
         }
     }
 }

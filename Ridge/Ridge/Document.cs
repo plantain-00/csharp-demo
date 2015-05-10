@@ -19,13 +19,13 @@ namespace Ridge
             source.SkipBlankSpaces();
             if (source.Is(DocType.NAME, true))
             {
-                Nodes.Add(DocType.Create(source, 0));
+                Nodes.Add(DocType.Create(source, null, 0));
             }
 
             source.SkipBlankSpaces();
             while (!source.IsTail)
             {
-                Nodes.Add(Node.CreateNode(source, 0));
+                Nodes.Add(Node.CreateNode(source, null, 0));
 
                 source.SkipBlankSpaces();
             }

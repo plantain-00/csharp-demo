@@ -46,6 +46,7 @@
     <Compile Include="Node.cs" />
     <Compile Include="PlainText.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ScriptText.cs" />
     <Compile Include="Tag.cs" />
   </ItemGroup>
   <ItemGroup>

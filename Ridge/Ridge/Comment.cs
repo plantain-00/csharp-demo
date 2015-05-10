@@ -17,7 +17,7 @@ namespace Ridge
             return string.Format("{0}<!--{1}-->\n", new string(' ', Depth * spaceNumber), Text);
         }
 
-        internal static Comment Create(Source source, int depth)
+        internal static Comment Create(Source source, Node parent, int depth)
         {
             source.Expect(COMMENT_START);
             source.Skip(COMMENT_START);
@@ -25,7 +25,8 @@ namespace Ridge
             var result = new Comment
                          {
                              Depth = depth,
-                             Text = source.TakeUntil(COMMENT_END)
+                             Text = source.TakeUntil(COMMENT_END),
+                             Parent = parent
                          };
             source.Skip(COMMENT_END);
 

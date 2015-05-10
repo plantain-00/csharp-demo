@@ -124,7 +124,7 @@ namespace Ridge
             return HasSlash ? " /" : "";
         }
 
-        internal static Tag Create(Source source, int depth)
+        internal static Tag Create(Source source, Node parent, int depth)
         {
             source.Expect('<');
             source.SkipIt();
@@ -137,7 +137,8 @@ namespace Ridge
                          {
                              Name = source.TakeUntilAny(" \r\n</>"),
                              Attributes = new List<Attribute>(),
-                             Depth = depth
+                             Depth = depth,
+                             Parent = parent
                          };
             source.SkipBlankSpaces();
 
@@ -183,13 +184,45 @@ namespace Ridge
                 result.Children = new List<Node>();
 
                 var endNode = "</" + result.Name + ">";
-                while (!source.IsTail
-                       && source.IsNot(endNode))
+                if (result.Name.Is("script", true))
                 {
-                    result.Children.Add(CreateNode(source, depth + 1));
-                    source.SkipBlankSpaces();
+                    result.Children.Add(ScriptText.Create(source, result, depth + 1));
+                    source.Skip(endNode);
                 }
-                source.Skip(endNode);
+                else
+                {
+                    while (!source.IsTail
+                           && source.IsNot(endNode, true))
+                    {
+                        if (source.Is("</"))
+                        {
+                            var index = source.Index;
+                            source.Skip("</");
+                            var name = source.TakeUntil(">");
+
+                            var p = parent;
+                            while (p != null)
+                            {
+                                if (p is Tag
+                                    && p.As<Tag>().Name.Is(name, true))
+                                {
+                                    source.Index = index;
+                                    return result;
+                                }
+                                p = p.Parent;
+                            }
+
+                            source.SkipIt();
+                            source.SkipBlankSpaces();
+                        }
+                        else
+                        {
+                            result.Children.Add(CreateNode(source, result, depth + 1));
+                            source.SkipBlankSpaces();
+                        }
+                    }
+                    source.Skip(endNode);
+                }
             }
 
             return result;

@@ -2,7 +2,7 @@
 
 namespace Ridge
 {
-    public class PlainText : Node
+    public class ScriptText : Node
     {
         public string Text { get; set; }
 
@@ -15,13 +15,12 @@ namespace Ridge
             return string.Format("{0}{1}\n", new string(' ', Depth * spaceNumber), Text.Trim(' ', '\n', '\r', '\t'));
         }
 
-        internal static PlainText Create(Source source, Node parent, int depth)
+        internal static ScriptText Create(Source source, Node parent, int depth)
         {
-            source.ExpectNot('<');
-            var result = new PlainText
+            var result = new ScriptText
                          {
                              Depth = depth,
-                             Text = source.TakeUntil('<').TrimEnd(),
+                             Text = source.TakeUntil("</script>").TrimEnd(),
                              Parent = parent
                          };
             return result;

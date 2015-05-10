@@ -16,14 +16,15 @@ namespace Ridge
             return string.Format("{0} {1}>\n", NAME, Declaration);
         }
 
-        internal static DocType Create(Source source, int depth)
+        internal static DocType Create(Source source, Node parent, int depth)
         {
             source.Expect(NAME, true);
             source.Skip(NAME);
 
             var result = new DocType
                          {
-                             Depth = depth
+                             Depth = depth,
+                             Parent = parent
                          };
 
             source.SkipBlankSpaces();

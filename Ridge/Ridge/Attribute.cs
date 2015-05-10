@@ -54,8 +54,7 @@ namespace Ridge
                 }
                 else
                 {
-                    result.Value = source.TakeUntilAny(" \r\n</>");
-                    //result.Value = source.TakeUntil(c => " \r\n<>".Contains(c) || source.Is("/>"));
+                    result.Value = source.TakeUntil(c => " \r\n<>".Contains(c) || source.Is("/>"));
                 }
             }
 
