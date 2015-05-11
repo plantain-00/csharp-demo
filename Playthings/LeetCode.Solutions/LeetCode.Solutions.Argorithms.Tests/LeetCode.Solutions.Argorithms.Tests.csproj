@@ -65,6 +65,7 @@
     <Compile Include="_200_NumberOfIslandsTests.cs" />
     <Compile Include="_202_HappyNumberTests.cs" />
     <Compile Include="_203_RemoveLinkedListElementsTests.cs" />
+    <Compile Include="_204_CountPrimesTests.cs" />
     <Compile Include="_2_AddTwoNumbersTests.cs" />
     <Compile Include="_3_LongestSubstringWithoutRepeatingCharactersTests.cs" />
   </ItemGroup>
