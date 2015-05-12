@@ -41,6 +41,7 @@
   <ItemGroup>
     <Compile Include="ListNode.cs" />
     <Compile Include="TreeNode.cs" />
+    <Compile Include="TrieNode.cs" />
     <Compile Include="_155_MinStack.cs" />
     <Compile Include="_160_IntersectionOfTwoLinkedLists.cs" />
     <Compile Include="_162_FindPeakElement.cs" />
@@ -67,6 +68,7 @@
     <Compile Include="_204_CountPrimes.cs" />
     <Compile Include="_205_IsomorphicStrings.cs" />
     <Compile Include="_207_CourseSchedule.cs" />
+    <Compile Include="Trie.cs" />
     <Compile Include="_2_AddTwoNumbers.cs" />
     <Compile Include="_3_LongestSubstringWithoutRepeatingCharacters.cs" />
   </ItemGroup>
