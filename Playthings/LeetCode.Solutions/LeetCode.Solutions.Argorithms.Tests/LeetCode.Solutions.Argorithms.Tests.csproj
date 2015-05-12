@@ -69,6 +69,7 @@
     <Compile Include="_204_CountPrimesTests.cs" />
     <Compile Include="_205_IsomorphicStringsTests.cs" />
     <Compile Include="_207_CourseScheduleTests.cs" />
+    <Compile Include="_209_MinimumSizeSubarraySumTests.cs" />
     <Compile Include="_2_AddTwoNumbersTests.cs" />
     <Compile Include="_3_LongestSubstringWithoutRepeatingCharactersTests.cs" />
   </ItemGroup>

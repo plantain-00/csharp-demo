@@ -69,6 +69,7 @@
     <Compile Include="_205_IsomorphicStrings.cs" />
     <Compile Include="_207_CourseSchedule.cs" />
     <Compile Include="Trie.cs" />
+    <Compile Include="_209_MinimumSizeSubarraySum.cs" />
     <Compile Include="_2_AddTwoNumbers.cs" />
     <Compile Include="_3_LongestSubstringWithoutRepeatingCharacters.cs" />
   </ItemGroup>
