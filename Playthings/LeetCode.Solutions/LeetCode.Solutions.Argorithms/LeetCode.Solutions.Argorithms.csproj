@@ -42,6 +42,8 @@
     <Compile Include="ListNode.cs" />
     <Compile Include="TreeNode.cs" />
     <Compile Include="TrieNode.cs" />
+    <Compile Include="_118_PascalsTriangle.cs" />
+    <Compile Include="_125_ValidPalindrome.cs" />
     <Compile Include="_155_MinStack.cs" />
     <Compile Include="_160_IntersectionOfTwoLinkedLists.cs" />
     <Compile Include="_162_FindPeakElement.cs" />
