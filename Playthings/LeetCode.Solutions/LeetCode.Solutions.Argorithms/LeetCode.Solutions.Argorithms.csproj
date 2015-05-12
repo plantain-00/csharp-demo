@@ -75,6 +75,7 @@
     <Compile Include="_51_NQueens.cs" />
     <Compile Include="_52_NQueensII.cs" />
     <Compile Include="_66_PlusOne.cs" />
+    <Compile Include="_67_AddBinary.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="_173_.png" />

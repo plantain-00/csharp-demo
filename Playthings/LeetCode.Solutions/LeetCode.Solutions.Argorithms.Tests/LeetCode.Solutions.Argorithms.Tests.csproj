@@ -74,6 +74,7 @@
     <Compile Include="_3_LongestSubstringWithoutRepeatingCharactersTests.cs" />
     <Compile Include="_51_NQueensTests.cs" />
     <Compile Include="_66_PlusOneTests.cs" />
+    <Compile Include="_67_AddBinaryTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LeetCode.Solutions.Argorithms\LeetCode.Solutions.Argorithms.csproj">
