@@ -66,6 +66,7 @@
     <Compile Include="_203_RemoveLinkedListElements.cs" />
     <Compile Include="_204_CountPrimes.cs" />
     <Compile Include="_205_IsomorphicStrings.cs" />
+    <Compile Include="_207_CourseSchedule.cs" />
     <Compile Include="_2_AddTwoNumbers.cs" />
     <Compile Include="_3_LongestSubstringWithoutRepeatingCharacters.cs" />
   </ItemGroup>
