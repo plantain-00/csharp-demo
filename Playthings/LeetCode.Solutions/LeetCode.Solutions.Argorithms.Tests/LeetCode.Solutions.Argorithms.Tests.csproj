@@ -73,6 +73,7 @@
     <Compile Include="_2_AddTwoNumbersTests.cs" />
     <Compile Include="_3_LongestSubstringWithoutRepeatingCharactersTests.cs" />
     <Compile Include="_51_NQueensTests.cs" />
+    <Compile Include="_66_PlusOneTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LeetCode.Solutions.Argorithms\LeetCode.Solutions.Argorithms.csproj">
