@@ -54,6 +54,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TrieTests.cs" />
     <Compile Include="_118_PascalsTriangleTests.cs" />
+    <Compile Include="_119_PascalsTriangleIITests.cs" />
     <Compile Include="_160_IntersectionOfTwoLinkedListsTests.cs" />
     <Compile Include="_162_FindPeakElementTests.cs" />
     <Compile Include="_168_ExcelSheetColumnTitleTests.cs" />
