@@ -42,6 +42,7 @@
     <Compile Include="ListNode.cs" />
     <Compile Include="TreeNode.cs" />
     <Compile Include="TrieNode.cs" />
+    <Compile Include="_111_MinimumDepthofBinaryTree.cs" />
     <Compile Include="_112_PathSum.cs" />
     <Compile Include="_118_PascalsTriangle.cs" />
     <Compile Include="_119_PascalsTriangleII.cs" />
