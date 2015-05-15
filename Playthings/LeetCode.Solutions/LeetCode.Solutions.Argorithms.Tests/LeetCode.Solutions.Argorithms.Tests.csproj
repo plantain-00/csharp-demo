@@ -73,6 +73,7 @@
     <Compile Include="_205_IsomorphicStringsTests.cs" />
     <Compile Include="_207_CourseScheduleTests.cs" />
     <Compile Include="_209_MinimumSizeSubarraySumTests.cs" />
+    <Compile Include="_26_RemoveDuplicatesfromSortedArrayTests.cs" />
     <Compile Include="_2_AddTwoNumbersTests.cs" />
     <Compile Include="_3_LongestSubstringWithoutRepeatingCharactersTests.cs" />
     <Compile Include="_51_NQueensTests.cs" />

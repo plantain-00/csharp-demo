@@ -81,6 +81,8 @@
     <Compile Include="_207_CourseSchedule.cs" />
     <Compile Include="Trie.cs" />
     <Compile Include="_209_MinimumSizeSubarraySum.cs" />
+    <Compile Include="_26_RemoveDuplicatesfromSortedArray.cs" />
+    <Compile Include="_27_RemoveElement.cs" />
     <Compile Include="_28_ImplementstrStr.cs" />
     <Compile Include="_2_AddTwoNumbers.cs" />
     <Compile Include="_38_CountandSay.cs" />
