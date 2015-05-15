@@ -78,6 +78,8 @@
     <Compile Include="_51_NQueensTests.cs" />
     <Compile Include="_66_PlusOneTests.cs" />
     <Compile Include="_67_AddBinaryTests.cs" />
+    <Compile Include="_82_RemoveDuplicatesfromSortedListIITests.cs" />
+    <Compile Include="_83_RemoveDuplicatesfromSortedListTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\LeetCode.Solutions.Argorithms\LeetCode.Solutions.Argorithms.csproj">

@@ -87,6 +87,8 @@
     <Compile Include="_52_NQueensII.cs" />
     <Compile Include="_66_PlusOne.cs" />
     <Compile Include="_67_AddBinary.cs" />
+    <Compile Include="_82_RemoveDuplicatesfromSortedListII.cs" />
+    <Compile Include="_83_RemoveDuplicatesfromSortedList.cs" />
     <Compile Include="_88_MergeSortedArray.cs" />
   </ItemGroup>
   <ItemGroup>
