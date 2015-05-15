@@ -85,8 +85,10 @@
     <Compile Include="_3_LongestSubstringWithoutRepeatingCharacters.cs" />
     <Compile Include="_51_NQueens.cs" />
     <Compile Include="_52_NQueensII.cs" />
+    <Compile Include="_58_LengthofLastWord.cs" />
     <Compile Include="_66_PlusOne.cs" />
     <Compile Include="_67_AddBinary.cs" />
+    <Compile Include="_70_ClimbingStairs.cs" />
     <Compile Include="_82_RemoveDuplicatesfromSortedListII.cs" />
     <Compile Include="_83_RemoveDuplicatesfromSortedList.cs" />
     <Compile Include="_88_MergeSortedArray.cs" />
