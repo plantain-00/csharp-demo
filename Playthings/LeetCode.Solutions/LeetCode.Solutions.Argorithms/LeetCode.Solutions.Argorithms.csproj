@@ -52,7 +52,9 @@
     <Compile Include="_112_PathSum.cs" />
     <Compile Include="_118_PascalsTriangle.cs" />
     <Compile Include="_119_PascalsTriangleII.cs" />
+    <Compile Include="_11_LongestCommonPrefix.cs" />
     <Compile Include="_125_ValidPalindrome.cs" />
+    <Compile Include="_13_RomantoInteger.cs" />
     <Compile Include="_155_MinStack.cs" />
     <Compile Include="_160_IntersectionOfTwoLinkedLists.cs" />
     <Compile Include="_162_FindPeakElement.cs" />
@@ -71,6 +73,7 @@
     <Compile Include="_191_NumberOf1Bits.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="_199_BinaryTreeRightSideView.cs" />
+    <Compile Include="_19_RemoveNthNodeFromEndofList.cs" />
     <Compile Include="_1_TwoSum.cs" />
     <Compile Include="_200_NumberOfIslands.cs" />
     <Compile Include="_201_BitwiseANDofNumbersRange.cs" />
@@ -87,6 +90,8 @@
     <Compile Include="_27_RemoveElement.cs" />
     <Compile Include="_28_ImplementstrStr.cs" />
     <Compile Include="_2_AddTwoNumbers.cs" />
+    <Compile Include="_36_ValidSudoku.cs" />
+    <Compile Include="_37_SudokuSolver.cs" />
     <Compile Include="_38_CountandSay.cs" />
     <Compile Include="_3_LongestSubstringWithoutRepeatingCharacters.cs" />
     <Compile Include="_51_NQueens.cs" />
@@ -98,6 +103,8 @@
     <Compile Include="_82_RemoveDuplicatesfromSortedListII.cs" />
     <Compile Include="_83_RemoveDuplicatesfromSortedList.cs" />
     <Compile Include="_88_MergeSortedArray.cs" />
+    <Compile Include="_8_StringtoIntegeratoi.cs" />
+    <Compile Include="_9_PalindromeNumber.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="_173_.png" />

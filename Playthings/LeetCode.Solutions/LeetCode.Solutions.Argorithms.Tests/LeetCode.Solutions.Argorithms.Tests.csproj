@@ -56,6 +56,7 @@
     <Compile Include="_107_BinaryTreeLevelOrderTraversalIITests.cs" />
     <Compile Include="_118_PascalsTriangleTests.cs" />
     <Compile Include="_119_PascalsTriangleIITests.cs" />
+    <Compile Include="_11_LongestCommonPrefixTests.cs" />
     <Compile Include="_160_IntersectionOfTwoLinkedListsTests.cs" />
     <Compile Include="_162_FindPeakElementTests.cs" />
     <Compile Include="_168_ExcelSheetColumnTitleTests.cs" />
@@ -66,6 +67,7 @@
     <Compile Include="_189_RotateArrayTests.cs" />
     <Compile Include="_190_ReverseBitsTests.cs" />
     <Compile Include="_191_NumberOf1BitsTests.cs" />
+    <Compile Include="_19_RemoveNthNodeFromEndofListTests.cs" />
     <Compile Include="_200_NumberOfIslandsTests.cs" />
     <Compile Include="_202_HappyNumberTests.cs" />
     <Compile Include="_203_RemoveLinkedListElementsTests.cs" />
