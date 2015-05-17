@@ -99,7 +99,9 @@
     <Compile Include="_58_LengthofLastWord.cs" />
     <Compile Include="_66_PlusOne.cs" />
     <Compile Include="_67_AddBinary.cs" />
+    <Compile Include="_6_ZigZagConversion.cs" />
     <Compile Include="_70_ClimbingStairs.cs" />
+    <Compile Include="_7_ReverseInteger.cs" />
     <Compile Include="_82_RemoveDuplicatesfromSortedListII.cs" />
     <Compile Include="_83_RemoveDuplicatesfromSortedList.cs" />
     <Compile Include="_88_MergeSortedArray.cs" />
