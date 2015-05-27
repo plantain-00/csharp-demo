@@ -85,6 +85,7 @@
     <Compile Include="Trie.cs" />
     <Compile Include="_209_MinimumSizeSubarraySum.cs" />
     <Compile Include="_20_ValidParentheses.cs" />
+    <Compile Include="_217_ContainsDuplicate.cs" />
     <Compile Include="_21_MergeTwoSortedLists.cs" />
     <Compile Include="_26_RemoveDuplicatesfromSortedArray.cs" />
     <Compile Include="_27_RemoveElement.cs" />
