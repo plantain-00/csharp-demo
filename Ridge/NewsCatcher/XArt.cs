@@ -40,7 +40,7 @@ namespace NewsCatcher
                         result.Add(new ShowItem
                                    {
                                        Text = tmp[1][0].As<PlainText>().Text + " " + text,
-                                       Url = String.Format("http://kickass.to/usearch/{0}/", HttpUtility.UrlEncode(text).Replace("+", "%20"))
+                                       Url = String.Format(TV.seedWebsite + "{0}/", HttpUtility.UrlEncode(text).Replace("+", "%20"))
                                    });
                     }
                 }

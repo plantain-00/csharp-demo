@@ -14,7 +14,7 @@ namespace NewsCatcher
     public class TV
     {
         public const string FAILS_MESSAGE = "TV Fails";
-        private static readonly string seedWebsite = ConfigurationManager.AppSettings["seed_website"];
+        public static readonly string seedWebsite = ConfigurationManager.AppSettings["seed_website"];
 
         public static IEnumerable<ShowItem> Do()
         {
