@@ -23,7 +23,7 @@ namespace JsonConverter
 
         public override string ToString(Formatting formatting, int spaceNumber = 4)
         {
-            return string.Format("\"{0}\"", Value);
+            return $"\"{Value}\"";
         }
     }
 }

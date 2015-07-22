@@ -15,12 +15,8 @@ namespace Ridge
         {
             get
             {
-                if (Attributes == null)
-                {
-                    return null;
-                }
-                var attribute = Attributes.FirstOrDefault(a => a.Name.Is(name, true));
-                return attribute == null ? null : attribute.Value;
+                var attribute = Attributes?.FirstOrDefault(a => a.Name.Is(name, true));
+                return attribute?.Value;
             }
         }
         public string Text
@@ -50,14 +46,11 @@ namespace Ridge
 
         internal override Node GetElementById(string id)
         {
-            if (Attributes != null)
+            var attribute = Attributes?.FirstOrDefault(a => a.Name.Is("id", true));
+            if (attribute != null
+                && attribute.Value == id)
             {
-                var attribute = Attributes.FirstOrDefault(a => a.Name.Is("id", true));
-                if (attribute != null
-                    && attribute.Value == id)
-                {
-                    return this;
-                }
+                return this;
             }
             return base.GetElementById(id);
         }
@@ -79,7 +72,7 @@ namespace Ridge
             {
                 if (Children == null)
                 {
-                    return string.Format("<{0}{1}{2}>", Name, attributes, slash);
+                    return $"<{Name}{attributes}{slash}>";
                 }
                 if (Children.Count == 0)
                 {
@@ -105,7 +98,7 @@ namespace Ridge
                 if (Children.Count == 1
                     && Children[0] is PlainText)
                 {
-                    var plainText = Children[0] as PlainText;
+                    var plainText = (PlainText) Children[0];
                     return string.Format("{3}<{0}{1}{4}>{2}</{0}>\n", Name, attributes, plainText.ToString(Formatting.None), new string(' ', Depth * spaceNumber), slash);
                 }
 

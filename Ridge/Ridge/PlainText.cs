@@ -12,7 +12,7 @@ namespace Ridge
             {
                 return Text.Trim(' ', '\n', '\r', '\t');
             }
-            return string.Format("{0}{1}\n", new string(' ', Depth * spaceNumber), Text.Trim(' ', '\n', '\r', '\t'));
+            return $"{new string(' ', Depth * spaceNumber)}{Text.Trim(' ', '\n', '\r', '\t')}\n";
         }
 
         internal static PlainText Create(Source source, Node parent, int depth)

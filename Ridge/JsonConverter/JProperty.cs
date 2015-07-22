@@ -34,9 +34,9 @@ namespace JsonConverter
         {
             if (formatting == Formatting.None)
             {
-                return string.Format("\"{0}\":{1}", Key, Value.ToString(formatting));
+                return $"\"{Key}\":{Value.ToString(formatting)}";
             }
-            return string.Format("\"{0}\" : {1}", Key, Value.ToString(formatting));
+            return $"\"{Key}\" : {Value.ToString(formatting)}";
         }
     }
 }

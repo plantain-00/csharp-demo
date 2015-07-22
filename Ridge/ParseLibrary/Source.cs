@@ -27,13 +27,7 @@ namespace ParseLibrary
             }
         }
 
-        public char Current
-        {
-            get
-            {
-                return _s[Index];
-            }
-        }
+        public char Current => _s[Index];
 
         public void MoveUntil(Func<char, bool> condition)
         {

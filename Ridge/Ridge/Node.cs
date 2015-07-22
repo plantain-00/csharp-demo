@@ -11,30 +11,18 @@ namespace Ridge
         internal int Depth { get; set; }
         public Node Parent { get; set; }
 
-        public Node this[int index]
-        {
-            get
-            {
-                return Children[index];
-            }
-        }
+        public Node this[int index] => Children[index];
 
         public Node this[string tagName, int index]
         {
             get
             {
-                var nodes = Children.Where(c => c is Tag && (c as Tag).Name.Is(tagName, true));
+                var nodes = Children.Where(c => c is Tag && ((Tag) c).Name.Is(tagName, true));
                 return nodes.ElementAt(index);
             }
         }
 
-        public Node this[string tagName]
-        {
-            get
-            {
-                return this[tagName, 0];
-            }
-        }
+        public Node this[string tagName] => this[tagName, 0];
 
         public T As<T>() where T : Node
         {

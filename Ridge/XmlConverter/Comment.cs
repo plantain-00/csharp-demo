@@ -13,7 +13,7 @@ namespace XmlConverter
         {
             if (formatting == Formatting.None)
             {
-                return string.Format("{0}{1}{2}", COMMENT_START, Value, COMMENT_END);
+                return $"{COMMENT_START}{Value}{COMMENT_END}";
             }
             var spaces = new string(' ', Depth * spaceNumber);
             return string.Format("{3}{0}{1}{2}\n", COMMENT_START, Value, COMMENT_END, spaces);

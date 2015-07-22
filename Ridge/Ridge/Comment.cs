@@ -12,9 +12,9 @@ namespace Ridge
         {
             if (formatting == Formatting.None)
             {
-                return string.Format("<!--{0}-->", Text);
+                return $"<!--{Text}-->";
             }
-            return string.Format("{0}<!--{1}-->\n", new string(' ', Depth * spaceNumber), Text);
+            return $"{new string(' ', Depth * spaceNumber)}<!--{Text}-->\n";
         }
 
         internal static Comment Create(Source source, Node parent, int depth)

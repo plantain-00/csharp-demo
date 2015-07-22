@@ -31,12 +31,12 @@ namespace NewsCatcher
                 tmp.Item1.AddRange(Do(2).Item1);
                 result.AddRange(tmp.Item2.Select(headline => new ShowItem
                                                              {
-                                                                 Text = String.Format("{0}", headline.Title),
+                                                                 Text = $"{headline.Title}",
                                                                  Url = headline.Url
                                                              }));
                 result.AddRange(tmp.Item1.Where(r => r.CommentNumber > 1 || r.Digg > 1).OrderByDescending(b => b.CommentNumber).ThenByDescending(b => b.Digg).ThenByDescending(b => b.Time).Select(blog => new ShowItem
                                                                                                                                                                                                            {
-                                                                                                                                                                                                               Text = String.Format("{0} {1} {2} {3}", blog.CommentNumber, blog.Digg, blog.Time.ToString("yyyy-MM-dd HH:mm"), blog.Title),
+                                                                                                                                                                                                               Text = $"{blog.CommentNumber} {blog.Digg} {blog.Time.ToString("yyyy-MM-dd HH:mm")} {blog.Title}",
                                                                                                                                                                                                                Url = blog.Url,
                                                                                                                                                                                                                Summary = blog.Summary.Paragraph(50)
                                                                                                                                                                                                            }));

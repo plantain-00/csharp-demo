@@ -11,7 +11,7 @@ namespace NewsCatcher
         {
             WM_SHOWME = RegisterWindowMessage("WM_SHOWME");
         }
-        internal static int WM_SHOWME { get; private set; }
+        internal static int WM_SHOWME { get; }
         internal static void SetGuid(string guid)
         {
             _mutex = new Mutex(true, guid);

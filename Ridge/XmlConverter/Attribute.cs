@@ -11,7 +11,7 @@ namespace XmlConverter
 
         public override string ToString(Formatting formatting, int spaceNumber = 4)
         {
-            return string.Format("{0}=\"{1}\"", Key, Value);
+            return $"{Key}=\"{Value}\"";
         }
 
         internal static Attribute Create(Source source)

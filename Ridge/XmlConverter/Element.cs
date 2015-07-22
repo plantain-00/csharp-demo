@@ -36,7 +36,7 @@ namespace XmlConverter
                 }
                 if (ChildElements == null)
                 {
-                    return string.Format("<{0}{1}/>", Name, attributes);
+                    return $"<{Name}{attributes}/>";
                 }
                 return string.Format("<{0}{1}>{2}</{0}>", Name, attributes, children);
             }

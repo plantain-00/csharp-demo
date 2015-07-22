@@ -8,7 +8,7 @@ namespace ParseLibrary
         {
             if (ignoreCase)
             {
-                return String.Equals(current, s, StringComparison.InvariantCultureIgnoreCase);
+                return string.Equals(current, s, StringComparison.InvariantCultureIgnoreCase);
             }
 
             return current == s;

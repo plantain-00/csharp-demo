@@ -51,18 +51,12 @@ namespace Ridge
         {
             get
             {
-                var nodes = Nodes.Where(c => c is Tag && (c as Tag).Name.Is(tagName, true));
+                var nodes = Nodes.Where(c => c is Tag && ((Tag) c).Name.Is(tagName, true));
                 return nodes.ElementAt(index);
             }
         }
 
-        public Node this[int index]
-        {
-            get
-            {
-                return Nodes[index];
-            }
-        }
+        public Node this[int index] => Nodes[index];
 
         public Node GetElementById(string id)
         {

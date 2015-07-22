@@ -34,8 +34,8 @@ namespace Racy
             phoneCall.Config(State.Connected, Trigger.HungUp, State.OffHook);
             phoneCall.Config(State.Connected, Trigger.PlacedOnHold, State.OnHold);
 
-            phoneCall.ConfigOnEntry(State.Connected, r => Console.WriteLine("{0} {1} {2}", r.By, r.From, r.To));
-            phoneCall.ConfigOnExit(State.Connected, r => Console.WriteLine("{0} {1} {2}", r.By, r.From, r.To));
+            phoneCall.ConfigOnEntry(State.Connected, r => Console.WriteLine($"{r.By} {r.From} {r.To}"));
+            phoneCall.ConfigOnExit(State.Connected, r => Console.WriteLine($"{r.By} {r.From} {r.To}"));
 
             phoneCall.Fire(Trigger.CallDialled);
             Console.WriteLine(phoneCall.State);

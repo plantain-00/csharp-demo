@@ -15,7 +15,7 @@ namespace Ridge
             {
                 return Name;
             }
-            return string.Format("{0}=\"{1}\"", Name, Value);
+            return $"{Name}=\"{Value}\"";
         }
 
         internal static Attribute Create(Source source)
