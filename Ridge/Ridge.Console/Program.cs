@@ -28,7 +28,7 @@ namespace Ridge.Console
         {
             Cookies = new CookieContainer();
         }
-        public CookieContainer Cookies { get; private set; }
+        public CookieContainer Cookies { get; }
         protected override WebRequest GetWebRequest(Uri address)
         {
             var request = base.GetWebRequest(address) as HttpWebRequest;
