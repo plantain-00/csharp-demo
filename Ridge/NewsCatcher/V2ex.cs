@@ -13,8 +13,8 @@ namespace NewsCatcher
 {
     internal static class V2ex
     {
-        private static readonly string v2exUrl = ConfigurationManager.AppSettings["v2ex_url"];
         public const string FAILS_MESSAGE = "V2ex Fails";
+        private static readonly string v2exUrl = ConfigurationManager.AppSettings["v2ex_url"];
 
         public static IEnumerable<ShowItem> Do()
         {
@@ -38,24 +38,27 @@ namespace NewsCatcher
                 {
                     try
                     {
-                        var tmp = doc["#Main"]["div", 1]["div", i + 1]["table"]["tr"];
-                        var name = tmp["td", 2]["span"]["a"][0].As<PlainText>().Text.Unescape();
-                        var url = tmp["td", 2]["span"]["a"].As<Tag>()["href"];
-                        int count;
-                        try
+                        var tmp = doc["#Main"]?["div", 1]?["div", i + 1]?["table"]?["tr"];
+                        if (tmp != null)
                         {
-                            count = Convert.ToInt32(tmp["td", 3]["a"][0].As<PlainText>().Text);
+                            var name = tmp["td", 2]?["span"]?["a"]?[0]?.As<PlainText>()?.Text?.Unescape();
+                            var url = tmp["td", 2]?["span"]?["a"]?.As<Tag>()?["href"];
+                            int count;
+                            try
+                            {
+                                count = Convert.ToInt32(tmp["td", 3]?["a"][0]?.As<PlainText>()?.Text);
+                            }
+                            catch (Exception)
+                            {
+                                count = 0;
+                            }
+                            models.Add(new Model
+                                       {
+                                           Count = count,
+                                           Url = v2exUrl.Trim('/') + new string(url.TakeWhile(u => u != '#').ToArray()),
+                                           Name = name
+                                       });
                         }
-                        catch (Exception)
-                        {
-                            count = 0;
-                        }
-                        models.Add(new Model
-                                   {
-                                       Count = count,
-                                       Url = v2exUrl.Trim('/') + new string(url.TakeWhile(u => u != '#').ToArray()),
-                                       Name = name
-                                   });
                     }
                     catch (Exception)
                     {

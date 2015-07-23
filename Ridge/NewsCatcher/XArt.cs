@@ -35,13 +35,16 @@ namespace NewsCatcher
                 {
                     for (var j = 0; j < 3; j++)
                     {
-                        var tmp = doc["ul"]["li", i]["ul"]["li", j]["a"]["span"];
-                        var text = tmp["span"]["b"][0].As<PlainText>().Text;
-                        result.Add(new ShowItem
-                                   {
-                                       Text = tmp[1][0].As<PlainText>().Text + " " + text,
-                                       Url = String.Format(TV.seedWebsite + "{0}/", HttpUtility.UrlEncode(text).Replace("+", "%20"))
-                                   });
+                        var tmp = doc["ul"]?["li", i]?["ul"]?["li", j]?["a"]?["span"];
+                        if (tmp != null)
+                        {
+                            var text = tmp["span"]?["b"]?[0]?.As<PlainText>()?.Text;
+                            result.Add(new ShowItem
+                                       {
+                                           Text = tmp[1]?[0]?.As<PlainText>()?.Text + " " + text,
+                                           Url = string.Format(TV.seedWebsite + "{0}/", HttpUtility.UrlEncode(text).Replace("+", "%20"))
+                                       });
+                        }
                     }
                 }
             }

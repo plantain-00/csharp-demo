@@ -32,27 +32,24 @@ namespace NewsCatcher
                            }.DownloadString("https://github.com/trending");
                 var doc = new Document(html);
                 var trendings = new List<Model>();
-                for (var i = 0; i < 25; i++)
+                var nodes = doc["#site-container"]?["div", 1]?["div", 1]?["div"]?["div", 1]?["ol"];
+                if (nodes?.Children != null)
                 {
-                    var node = doc["#site-container"]["div", 1]["div", 1]["div"]["div", 1]["ol"];
-                    if (node.Children == null
-                        || node.Children.Count <= i)
+                    foreach (var node in nodes.Children)
                     {
-                        break;
-                    }
-                    node = node[i];
-                    try
-                    {
-                        var text = node["p", 1][0].As<PlainText>().Text.Unescape().Trim().Split('•');
-                        trendings.Add(new Model
-                                      {
-                                          Title = node["h3"]["a"].As<Tag>().Text.Unescape(),
-                                          Url = "https://github.com/" + node["h3"]["a"].As<Tag>()["href"].Trim('/'),
-                                          Summary = node["p"].As<Tag>().Text.Unescape().Trim() + " - " + text[0].Trim() + ((text.Length == 2) ? "" : " - " + text[1].Trim())
-                                      });
-                    }
-                    catch (Exception)
-                    {
+                        try
+                        {
+                            var text = node["p", 1]?[0]?.As<PlainText>()?.Text?.Unescape()?.Trim()?.Split('•');
+                            trendings.Add(new Model
+                                          {
+                                              Title = node["h3"]?["a"]?.As<Tag>()?.Text?.Unescape(),
+                                              Url = "https://github.com/" + node["h3"]?["a"]?.As<Tag>()?["href"]?.Trim('/'),
+                                              Summary = node["p"]?.As<Tag>()?.Text?.Unescape()?.Trim() + " - " + text[0]?.Trim() + ((text.Length == 2) ? "" : " - " + text[1]?.Trim())
+                                          });
+                        }
+                        catch (Exception)
+                        {
+                        }
                     }
                 }
                 result.AddRange(trendings.Select(t => new ShowItem

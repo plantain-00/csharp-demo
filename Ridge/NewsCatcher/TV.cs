@@ -36,15 +36,15 @@ namespace NewsCatcher
                 var tvs = new List<Model>();
                 for (var i = 0; i < 10; i++)
                 {
-                    var tmp = doc["#wrapperInner"]["div", 5]["table"]["tr"]["td"]["div"]["table"]["tr", i + 1];
+                    var tmp = doc["#wrapperInner"]?["div", 5]?["table"]?["tr"]?["td"]?["div"]?["table"]?["tr", i + 1];
                     try
                     {
                         tvs.Add(new Model
                                 {
-                                    Title = tmp["td"]["div", 1]["a"][0].As<PlainText>().Text.Unescape(),
-                                    Size = tmp["td", 1][0].As<PlainText>().Text + " " + tmp["td", 1]["span"][0].As<PlainText>().Text,
-                                    Url = seedWebsite + tmp["td"]["div", 1]["a"].As<Tag>()["href"].Trim('/'),
-                                    Age = tmp["td", 3][0].As<PlainText>().Text.Unescape()
+                                    Title = tmp?["td"]?["div", 1]?["a"]?[0]?.As<PlainText>()?.Text?.Unescape(),
+                                    Size = tmp?["td", 1]?[0]?.As<PlainText>()?.Text + " " + tmp?["td", 1]?["span"]?[0]?.As<PlainText>()?.Text,
+                                    Url = seedWebsite + tmp?["td"]?["div", 1]?["a"]?.As<Tag>()?["href"]?.Trim('/'),
+                                    Age = tmp?["td", 3]?[0]?.As<PlainText>()?.Text?.Unescape()
                                 });
                     }
                     catch (Exception)
@@ -53,15 +53,15 @@ namespace NewsCatcher
                 }
                 for (var i = 0; i < 10; i++)
                 {
-                    var tmp = doc["#wrapperInner"]["div", 5]["table"]["tr"]["td"]["div"]["div"]["table"]["tr", i + 1];
+                    var tmp = doc["#wrapperInner"]?["div", 5]?["table"]?["tr"]?["td"]?["div"]?["div"]?["table"]?["tr", i + 1];
                     try
                     {
                         tvs.Add(new Model
                                 {
-                                    Title = tmp["td"]["div", 1]["a"][0].As<PlainText>().Text.Unescape(),
-                                    Size = tmp["td", 1][0].As<PlainText>().Text + " " + tmp["td", 1]["span"][0].As<PlainText>().Text,
-                                    Url = seedWebsite + tmp["td"]["div", 1]["a"].As<Tag>()["href"].Trim('/'),
-                                    Age = tmp["td", 3][0].As<PlainText>().Text.Unescape()
+                                    Title = tmp?["td"]?["div", 1]?["a"]?[0]?.As<PlainText>()?.Text?.Unescape(),
+                                    Size = tmp?["td", 1]?[0]?.As<PlainText>()?.Text + " " + tmp?["td", 1]?["span"]?[0]?.As<PlainText>()?.Text,
+                                    Url = seedWebsite + tmp?["td"]?["div", 1]?["a"]?.As<Tag>()?["href"]?.Trim('/'),
+                                    Age = tmp?["td", 3]?[0]?.As<PlainText>()?.Text?.Unescape()
                                 });
                     }
                     catch (Exception)

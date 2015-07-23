@@ -32,27 +32,24 @@ namespace NewsCatcher
                            }.DownloadString("http://www.cnbeta.com/");
                 var doc = new Document(html);
                 var cnBetas = new List<Model>();
-                for (var i = 0; i < 60; i++)
+                var nodes = doc.GetElementById("allnews_all")?["div"];
+                if (nodes?.Children != null)
                 {
-                    var node = doc["#allnews_all"]["div"];
-                    if (node.Children == null
-                        || node.Children.Count <= i)
+                    foreach (var node in nodes.Children)
                     {
-                        break;
-                    }
-                    node = node[i];
-                    try
-                    {
-                        cnBetas.Add(new Model
-                                    {
-                                        Title = node["div"]["div"]["a"][0].As<PlainText>().Text.Unescape(),
-                                        CommentNumber = Convert.ToInt32(node["div", 2]["ul"]["li", 1]["em"][0].As<PlainText>().Text),
-                                        Url = "http://www.cnbeta.com/" + node["div"]["div"]["a"].As<Tag>()["href"].Trim('/'),
-                                        Time = Convert.ToDateTime(node["div"]["div"]["div"]["span"]["em"][0].As<PlainText>().Text)
-                                    });
-                    }
-                    catch (Exception)
-                    {
+                        try
+                        {
+                            cnBetas.Add(new Model
+                                        {
+                                            Title = node["div"]?["div"]?["a"]?[0]?.As<PlainText>()?.Text?.Unescape(),
+                                            CommentNumber = Convert.ToInt32(node["div", 2]?["ul"]?["li", 1]?["em"]?[0]?.As<PlainText>()?.Text),
+                                            Url = "http://www.cnbeta.com/" + node["div"]?["div"]?["a"]?.As<Tag>()?["href"]?.Trim('/'),
+                                            Time = Convert.ToDateTime(node["div"]?["div"]?["div"]?["span"]?["em"]?[0]?.As<PlainText>()?.Text)
+                                        });
+                        }
+                        catch (Exception)
+                        {
+                        }
                     }
                 }
                 result.AddRange(cnBetas.Where(r => r.CommentNumber >= 10).OrderByDescending(r => r.CommentNumber).ThenByDescending(r => r.Time).Select(cnBeta => new ShowItem

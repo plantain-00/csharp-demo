@@ -34,22 +34,22 @@ namespace NewsCatcher
                            }.DownloadString(seedWebsite + "usearch/Czech%20Massage/?field=time_add&sorder=desc");
                 var doc = new Document(html);
                 var tvs = new List<Model>();
-                var root = doc["#mainSearchTable"][0][0]["div", 3]["table"];
+                var root = doc["#mainSearchTable"]?[0]?[0]?["div", 3]?["table"];
                 for (var i = 0; i < 25; i++)
                 {
                     try
                     {
-                        var tmp = root["tr", i + 1];
-                        var a = tmp["td"]["div", 1]["div"]["a"];
+                        var tmp = root?["tr", i + 1];
+                        var a = tmp?["td"]?["div", 1]?["div"]?["a"];
                         tvs.Add(new Model
                                 {
-                                    Title = a.As<Tag>().Text.Unescape(),
-                                    Size = tmp["td", 1].As<Tag>().Text,
-                                    Url = seedWebsite + a.As<Tag>()["href"].Trim('/'),
-                                    Files = Convert.ToInt32(tmp["td", 2].As<Tag>().Text),
-                                    Age = tmp["td", 3].As<Tag>().Text.Unescape(),
-                                    Seed = Convert.ToInt32(tmp["td", 4].As<Tag>().Text),
-                                    Leech = Convert.ToInt32(tmp["td", 5].As<Tag>().Text)
+                                    Title = a?.As<Tag>()?.Text?.Unescape(),
+                                    Size = tmp?["td", 1]?.As<Tag>()?.Text,
+                                    Url = seedWebsite + a?.As<Tag>()?["href"]?.Trim('/'),
+                                    Files = Convert.ToInt32(tmp?["td", 2]?.As<Tag>()?.Text),
+                                    Age = tmp?["td", 3]?.As<Tag>()?.Text?.Unescape(),
+                                    Seed = Convert.ToInt32(tmp?["td", 4]?.As<Tag>()?.Text),
+                                    Leech = Convert.ToInt32(tmp?["td", 5]?.As<Tag>()?.Text)
                                 });
                     }
                     catch (Exception)

@@ -36,10 +36,10 @@ namespace NewsCatcher
                     {
                         try
                         {
-                            var tmp = doc["html"]["body"]["div", 1]["div"]["div", 1]["div", i]["div", j]["h2"]["div"];
-                            var name = tmp["div"]["a"][0].As<PlainText>().Text;
-                            var value = tmp["div", 1]["span"][0].As<PlainText>().Text;
-                            var title = tmp["div", 1]["span"].As<Tag>()["title"];
+                            var tmp = doc["html"]?["body"]?["div", 1]?["div"]?["div", 1]?["div", i]?["div", j]?["h2"]?["div"];
+                            var name = tmp?["div"]?["a"]?[0].As<PlainText>()?.Text;
+                            var value = tmp?["div", 1]?["span"]?[0]?.As<PlainText>()?.Text;
+                            var title = tmp?["div", 1]?["span"]?.As<Tag>()?["title"];
                             result.Add(new ShowItem
                                        {
                                            Text = name + ":" + value,
