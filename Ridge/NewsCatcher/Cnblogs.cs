@@ -38,7 +38,7 @@ namespace NewsCatcher
                                                                                                                                                                                                            {
                                                                                                                                                                                                                Text = $"{blog.CommentNumber} {blog.Digg} {blog.Time.ToString("yyyy-MM-dd HH:mm")} {blog.Title}",
                                                                                                                                                                                                                Url = blog.Url,
-                                                                                                                                                                                                               Summary = blog.Summary.Paragraph(50)
+                                                                                                                                                                                                               Summary = blog.Summary?.Paragraph(50)
                                                                                                                                                                                                            }));
             }
             catch (Exception exception)
@@ -93,14 +93,15 @@ namespace NewsCatcher
                 {
                     var div1 = doc["#post_list"]?[i]?["div"];
                     var div2 = doc["#post_list"]?[i]?["div", 1];
-                    var date = new string(div2?["div"]?[1]?.As<PlainText>()?.Text?.Skip("发布于 ".Length).Take("0000-00-00 00:00".Length)?.ToArray());
-                    var commentNumber = new string(div2?["div"]?["span"]?["a"]?[0]?.As<PlainText>()?.Text?.Skip("评论(".Length)?.TakeWhile(c => c != ')')?.ToArray());
+                    var tmp = div2?["div"]?[1]?.As<PlainText>()?.Text;
+                    var date = new string(tmp?.Skip(4).Take(17).ToArray());
+                    var commentNumber = new string(div2?["div"]?["span"]?["a"]?[0]?.As<PlainText>()?.Text?.Skip(3)?.TakeWhile(c => c != ')')?.ToArray());
                     result.Add(new Model
                                {
                                    Digg = Convert.ToInt32(div1?["div"]?["span"]?[0]?.As<PlainText>()?.Text?.Trim()),
                                    Title = div2?["h3"]?["a"]?[0]?.As<PlainText>()?.Text?.Unescape(),
                                    Url = div2?["h3"]?["a"]?.As<Tag>()?["href"]?.Trim(),
-                                   Summary = div2?["p"]?[1]?.As<PlainText>()?.Text?.Trim()?.Unescape(),
+                                   Summary = div2?["p"]?[0]?.As<PlainText>()?.Text?.Trim()?.Unescape(),
                                    Time = Convert.ToDateTime(date),
                                    CommentNumber = Convert.ToInt32(commentNumber)
                                });

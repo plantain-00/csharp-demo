@@ -5,7 +5,6 @@
         WindowStartupLocation="CenterScreen" 
         Closing="MainWindow_OnClosing"
         Loaded="MainWindow_OnLoaded"
-        Topmost="False"
         Icon="news.ico">
     <ListView Name="listView">
         <ListView.View>

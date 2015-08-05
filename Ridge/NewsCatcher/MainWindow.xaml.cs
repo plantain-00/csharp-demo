@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -30,6 +31,8 @@ namespace NewsCatcher
             InitializeComponent();
             _itemsSource = new List<ShowItem>();
             listView.ItemsSource = _itemsSource;
+
+            Topmost = ConfigurationManager.AppSettings["is_debug"] != true.ToString();
         }
 
         protected override void OnSourceInitialized(EventArgs e)
@@ -61,10 +64,6 @@ namespace NewsCatcher
             {
                 case "title":
                     break;
-                case XArt.FAILS_MESSAGE:
-                    _itemsSource.RemoveAll(i => i.Url == XArt.FAILS_MESSAGE);
-                    await XArtTask();
-                    break;
                 case CnBeta.FAILS_MESSAGE:
                     _itemsSource.RemoveAll(i => i.Url == CnBeta.FAILS_MESSAGE);
                     await CnBetaTask();
@@ -72,10 +71,6 @@ namespace NewsCatcher
                 case Cnblogs.FAILS_MESSAGE:
                     _itemsSource.RemoveAll(i => i.Url == Cnblogs.FAILS_MESSAGE);
                     await CnblogsTask();
-                    break;
-                case PM25Now.FAILS_MESSAGE:
-                    _itemsSource.RemoveAll(i => i.Url == PM25Now.FAILS_MESSAGE);
-                    await PM25NowTask();
                     break;
                 case V2ex.FAILS_MESSAGE:
                     _itemsSource.RemoveAll(i => i.Url == V2ex.FAILS_MESSAGE);
@@ -147,8 +142,6 @@ namespace NewsCatcher
             _deserialization.Start();
             CnblogsTask();
             CnBetaTask();
-            XArtTask();
-            PM25NowTask();
             V2exTask();
             TVTask();
             CzechMassageTask();
@@ -182,24 +175,6 @@ namespace NewsCatcher
         private async Task V2exTask()
         {
             var result = await V2ex.DoAsync();
-            await _deserialization;
-            _itemsSource.AddRange(result.Where(i => History.All(h => h.Url != i.Url)));
-            Refactor();
-            listView.Items.Refresh();
-        }
-
-        private async Task PM25NowTask()
-        {
-            var result = await PM25Now.DoAsync();
-            await _deserialization;
-            _itemsSource.AddRange(result);
-            Refactor();
-            listView.Items.Refresh();
-        }
-
-        private async Task XArtTask()
-        {
-            var result = await XArt.DoAsync();
             await _deserialization;
             _itemsSource.AddRange(result.Where(i => History.All(h => h.Url != i.Url)));
             Refactor();
