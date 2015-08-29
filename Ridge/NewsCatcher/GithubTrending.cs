@@ -32,7 +32,7 @@ namespace NewsCatcher
                            }.DownloadString("https://github.com/trending");
                 var doc = new Document(html);
                 var trendings = new List<Model>();
-                var nodes = doc["#site-container"]?["div", 1]?["div", 1]?["div"]?["div", 1]?["ol"];
+                var nodes = doc["#js-pjax-container"]?["div", 1]?["div", 1]?["div"]?["div", 1]?["ol"];
                 if (nodes?.Children != null)
                 {
                     foreach (var node in nodes.Children)
