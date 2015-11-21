@@ -36,7 +36,7 @@ namespace NewsCatcher
                 var tvs = new List<Model>();
                 for (var i = 0; i < 10; i++)
                 {
-                    var tmp = doc["#wrapperInner"]?["div", 5]?["table"]?["tr"]?["td"]?["div"]?["table"]?["tr", i + 1];
+                    var tmp = doc["#wrapperInner"]?["div", 3]?["table"]?["tr"]?["td"]?["div"]?["table"]?["tr", i + 1];
                     try
                     {
                         tvs.Add(new Model
@@ -53,7 +53,7 @@ namespace NewsCatcher
                 }
                 for (var i = 0; i < 10; i++)
                 {
-                    var tmp = doc["#wrapperInner"]?["div", 5]?["table"]?["tr"]?["td"]?["div"]?["div"]?["table"]?["tr", i + 1];
+                    var tmp = doc["#wrapperInner"]?["div", 3]?["table"]?["tr"]?["td"]?["div"]?["div"]?["table"]?["tr", i + 1];
                     try
                     {
                         tvs.Add(new Model

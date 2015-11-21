@@ -34,7 +34,7 @@ namespace NewsCatcher
                            }.DownloadString(seedWebsite + "usearch/Czech%20Massage/?field=time_add&sorder=desc");
                 var doc = new Document(html);
                 var tvs = new List<Model>();
-                var root = doc["#mainSearchTable"]?[0]?[0]?["div", 3]?["table"];
+                var root = doc["#mainSearchTable"]?[0]?[0]?["div", 2]?["table"];
                 for (var i = 0; i < 25; i++)
                 {
                     try
